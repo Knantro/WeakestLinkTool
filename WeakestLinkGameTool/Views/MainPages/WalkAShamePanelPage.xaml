@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="WeakestLinkGameTool.Views.MainPages.WalkAShamePanelPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
+             xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+
+    <UserControl.DataContext>
+        <mainVMs:WalkAShamePanelVM />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          ShowGridLines="False"
+          Background="{StaticResource WalkAShameBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <controls:OutlinedTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                    Style="{StaticResource DefaultText}"
+                                    FontSize="50"
+                                    Text="Слабое звено"
+                                    VerticalAlignment="Top"/>
+        
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                Background="{StaticResource GrayButtonBrush}"
+                Height="350"
+                Width="700"
+                Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource InvertVisibilityConverter}}"
+                Style="{StaticResource DefaultButton}"
+                Content="Начать раунд"
+                FontSize="80"
+                Command="{Binding DeclareWeakestLinkCommand}" />
+
+        <controls:OutlinedTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                    Style="{StaticResource DefaultText}"
+                                    FontSize="50"
+                                    Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource VisibilityConverter}}"
+                                    Text="{Binding KickedPlayer, StringFormat={}{0}\, вы - самое слабое звено\, прощайте!}" />
+
+        <Button Grid.Row="2" Grid.Column="2"
+                Height="140"
+                Width="300"
+                FontSize="40"
+                Style="{StaticResource DefaultButton}"
+                Background="{StaticResource GrayButtonBrush}"
+                Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource VisibilityConverter}}"
+                Content="Новый раунд"
+                Command="{Binding PreRoundInstructionCommand}" />
+    </Grid>
+</UserControl>

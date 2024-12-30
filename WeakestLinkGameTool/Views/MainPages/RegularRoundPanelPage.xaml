@@ -1,0 +1,271 @@
+﻿<UserControl x:Class="WeakestLinkGameTool.Views.MainPages.RegularRoundPanelPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
+             xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+
+    <UserControl.InputBindings>
+        <!-- TODO: Done bindings -->
+        <KeyBinding Key="D1" Command="{Binding}"  />
+        <KeyBinding Key="D2" Command="{Binding}" />
+        <KeyBinding Key="D3" Command="{Binding}" />
+        <KeyBinding Key="D4" Command="{Binding}" />
+        <KeyBinding Key="D5" Command="{Binding}" />
+        <KeyBinding Key="D6" Command="{Binding}" />
+        <KeyBinding Key="D7" Command="{Binding}" />
+        <KeyBinding Key="D8" Command="{Binding}" />
+    </UserControl.InputBindings>
+
+    <UserControl.DataContext>
+        <mainVMs:RegularRoundPanelVM />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Background="{StaticResource CommonBackgroundBrush}"
+          ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ItemsControl Grid.Row="0" Grid.RowSpan="2"
+                      Grid.Column="0"
+                      Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}"
+                      ItemsSource="{Binding MoneyTree}">
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Panel.ZIndex" Value="{Binding ChainNumber}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel  VerticalAlignment="Bottom"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Width="{Binding Width}"
+                            Height="{Binding Height}"
+                            Padding="0"
+                            Background="{Binding Background}"
+                            Margin="{Binding Margin}"
+                            Style="{StaticResource DefaultNonClickableButton}"
+                            Content="{Binding ValueString}"
+                            FontSize="{Binding FontSize}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Border Grid.Row="2" Grid.Column="2"
+                Background="{StaticResource GrayButtonBrush}"
+                CornerRadius="1000000000"
+                Height="80"
+                Width="160"
+                Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}">
+            <controls:OutlinedTextBlock Text="{Binding TimeText}"
+                                        FontSize="45"
+                                        Style="{StaticResource DefaultText}" />
+        </Border>
+
+
+        <Border Grid.Row="2" Grid.Column="0"
+                Background="{StaticResource GrayButtonBrush}"
+                CornerRadius="1000000000"
+                Height="108" Width="288"
+                Visibility="{Binding IsRoundStarted, Converter={StaticResource VisibilityConverter}}">
+            <controls:OutlinedTextBlock Text="{Binding Bank}"
+                                        FontSize="60"
+                                        Style="{StaticResource DefaultText}" />
+        </Border>
+        
+        <Button Grid.Row="1" Grid.Column="1"
+                Height="350"
+                Width="700"
+                Visibility="{Binding IsRoundStarted, Converter={StaticResource InvertVisibilityConverter}}"
+                Style="{StaticResource DefaultButton}"
+                Content="Начать раунд"
+                FontSize="80"
+                Command="{Binding StartRoundCommand}" />
+
+        <Grid Grid.Row="1" Grid.Column="1" ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <controls:OutlinedTextBlock Grid.Row="0"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Stretch"
+                                        Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}"
+                                        TextAlignment="Center"
+                                        FontSize="50"
+                                        Style="{StaticResource DefaultText}">
+                <controls:OutlinedTextBlock.Text>
+                    <MultiBinding StringFormat="{}Игрок {0}: {1}">
+                        <Binding Path="CurrentPlayer.Number"/>
+                        <Binding Path="CurrentPlayer.Name"/>
+                    </MultiBinding>
+                </controls:OutlinedTextBlock.Text>
+            </controls:OutlinedTextBlock>
+
+            <controls:OutlinedTextBlock Grid.Row="1"
+                                        FontSize="50"
+                                        HorizontalAlignment="Stretch"
+                                        Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}"
+                                        Text="{Binding CurrentQuestion.Text}"
+                                        TextAlignment="Center"
+                                        Style="{StaticResource DefaultText}" />
+
+
+            <controls:OutlinedTextBlock Grid.Row="1"
+                                        FontSize="50"
+                                        HorizontalAlignment="Stretch"
+                                        Visibility="{Binding IsRoundEnded, Converter={StaticResource VisibilityConverter}}"
+                                        Text="{Binding CurrentJoke.Text}"
+                                        TextAlignment="Center"
+                                        Style="{StaticResource DefaultText}" />
+
+
+            <StackPanel Grid.Row="2" Margin="0 10 0 0">
+                <controls:OutlinedTextBlock
+                    HorizontalAlignment="Stretch"
+                    TextAlignment="Center"
+                    Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}"
+                    Text="{Binding CurrentQuestion.Answer, StringFormat={}Ответ: {0}}"
+                    FontSize="35"
+                    Style="{StaticResource DefaultText}" />
+
+                <controls:OutlinedTextBlock Margin="0 20 0 0"
+                                            HorizontalAlignment="Stretch"
+                                            TextAlignment="Center"
+                                            Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}"
+                                            Text="Следующий вопрос:"
+                                            FontSize="20"
+                                            Style="{StaticResource DefaultText}" />
+
+                <controls:OutlinedTextBlock HorizontalAlignment="Stretch"
+                                            TextAlignment="Center"
+                                            Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}"
+                                            Text="{Binding FollowingQuestion.Text}"
+                                            FontSize="20"
+                                            Style="{StaticResource DefaultText}" />
+
+
+            </StackPanel>
+        </Grid>
+
+        <controls:OutlinedTextBlock Grid.Row="2" Grid.Column="0"
+                                    Text="БАНК"
+                                    FontSize="50"
+                                    Margin="0 50 0 -50"
+                                    Visibility="{Binding IsRoundStarted, Converter={StaticResource VisibilityConverter}}"
+                                    Style="{StaticResource DefaultText}" />
+
+
+        <Button Grid.Row="2" Grid.Column="2" VerticalAlignment="Center"
+                Margin="10 0"
+                Height="120"
+                Width="260"
+                Padding="0"
+                Command="{Binding RoundEndCommand}"
+                Visibility="{Binding IsRoundEnded, Converter={StaticResource VisibilityConverter}}"
+                Style="{StaticResource DefaultButton}"
+                Content="{Binding RoundEndNextButtonText}" FontSize="30" />
+
+        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Command="{Binding CorrectAnswerCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="1. Верно" FontSize="30" />
+            <Button VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Command="{Binding WrongAnswerCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="2. Неверно" FontSize="30" />
+            <Button VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Command="{Binding BankCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="3. Банк" FontSize="30" />
+            <Button VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Command="{Binding MeasureTimeCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="4. Замерить время" FontSize="30" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button VerticalAlignment="Center"
+                    Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Command="{Binding PauseRoundCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="5. Остановить раунд" FontSize="30" />
+            <Button VerticalAlignment="Center"
+                    Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Command="{Binding ContinueRoundCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="6. Продолжить раунд" FontSize="30" />
+            <Button VerticalAlignment="Center"
+                    Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Command="{Binding PreviousQuestionCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="7. Предыдущий вопрос" FontSize="30" />
+            <Button VerticalAlignment="Center"
+                    Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Command="{Binding NextQuestionCommand}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="8. Следующий вопрос" FontSize="30" />
+        </StackPanel>
+    </Grid>
+</UserControl>

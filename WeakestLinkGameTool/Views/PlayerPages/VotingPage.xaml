@@ -1,0 +1,171 @@
+﻿<UserControl x:Class="WeakestLinkGameTool.Views.PlayerPages.VotingPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:WeakestLinkGameTool.ViewModels"
+             xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
+             xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
+             xmlns:playerVMs="clr-namespace:WeakestLinkGameTool.ViewModels.PlayerVMs"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+
+    <UserControl.DataContext>
+        <playerVMs:VotingVM />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          ShowGridLines="True"
+          Background="{StaticResource CommonBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.4*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <controls:OutlinedTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
+                                    Style="{StaticResource DefaultText}"
+                                    FontSize="50"
+                                    Text="Введите игроков (от 7 до 11)" />
+
+        <!-- <Border Grid.Row="3" Background="{StaticResource TextBoxBackgroundBrush}" -->
+        <!--         BorderBrush="{StaticResource TextBoxBorderBrush}" -->
+        <!--         BorderThickness="5" -->
+        <!--         Margin="5" -->
+        <!--         Padding="5 0" -->
+        <!--         CornerRadius="10"> -->
+        <!--     <ScrollViewer VerticalScrollBarVisibility="Hidden" -->
+        <!--                   HorizontalScrollBarVisibility="Hidden" -->
+        <!--                   CanContentScroll="True" -->
+        <!--                   SnapsToDevicePixels="True"> -->
+        <!--         <controls:OutlinedTextBox FontSize="25" -->
+        <!--                                   Background="#00FFFFFF" -->
+        <!--                                   CaretBrush="White" -->
+        <!--                                   BorderThickness="0" -->
+        <!--                                   Padding="-2 0" -->
+        <!--                                   Text="{Binding TextInput}" -->
+        <!--                                   Foreground="Transparent" /> -->
+        <!--     </ScrollViewer> -->
+        <!-- </Border> -->
+
+        <Border Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Grid.Row="1"
+                Grid.RowSpan="3"
+                Background="Transparent"
+                BorderBrush="{StaticResource TextBoxBorderBrush}"
+                BorderThickness="5"
+                Margin="0 10 0 0"
+                Padding="5 0"
+                CornerRadius="15">
+            <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                          HorizontalScrollBarVisibility="Hidden">
+                <ItemsControl VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding AllPlayers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ShowGridLines="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="70" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                                                FontSize="40"
+                                                                Text="{Binding Number, StringFormat={}{0}.}" />
+                                    <Separator Width="10" Visibility="Hidden" />
+                                </StackPanel>
+
+                                <Border Grid.Column="1" Background="{StaticResource TextBoxBackgroundBrush}"
+                                        BorderBrush="{StaticResource TextBoxBorderBrush}"
+                                        BorderThickness="5"
+                                        Margin="5"
+                                        Padding="5 0"
+                                        CornerRadius="10">
+                                    <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                                                  HorizontalScrollBarVisibility="Hidden"
+                                                  CanContentScroll="True"
+                                                  SnapsToDevicePixels="True">
+                                        <controls:OutlinedTextBox FontSize="40"
+                                                                  MaxLength="20"
+                                                                  Background="#00FFFFFF"
+                                                                  CaretBrush="White"
+                                                                  BorderThickness="0"
+                                                                  Padding="-2 0"
+                                                                  Text="{Binding Name}"
+                                                                  Foreground="Transparent" />
+                                    </ScrollViewer>
+                                </Border>
+
+                                <Viewbox Grid.Column="2"
+                                         Stretch="Uniform"
+                                         Margin="5">
+                                    <Button Height="40"
+                                            Width="40"
+                                            Style="{StaticResource DefaultButton}"
+                                            Content="—"
+                                            Padding="0 -1.5 0 1.5"
+                                            FontSize="20"
+                                            Command="{Binding DataContext.RemovePlayerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                            CommandParameter="{Binding}" />
+                                </Viewbox>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <Button Grid.Row="4" Grid.Column="0"
+                Height="130"
+                Width="260"
+                FontSize="40"
+                Style="{StaticResource DefaultButton}"
+                Content="Назад"
+                Command="{Binding BackCommand}" />
+
+        <Button Grid.Row="4" Grid.Column="1"
+                Height="130"
+                Width="260"
+                FontSize="100"
+                Style="{StaticResource DefaultButton}"
+                Content="—"
+                Padding="0 -6 0 6"
+                Command="{Binding RemovePlayerCommand}" />
+
+        <Button Grid.Row="4" Grid.Column="2"
+                Height="130"
+                Width="260"
+                FontSize="100"
+                Style="{StaticResource DefaultButton}"
+                Content="+"
+                Command="{Binding AddPlayerCommand}" />
+
+        <Button Grid.Row="4" Grid.Column="3"
+                Height="130"
+                Width="260"
+                FontSize="40"
+                Style="{StaticResource DefaultButton}"
+                Content="Запустить"
+                Command="{Binding StartRoundCommand}" />
+    </Grid>
+</UserControl>

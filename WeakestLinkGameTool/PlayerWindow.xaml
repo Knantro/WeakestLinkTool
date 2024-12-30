@@ -1,0 +1,19 @@
+﻿<Window x:Class="WeakestLinkGameTool.PlayerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:base="clr-namespace:WeakestLinkGameTool.ViewModels.Base"
+        mc:Ignorable="d"
+        Title="Weakest Link Game - Player Window"
+        ResizeMode="CanMinimize"
+        WindowState="Maximized">
+
+    <Window.DataContext>
+        <base:MainWindowViewModel />
+    </Window.DataContext>
+
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <ContentControl Content="{Binding CurrentPWPage}" />
+    </Grid>
+</Window>

@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="WeakestLinkGameTool.Views.MainPages.RulesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
+             xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+
+    <UserControl.DataContext>
+        <mainVMs:RulesVM />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Background="{StaticResource CommonBackgroundBrush}"
+          ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="1"
+                                    Style="{StaticResource DefaultText}"
+                                    Text="{Binding CurrentRule}"
+                                    TextAlignment="Center" 
+                                    FontSize="50"/>
+        
+        <Button Grid.Row="2" Grid.Column="0"
+                Height="140"
+                Width="280"
+                Style="{StaticResource DefaultButton}"
+                IsEnabled="{Binding IsFirstRule, Converter={StaticResource InvertBooleanConverter}}"
+                Content="Назад"
+                FontSize="40"
+                Command="{Binding BackRuleCommand}" />
+        
+        <Button Grid.Row="2" Grid.Column="2"
+                Height="140"
+                Width="280"
+                Style="{StaticResource DefaultButton}"
+                IsEnabled="{Binding IsLastRule, Converter={StaticResource InvertBooleanConverter}}"
+                Content="Далее"
+                Visibility="{Binding IsLastRule, Converter={StaticResource InvertVisibilityConverter}}"
+                FontSize="40"
+                Command="{Binding NextRuleCommand}"/>
+        
+        <Button Grid.Row="2" Grid.Column="2"
+                Height="140"
+                Width="280"
+                Visibility="{Binding IsLastRule, Converter={StaticResource VisibilityConverter}}"
+                Style="{StaticResource DefaultButton}"
+                Content="Начать игру"
+                FontSize="40"
+                Command="{Binding StartGameCommand}" />
+    </Grid>
+</UserControl>
