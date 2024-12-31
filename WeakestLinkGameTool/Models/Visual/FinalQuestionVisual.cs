@@ -36,6 +36,7 @@ public class FinalQuestionVisual : INPCBase {
             OnPropertyChanged(nameof(Background));
             OnPropertyChanged(nameof(Foreground));
             OnPropertyChanged(nameof(Text));
+            OnPropertyChanged(nameof(Padding));
         }
     }
 
@@ -50,6 +51,7 @@ public class FinalQuestionVisual : INPCBase {
             OnPropertyChanged(nameof(Foreground));
             OnPropertyChanged(nameof(Text));
             OnPropertyChanged(nameof(FontSize));
+            OnPropertyChanged(nameof(Padding));
         }
     }
     
@@ -62,7 +64,7 @@ public class FinalQuestionVisual : INPCBase {
     
     public Thickness Padding {
         get {
-            if (IsRight == true) return new Thickness(0, -6, 0, 6);
+            if (IsRight == true) return new Thickness(0, -5, 0, 5);
             return new Thickness(0);
         }
     }

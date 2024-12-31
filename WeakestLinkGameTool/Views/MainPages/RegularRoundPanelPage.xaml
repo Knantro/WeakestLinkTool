@@ -49,7 +49,6 @@
 
         <ItemsControl Grid.Row="0" Grid.RowSpan="2"
                       Grid.Column="0"
-                      Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}"
                       ItemsSource="{Binding MoneyTree}">
             <ItemsControl.ItemContainerStyle>
                 <Style>
@@ -79,8 +78,7 @@
                 Background="{StaticResource GrayButtonBrush}"
                 CornerRadius="1000000000"
                 Height="80"
-                Width="160"
-                Visibility="{Binding IsRoundPlayingNow, Converter={StaticResource VisibilityConverter}}">
+                Width="160">
             <controls:OutlinedTextBlock Text="{Binding TimeText}"
                                         FontSize="45"
                                         Style="{StaticResource DefaultText}" />
@@ -90,8 +88,7 @@
         <Border Grid.Row="2" Grid.Column="0"
                 Background="{StaticResource GrayButtonBrush}"
                 CornerRadius="1000000000"
-                Height="108" Width="288"
-                Visibility="{Binding IsRoundStarted, Converter={StaticResource VisibilityConverter}}">
+                Height="108" Width="288">
             <controls:OutlinedTextBlock Text="{Binding Bank}"
                                         FontSize="60"
                                         Style="{StaticResource DefaultText}" />
@@ -178,7 +175,6 @@
                                     Text="БАНК"
                                     FontSize="50"
                                     Margin="0 50 0 -50"
-                                    Visibility="{Binding IsRoundStarted, Converter={StaticResource VisibilityConverter}}"
                                     Style="{StaticResource DefaultText}" />
 
 

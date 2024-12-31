@@ -95,8 +95,8 @@ public class VotingPanelVM : ViewModelBase {
     public ObservableCollection<PlayerStatistics> RoundStatistics { get; set; }
     
     public RelayCommand<Player> SelectStatisticsCommand => new(FormPersonalStatistics);
-    public RelayCommand<Player> DecreaseVoteCommand => new(DecreasePlayerVotes);
-    public RelayCommand<Player> IncreaseVoteCommand => new(IncreasePlayerVotes);
+    public RelayCommand<Player> DecreaseVoteCommand => new(DecreasePlayerVotes, _ => !IsVotingInProgress);
+    public RelayCommand<Player> IncreaseVoteCommand => new(IncreasePlayerVotes, _ => !IsVotingInProgress);
     public RelayCommand<Player> KickPlayerCommand => new(KickPlayer);
     public RelayCommand RoundStatisticsCommand => new(_ => ShowRoundStatistics());
     public RelayCommand StopVotingCommand => new(_ => StopVoting());
@@ -109,6 +109,7 @@ public class VotingPanelVM : ViewModelBase {
         RoundStatistics = new ObservableCollection<PlayerStatistics>(WeakestLinkLogic.CurrentSession.CurrentRound.Statistics.PlayersStatistics.Values);
         Players = new ObservableCollection<Player>(WeakestLinkLogic.CurrentSession.ActivePlayers);
         IsVotingInProgress = true;
+        IsRoundStatisticsSelected = true;
         // SelectedPlayer = DesignData.Player1;
         // IsPersonalStatisticsSelected = true;
         // IsVotingDone = true;
@@ -129,6 +130,15 @@ public class VotingPanelVM : ViewModelBase {
     private void FormPersonalStatistics(Player player) {
         SelectedPlayer = player;
         PersonalPlayerStatistics = new ObservableCollection<PlayerStatistics>(player.Statistics);
+        var totalStatistics = WeakestLinkLogic.CurrentSession.GetFullGameStatistics().First(x => x.Player == player);
+        PersonalPlayerStatistics.Add(new PlayerStatistics {
+            RoundName = "Итого",
+            Player = player,
+            AnswerSpeeds = player.Statistics.SelectMany(x => x.AnswerSpeeds).ToList(),
+            CorrectAnswers = totalStatistics.CorrectAnswers,
+            WrongAnswers = totalStatistics.WrongAnswers,
+            BankedMoney = totalStatistics.BankedMoney,
+        });
         IsRoundStatisticsSelected = false;
         IsPersonalStatisticsSelected = true;
     }

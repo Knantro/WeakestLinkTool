@@ -13,14 +13,14 @@ public class FinalRoundInstructionVM : ViewModelBase {
     /// Страницы вступления
     /// </summary>
     public List<string> Instructions { get; set; } = [
-        $"Вы двое в этом раунде заработали {WeakestLinkLogic.CurrentSession.CurrentRound.BankedMoney!.Value.Decline("рубль", "рубля", "рублей")}",
+        $"Вы двое в этом раунде заработали {(WeakestLinkLogic.CurrentSession.CurrentRound.BankedMoney!.Value / 2).Decline("рубль", "рубля", "рублей")}",
         "Ну что ж, мы удвоим эту сумму и добавим к тому, что было заработано в предыдущих раундах",
         $"Это значит, что общий приз сегодня составляет {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}",
         "Но только один из вас сможет забрать эти деньги с собой",
         "Сейчас вам придётся играть друг против друга. Лицом к лицу",
         "Вы по очереди ответите на 5 пар вопросов. Выиграет тот, кто даст больше правильных ответов. Правило очень простое",
         "Если после 5 пар вопросов у нас ничья, мы продолжаем игру до первого проигрыша, пока не определится победитель",
-        $"Итак {WeakestLinkLogic.CurrentSession.ActivePlayers[0].Name}, {WeakestLinkLogic.CurrentSession.ActivePlayers[1].Name}, на кон поставлено {WeakestLinkLogic.CurrentSession.CurrentRound.BankedMoney!.Value.Decline("рубль", "рубля", "рублей")}",
+        $"Итак {WeakestLinkLogic.CurrentSession.ActivePlayers[0].Name}, {WeakestLinkLogic.CurrentSession.ActivePlayers[1].Name}, на кон поставлено {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}",
         "Играем в \"Слабое звено\"",
     ];
 

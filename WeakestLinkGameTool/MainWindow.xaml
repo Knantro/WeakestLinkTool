@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:base="clr-namespace:WeakestLinkGameTool.ViewModels.Base"
         mc:Ignorable="d"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         
         DataContext="{Binding Path=MainDataContext, RelativeSource={RelativeSource Self}}"
         

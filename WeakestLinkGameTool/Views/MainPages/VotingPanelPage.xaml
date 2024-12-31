@@ -166,7 +166,7 @@
                                         Margin="10 5"
                                         TextAlignment="Left"
                                         HorizontalAlignment="Left"
-                                        Text="{Binding RoundBank, StringFormat={}Банк раунда: {0}}"/>
+                                        Text="{Binding RoundBank, StringFormat={}Банк раунда: {0} ₽}"/>
         
         
             <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
@@ -174,7 +174,7 @@
                                         Margin="10 5"
                                         TextAlignment="Left"
                                         HorizontalAlignment="Left"
-                                        Text="{Binding FullBank, StringFormat={}Общий банк: {0}}"/>
+                                        Text="{Binding FullBank, StringFormat={}Общий банк: {0} ₽}"/>
         </StackPanel>
         
         <StackPanel Grid.Row="1" Grid.Column="1"
@@ -317,7 +317,7 @@
                     <DataGridTemplateColumn Header="Раунд" IsReadOnly="True" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <controls:OutlinedTextBlock Text="{Binding RoundNumber}">
+                                <controls:OutlinedTextBlock Text="{Binding RoundName}">
                                     <controls:OutlinedTextBlock.Style>
                                         <Style BasedOn="{StaticResource DefaultText}"
                                                TargetType="{x:Type controls:OutlinedTextBlock}">

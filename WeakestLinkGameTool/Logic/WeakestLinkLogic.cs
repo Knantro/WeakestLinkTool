@@ -11,7 +11,7 @@ public class WeakestLinkLogic {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private const string DEFAULT_MONEY_TREE_STRING = "1000;2000;5000;10000;20000;30000;40000;50000";
     // private TimeSpan firstRoundTimer = new(0, 3, 0);
-    private TimeSpan firstRoundTimer = new(0, 0, 30); // TODO: Исправить после теста
+    private TimeSpan firstRoundTimer = new(0, 1, 0); // TODO: TEST_REMOVE
     private int currentQuestionIndex = -1;
     private int currentFinalQuestionIndex = -1;
     private int currentJokeIndex = -1;
@@ -20,7 +20,7 @@ public class WeakestLinkLogic {
     /// <summary>
     /// Текущая игровая сессия
     /// </summary>
-    public GameSession CurrentSession { get; set; }
+    public GameSession CurrentSession { get; private set; }
 
     /// <summary>
     /// Вопросы регулярного раунда
@@ -57,9 +57,8 @@ public class WeakestLinkLogic {
     /// </summary>
     public List<MoneyTreeNode> MoneyTree { get; private set; } = [];
     
-    public bool CanNewGame => true;
-
-    // TODO: Вернуть после конца разработки
+    public bool CanNewGame => true; // TODO: TEST_REMOVE
+    
     /// <summary>
     /// Можно ли начать новую игру
     /// </summary>
@@ -68,8 +67,9 @@ public class WeakestLinkLogic {
     /// <summary>
     /// Можно ли начать игру
     /// </summary>
-    public bool CanStartGame => CurrentSession?.AllPlayers.Count.InRange(7, 11) == true && 
-        CurrentSession?.AllPlayers.All(x => !string.IsNullOrEmpty(x.Name)) == true;
+    public bool CanStartGame => CurrentSession?.AllPlayers.Count.InRange(4, 11) == true && // TODO: TEST_REMOVE
+    // public bool CanStartGame => CurrentSession?.AllPlayers.Count.InRange(7, 11) == true && 
+        CurrentSession?.AllPlayers.All(x => !string.IsNullOrEmpty(x.Name)) == true; 
 
     /// <summary>
     /// Максимально возможный выигрыш
@@ -91,14 +91,16 @@ public class WeakestLinkLogic {
     /// Переключает раунд на следующий
     /// </summary>
     public Round NextRound() {
-        if ((CurrentSession.CurrentRound?.Number - 1 ?? 1) != CurrentSession.AllPlayers.Count) {
+        if ((CurrentSession.CurrentRound?.Number + 1 ?? 1) != CurrentSession.AllPlayers.Count) {
             CurrentSession.CurrentRound = new Round {
                 Number = CurrentSession.CurrentRound?.Number + 1 ?? 1,
-                IsPreFinal = (CurrentSession.CurrentRound?.Number ?? 1) == CurrentSession.AllPlayers.Count - 1,
+                IsPreFinal = (CurrentSession.CurrentRound?.Number + 1 ?? 1) == CurrentSession.AllPlayers.Count - 1,
                 BankedMoney = 0,
-                Timer = (CurrentSession.CurrentRound?.Number ?? 1) == CurrentSession.AllPlayers.Count - 1 
-                    ? new TimeSpan(0, 1, 30)
-                    : firstRoundTimer.Add(TimeSpan.FromSeconds(-10 * CurrentSession.CurrentRound?.Number ?? 0))
+                Timer = (CurrentSession.CurrentRound?.Number + 1 ?? 1) == CurrentSession.AllPlayers.Count - 1 
+                    // ? new TimeSpan(0, 1, 30)
+                    ? new TimeSpan(0, 0, 10) // TODO: TEST_REMOVE
+                    // : firstRoundTimer.Add(TimeSpan.FromSeconds(-10 * CurrentSession.CurrentRound?.Number ?? 0))
+                    : new TimeSpan(0, 0, 10) // TODO: TEST_REMOVE
             };
             
             CurrentSession.Rounds.Add(CurrentSession.CurrentRound);
@@ -111,7 +113,11 @@ public class WeakestLinkLogic {
         
         CurrentSession.CurrentRound.Statistics = new RoundStatistics {
             RoundNumber = CurrentSession.CurrentRound.Number,
-            PlayersStatistics = CurrentSession.ActivePlayers.ToDictionary(p => p, p => new PlayerStatistics { RoundNumber = CurrentSession.CurrentRound.Number, Player = p }),
+            PlayersStatistics = CurrentSession.ActivePlayers.ToDictionary(p => p, 
+                p => new PlayerStatistics {
+                    RoundName = CurrentSession.CurrentRound.IsFinal ? "Финал" : CurrentSession.CurrentRound.Number.ToString(), 
+                    Player = p
+                }),
         };
 
         return CurrentSession.CurrentRound;
@@ -120,10 +126,11 @@ public class WeakestLinkLogic {
     /// <summary>
     /// 
     /// </summary>
-    public void ResetStrongestWeakestLinks() {
+    public void ResetTempPlayerParams() {
         CurrentSession.ActivePlayers.ForEach(x => {
             x.IsStrongestLink = false;
             x.IsWeakestLink = false;
+            x.VotesCount = 0;
         });
     }
 
@@ -249,7 +256,7 @@ public class WeakestLinkLogic {
         
         if (UnusedFinalQuestions.Count == 0) FinalQuestions.ForEach(x => x.IsUsed = false);
         
-        return currentFinalQuestionIndex < UnusedFinalQuestions.Count ? UnusedFinalQuestions[++currentFinalQuestionIndex] : UnusedFinalQuestions[currentFinalQuestionIndex = 0];
+        return currentFinalQuestionIndex < UnusedFinalQuestions.Count - 1 ? UnusedFinalQuestions[++currentFinalQuestionIndex] : UnusedFinalQuestions[currentFinalQuestionIndex = 0];
     }
     
     /// <summary>
@@ -259,7 +266,7 @@ public class WeakestLinkLogic {
     public Question PreviousFinalQuestion() {
         if (UnusedFinalQuestions.Count == 0) FinalQuestions.ForEach(x => x.IsUsed = false);
         
-        return currentFinalQuestionIndex < UnusedFinalQuestions.Count ? UnusedFinalQuestions[++currentFinalQuestionIndex] : UnusedFinalQuestions[currentFinalQuestionIndex = 0];
+        return currentFinalQuestionIndex != 0 ? UnusedFinalQuestions[--currentFinalQuestionIndex] : UnusedFinalQuestions[currentFinalQuestionIndex = UnusedFinalQuestions.Count - 1];
     }
 
     /// <summary>
@@ -322,7 +329,9 @@ public class WeakestLinkLogic {
             .ToDictionary(x => x.Key, x => x.Value);
         
         CurrentSession.CurrentRound.Statistics.PlayersStatistics.First().Value.IsStrongestLink = true;
+        CurrentSession.CurrentRound.Statistics.PlayersStatistics.First().Value.Player.IsStrongestLink = true;
         CurrentSession.CurrentRound.Statistics.PlayersStatistics.Last().Value.IsWeakestLink = true;
+        CurrentSession.CurrentRound.Statistics.PlayersStatistics.Last().Value.Player.IsWeakestLink = true;
         
         CurrentSession.ActivePlayers.ForEach(x => {
             x.Statistics.Add(CurrentSession.CurrentRound.Statistics.PlayersStatistics[x]);

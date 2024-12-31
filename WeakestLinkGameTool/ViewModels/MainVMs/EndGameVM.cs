@@ -11,6 +11,7 @@ public class EndGameVM : ViewModelBase {
 
     private bool isFullGameStatisticsSelected;
     private bool isPersonalStatisticsSelected;
+    private Player selectedPlayer;
     
     /// <summary>
     /// 
@@ -21,6 +22,26 @@ public class EndGameVM : ViewModelBase {
     /// 
     /// </summary>
     public int TotalBank { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public Player FirstFinalist { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public Player SecondFinalist { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public List<bool> FirstFinalistAnswers { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public List<bool> SecondFinalistAnswers { get; set; }
     
     /// <summary>
     /// 
@@ -36,8 +57,6 @@ public class EndGameVM : ViewModelBase {
     /// 
     /// </summary>
     public ObservableCollection<FullPlayerStatistics> FullGameStatistics { get; set; }
-    
-    private Player selectedPlayer;
 
     /// <summary>
     /// 
@@ -60,17 +79,27 @@ public class EndGameVM : ViewModelBase {
     /// </summary>
     public bool IsPersonalStatisticsSelected {
         get => isPersonalStatisticsSelected;
-        set => SetField(ref isPersonalStatisticsSelected, value);
+        set {
+            SetField(ref isPersonalStatisticsSelected, value);
+            OnPropertyChanged(nameof(PersonalPlayerStatistics));
+        }
     }
     
     public RelayCommand<Player> SelectStatisticsCommand => new(FormPersonalStatistics);
     public RelayCommand StartNewGameCommand => new(_ => StartNewGame());
-    public RelayCommand FullStatisticsCommand => new(_ => FormFullGameStatistics());
+    public RelayCommand FullStatisticsCommand => new(_ => ShowFullGameStatistics());
     public RelayCommand ToMenuCommand => new(_ => GoToMainMenu());
     
     public EndGameVM() {
         Winner = WeakestLinkLogic.CurrentSession.Winner;
+        FirstFinalist = WeakestLinkLogic.CurrentSession.FirstFinalist;
+        FirstFinalistAnswers = WeakestLinkLogic.CurrentSession.CurrentRound.Statistics.PlayersStatistics[FirstFinalist].FinalRoundAnswers;
+        SecondFinalist = WeakestLinkLogic.CurrentSession.SecondFinalist;
+        SecondFinalistAnswers = WeakestLinkLogic.CurrentSession.CurrentRound.Statistics.PlayersStatistics[SecondFinalist].FinalRoundAnswers;
         TotalBank = WeakestLinkLogic.CurrentSession.FullBank;
+        Players = new ObservableCollection<Player>(WeakestLinkLogic.CurrentSession.AllPlayers);
+        FullGameStatistics = new ObservableCollection<FullPlayerStatistics>(WeakestLinkLogic.CurrentSession.GetFullGameStatistics());
+        IsFullGameStatisticsSelected = true;
     }
 
     /// <summary>
@@ -83,8 +112,9 @@ public class EndGameVM : ViewModelBase {
     /// <summary>
     /// 
     /// </summary>
-    private void FormFullGameStatistics() {
-        FullGameStatistics = new ObservableCollection<FullPlayerStatistics>(WeakestLinkLogic.CurrentSession.GetFullGameStatistics());
+    private void ShowFullGameStatistics() {
+        IsFullGameStatisticsSelected = true;
+        IsPersonalStatisticsSelected = false;
     }
     
     /// <summary>
@@ -93,8 +123,9 @@ public class EndGameVM : ViewModelBase {
     /// <param name="player"></param>
     private void FormPersonalStatistics(Player player) {
         SelectedPlayer = player;
+        var skip = player == FirstFinalist || player == SecondFinalist ? 1 : 0;
         IsFullGameStatisticsSelected = false;
+        PersonalPlayerStatistics = new ObservableCollection<PlayerStatistics>(player.Statistics.SkipLast(skip));
         IsPersonalStatisticsSelected = true;
-        PersonalPlayerStatistics = new ObservableCollection<PlayerStatistics>(player.Statistics);
     }
 }

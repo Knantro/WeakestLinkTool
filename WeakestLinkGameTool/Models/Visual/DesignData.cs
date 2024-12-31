@@ -52,7 +52,7 @@ public static class DesignData {
 
     public static ObservableCollection<PlayerStatistics> PlayerStatistics => [
         new() {
-            RoundNumber = 1,
+            RoundName = "1",
             AnswerSpeeds = { 3.19, 5.17, 2.1, 4.5 },
             Player = new Player { Number = 1, Name = "Коля" },
             BankedMoney = 4000,
@@ -62,7 +62,7 @@ public static class DesignData {
             WrongAnswers = 2
         },
         new() {
-            RoundNumber = 2,
+            RoundName = "2",
             AnswerSpeeds = { 2.12, 4.2, 3.51 },
             Player = new Player { Number = 1, Name = "Коля" },
             BankedMoney = 1000,
@@ -72,7 +72,7 @@ public static class DesignData {
             WrongAnswers = 1
         },
         new() {
-            RoundNumber = 3,
+            RoundName = "3",
             AnswerSpeeds = { 7.49, 3.22, 9.39 },
             Player = new Player { Number = 1, Name = "Коля" },
             BankedMoney = 8000,
@@ -89,7 +89,7 @@ public static class DesignData {
             {
                 new Player { Number = 1, Name = "Ваня" },
                 new PlayerStatistics {
-                    RoundNumber = 1,
+                    RoundName = "1",
                     AnswerSpeeds = { 5.59, 3.92, 8.3 },
                     Player = new Player { Number = 1, Name = "Ваня" },
                     BankedMoney = 4000,
@@ -101,7 +101,7 @@ public static class DesignData {
             }, {
                 new Player { Number = 2, Name = "Дима" },
                 new PlayerStatistics {
-                    RoundNumber = 1,
+                    RoundName = "1",
                     AnswerSpeeds = { 4.53, 2.89, 6.1 },
                     Player = new Player { Number = 2, Name = "Дима" },
                     BankedMoney = 1000,
@@ -113,7 +113,7 @@ public static class DesignData {
             }, {
                 new Player { Number = 3, Name = "Петя" },
                 new PlayerStatistics {
-                    RoundNumber = 1,
+                    RoundName = "1",
                     AnswerSpeeds = { 2.31, 6.7, 10.483, 2.1 },
                     Player = new Player { Number = 3, Name = "Петя" },
                     BankedMoney = 0,
@@ -125,7 +125,7 @@ public static class DesignData {
             }, {
                 new Player { Number = 4, Name = "Саша" },
                 new PlayerStatistics {
-                    RoundNumber = 1,
+                    RoundName = "1",
                     AnswerSpeeds = { 5.81, 4.99, 3.12 },
                     Player = new Player { Number = 4, Name = "Саша" },
                     BankedMoney = 1000,
@@ -137,7 +137,7 @@ public static class DesignData {
             }, {
                 new Player { Number = 5, Name = "Толя" },
                 new PlayerStatistics {
-                    RoundNumber = 1,
+                    RoundName = "1",
                     AnswerSpeeds = { 6.7, 2.133, 3.75, 4.94 },
                     Player = new Player { Number = 5, Name = "Толя" },
                     BankedMoney = 5000,

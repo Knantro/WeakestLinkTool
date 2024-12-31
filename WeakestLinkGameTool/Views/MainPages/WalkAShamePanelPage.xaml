@@ -31,12 +31,13 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <controls:OutlinedTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
                                     Style="{StaticResource DefaultText}"
+                                    Margin="0 15 0 0 "
                                     FontSize="50"
                                     Text="Слабое звено"
                                     VerticalAlignment="Top"/>
@@ -47,19 +48,19 @@
                 Width="700"
                 Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource InvertVisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                Content="Начать раунд"
-                FontSize="80"
+                Content="Объявить слабое звено"
+                FontSize="75"
                 Command="{Binding DeclareWeakestLinkCommand}" />
 
-        <controls:OutlinedTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+        <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                                     Style="{StaticResource DefaultText}"
                                     FontSize="50"
                                     Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource VisibilityConverter}}"
-                                    Text="{Binding KickedPlayer, StringFormat={}{0}\, вы - самое слабое звено\, прощайте!}" />
+                                    Text="{Binding KickedPlayer.Name, StringFormat={}{0}\, вы - самое слабое звено\, прощайте!}" />
 
         <Button Grid.Row="2" Grid.Column="2"
                 Height="140"
-                Width="300"
+                Width="280"
                 FontSize="40"
                 Style="{StaticResource DefaultButton}"
                 Background="{StaticResource GrayButtonBrush}"

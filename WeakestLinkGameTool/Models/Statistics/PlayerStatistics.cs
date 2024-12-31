@@ -8,7 +8,7 @@ public class PlayerStatistics {
     /// <summary>
     /// Номер раунда
     /// </summary>
-    public int RoundNumber { get; set; }
+    public string RoundName { get; set; }
     
     /// <summary>
     /// Игрок
@@ -33,7 +33,7 @@ public class PlayerStatistics {
     /// <summary>
     /// Скорости ответов на вопросы
     /// </summary>
-    public List<double> AnswerSpeeds { get; } = [];
+    public List<double> AnswerSpeeds { get; set; } = [];
 
     /// <summary>
     /// Средняя скорость ответов

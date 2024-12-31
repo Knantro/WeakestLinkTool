@@ -173,12 +173,27 @@ public class RegularRoundPanelVM : ViewModelBase {
             timer.Stop();
             await Task.Delay(3000);
             
-            IsRoundPlayingNow = false;
-            CommandManager.InvalidateRequerySuggested();
-            IsRoundEnded = true;
-            
-            if (!WeakestLinkLogic.CurrentSession.CurrentRound.IsPreFinal) NextJoke();
+            CompleteRound();
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void CompleteRound()
+    {
+        IsRoundPlayingNow = false;
+        CommandManager.InvalidateRequerySuggested();
+        IsRoundEnded = true;
+
+        if (WeakestLinkLogic.CurrentSession.CurrentRound.IsPreFinal) {
+            RoundEndNextButtonText= "К финалу";
+            RoundEndCommand = new RelayCommand(_ => EndRound());
+
+            OnPropertyChanged(nameof(RoundEndNextButtonText));
+            OnPropertyChanged(nameof(RoundEndCommand));
+        }
+        else NextJoke();
     }
 
     /// <summary>
@@ -187,7 +202,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     private void StartRound() {
         // TODO: Музыка
         NextPlayerQuestion();
-        WeakestLinkLogic.ResetStrongestWeakestLinks();
+        WeakestLinkLogic.ResetTempPlayerParams();
         IsRoundStarted = true;
         IsRoundPlayingNow = true;
         StartTimer();
@@ -279,6 +294,9 @@ public class RegularRoundPanelVM : ViewModelBase {
         if (money > 0) {
             if (Bank + money >= MoneyTree.First().Value) {
                 money = MoneyTree.First().Value - Bank;
+                // TODO: Музыка
+                timer.Stop();
+                CompleteRound();
             }
             
             Bank += money;

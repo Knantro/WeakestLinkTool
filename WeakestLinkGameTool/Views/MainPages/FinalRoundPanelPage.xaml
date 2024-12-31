@@ -31,7 +31,7 @@
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Background="{StaticResource CommonBackgroundBrush}"
-          ShowGridLines="True">
+          ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="3*"/>
@@ -45,8 +45,7 @@
         
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Visibility="{Binding IsFinalRoundPlaying, Converter={StaticResource VisibilityConverter}}">
+                    VerticalAlignment="Center">
             <Button Margin="10 0"
                     Height="120"
                     Width="260"
@@ -80,7 +79,7 @@
                     Command="{Binding NextQuestionCommand}"/>
         </StackPanel>
 
-        <Grid Grid.Column="1" Grid.Row="1" ShowGridLines="True">
+        <Grid Grid.Column="1" Grid.Row="1" ShowGridLines="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -89,6 +88,7 @@
             
             <controls:OutlinedTextBlock Grid.Row="0"
                                         TextAlignment="Center"
+                                        VerticalAlignment="Top"
                                         Style="{StaticResource DefaultText}"
                                         FontSize="50"
                                         Visibility="{Binding IsFinalRoundPlaying, Converter={StaticResource VisibilityConverter}}">
@@ -103,9 +103,16 @@
             <controls:OutlinedTextBlock Grid.Row="0"
                                         TextAlignment="Center"
                                         Style="{StaticResource DefaultText}"
-                                        FontSize="50"
+                                        FontSize="40"
                                         Visibility="{Binding IsFinalRoundPlaying, Converter={StaticResource VisibilityConverter}}"
                                         Text="{Binding CurrentQuestion.Text}"/>
+
+            <controls:OutlinedTextBlock Grid.Row="0"
+                                        TextAlignment="Center"
+                                        Style="{StaticResource DefaultText}"
+                                        FontSize="40"
+                                        Visibility="{Binding IsGameEnd, Converter={StaticResource VisibilityConverter}}"
+                                        Text="{Binding EndGameText}"/>
 
             <controls:OutlinedTextBlock Grid.Row="2"
                                         VerticalAlignment="Top"
@@ -122,14 +129,14 @@
                                         HorizontalAlignment="Stretch"
                                         TextAlignment="Center"
                                         Text="{Binding InfoText}"
-                                        FontSize="35"
+                                        FontSize="32"
                                         Style="{StaticResource DefaultText}"/>
         </Grid>
 
         <StackPanel Grid.Row="1" Grid.Column="1"
                     VerticalAlignment="Center" Orientation="Horizontal"
                     HorizontalAlignment="Center"
-                    Visibility="{Binding IsFinalRoundPlaying, Converter={StaticResource InvertVisibilityConverter}}">
+                    Visibility="{Binding IsFinalRoundStarted, Converter={StaticResource InvertVisibilityConverter}}">
             <Button HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Margin="100 0"
@@ -138,7 +145,6 @@
                     Style="{StaticResource DefaultButton}"
                     Content="{Binding FirstPlayer.Name}"
                     FontSize="60"
-                    Visibility="{Binding IsGameEnd, Converter={StaticResource InvertVisibilityConverter}}"
                     Command="{Binding StartFinalRoundCommand}"
                     CommandParameter="{Binding FirstPlayer}"/>
 
@@ -150,15 +156,18 @@
                     Style="{StaticResource DefaultButton}"
                     Content="{Binding SecondPlayer.Name}"
                     FontSize="60"
-                    Visibility="{Binding IsGameEnd, Converter={StaticResource InvertVisibilityConverter}}"
                     Command="{Binding StartFinalRoundCommand}"
                     CommandParameter="{Binding SecondPlayer}"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
-                    Visibility="{Binding IsFinalRoundPlaying, Converter={StaticResource VisibilityConverter}}">
-            <StackPanel Margin="0 0 0 20" Orientation="Horizontal">
-                <Button HorizontalAlignment="Left"
+                    Visibility="{Binding IsFinalRoundStarted, Converter={StaticResource VisibilityConverter}}">
+            <Grid Margin="0 0 0 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Margin="3 0"
                         Height="120" Width="380"
@@ -167,7 +176,7 @@
                         Style="{StaticResource DefaultNonClickableButton}"
                         Content="{Binding FirstPlayer.Name}" FontSize="50"/>
 
-                <ItemsControl ItemsSource="{Binding FirstPlayerAnswersPanel}">
+                <ItemsControl HorizontalAlignment="Center" Grid.Column="1" ItemsSource="{Binding FirstPlayerAnswersPanel}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal"/>
@@ -188,9 +197,15 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </StackPanel>
-            <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
-                <Button HorizontalAlignment="Left"
+            </Grid>
+            
+            <Grid Margin="0 20 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="0" HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Margin="3 0"
                         Height="120" Width="380"
@@ -199,7 +214,7 @@
                         Style="{StaticResource DefaultNonClickableButton}"
                         Content="{Binding SecondPlayer.Name}" FontSize="50"/>
 
-                <ItemsControl ItemsSource="{Binding SecondPlayerAnswersPanel}">
+                <ItemsControl HorizontalAlignment="Center" Grid.Column="1" ItemsSource="{Binding SecondPlayerAnswersPanel}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal"/>
@@ -220,11 +235,11 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </StackPanel>
+            </Grid>
         </StackPanel>
         
         <Border Grid.Row="2" Grid.Column="2"
-                Visibility="{Binding IsSuddenDeath, Converter={StaticResource InvertBooleanConverter}}">
+                Visibility="{Binding IsSuddenDeath, Converter={StaticResource InvertVisibilityConverter}}">
             <Button Margin="0 10"
                     VerticalAlignment="Bottom"
                     Height="150"

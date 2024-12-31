@@ -26,6 +26,16 @@ public class GameSession {
     /// Победитель игры
     /// </summary>
     public Player Winner { get; set; }
+    
+    /// <summary>
+    /// Первый финалист игры
+    /// </summary>
+    public Player FirstFinalist { get; set; }
+    
+    /// <summary>
+    /// Второй финалист игры
+    /// </summary>
+    public Player SecondFinalist { get; set; }
 
     /// <summary>
     /// Текущий раунд игры
@@ -48,6 +58,7 @@ public class GameSession {
     /// <returns>Полная статистика игры</returns>
     public List<FullPlayerStatistics> GetFullGameStatistics() {
         var result = AllPlayers.Select(p => new FullPlayerStatistics {
+            Player = p,
             BankedMoney = p.Statistics.Sum(x => x.BankedMoney),
             CorrectAnswers = p.Statistics.Sum(x => x.CorrectAnswers),
             WrongAnswers = p.Statistics.Sum(x => x.WrongAnswers),
