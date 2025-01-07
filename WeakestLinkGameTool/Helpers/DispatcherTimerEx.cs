@@ -5,7 +5,9 @@ namespace WeakestLinkGameTool.Helpers;
 /// <summary>
 /// 
 /// </summary>
-public class DispatcherTimerEx : DispatcherTimer{
+public class DispatcherTimerEx : DispatcherTimer {
+    
+    private readonly Logger logger = LogManager.GetCurrentClassLogger();
     
     /// <summary>
     /// 
@@ -66,6 +68,7 @@ public class DispatcherTimerEx : DispatcherTimer{
         base.Start();
         startTime = DateTime.Now;
         stopTime = DateTime.MinValue;
+        logger.Debug($"OnTick start: {startTime} stop: {stopTime}");
     }
 
     /// <summary>
@@ -73,9 +76,9 @@ public class DispatcherTimerEx : DispatcherTimer{
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void OnTick(object sender, EventArgs e)
-    {
+    private void OnTick(object sender, EventArgs e) {
         startTime = DateTime.Now;
+        logger.Debug($"OnTick start: {startTime}");
         if (base.Interval == maxInterval) return;
 
         Stop();
@@ -88,8 +91,14 @@ public class DispatcherTimerEx : DispatcherTimer{
     /// </summary>
     public void Pause()
     {
-        Stop();
         stopTime = DateTime.Now;
+        if (stopTime - startTime > maxInterval) {
+            startTime += maxInterval;
+            return;
+        }
+        
+        Stop();
+        logger.Debug($"Pause stop: {stopTime}");
     }
 
     /// <summary>
@@ -106,10 +115,17 @@ public class DispatcherTimerEx : DispatcherTimer{
         }
         else
         {
+            logger.Debug($"Resume start: {startTime} stop: {stopTime}");
+            
+            while (maxInterval < stopTime - startTime) {
+                startTime += maxInterval;
+            }
+            
             base.Interval = maxInterval - (stopTime - startTime);
             stopTime = DateTime.MinValue;
         }
 
+        logger.Debug($"Resume start: {startTime} stop: {stopTime}");
         base.Start();
     }
 }

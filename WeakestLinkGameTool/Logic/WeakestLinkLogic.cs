@@ -10,8 +10,7 @@ namespace WeakestLinkGameTool.Logic;
 public class WeakestLinkLogic {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private const string DEFAULT_MONEY_TREE_STRING = "1000;2000;5000;10000;20000;30000;40000;50000";
-    // private TimeSpan firstRoundTimer = new(0, 3, 0);
-    private TimeSpan firstRoundTimer = new(0, 1, 0); // TODO: TEST_REMOVE
+    private TimeSpan firstRoundTimer = new(0, 3, 0);
     private int currentQuestionIndex = -1;
     private int currentFinalQuestionIndex = -1;
     private int currentJokeIndex = -1;
@@ -97,10 +96,8 @@ public class WeakestLinkLogic {
                 IsPreFinal = (CurrentSession.CurrentRound?.Number + 1 ?? 1) == CurrentSession.AllPlayers.Count - 1,
                 BankedMoney = 0,
                 Timer = (CurrentSession.CurrentRound?.Number + 1 ?? 1) == CurrentSession.AllPlayers.Count - 1 
-                    // ? new TimeSpan(0, 1, 30)
-                    ? new TimeSpan(0, 0, 10) // TODO: TEST_REMOVE
-                    // : firstRoundTimer.Add(TimeSpan.FromSeconds(-10 * CurrentSession.CurrentRound?.Number ?? 0))
-                    : new TimeSpan(0, 0, 10) // TODO: TEST_REMOVE
+                    ? new TimeSpan(0, 1, 30)
+                    : firstRoundTimer.Add(TimeSpan.FromSeconds(-10 * CurrentSession.CurrentRound?.Number ?? 0))
             };
             
             CurrentSession.Rounds.Add(CurrentSession.CurrentRound);

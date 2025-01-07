@@ -3,8 +3,6 @@ using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.ViewModels.Base;
 using WeakestLinkGameTool.Views.MainPages;
-using WeakestLinkGameTool.Views.PlayerPages;
-using RegularRoundPage = WeakestLinkGameTool.Views.PlayerPages.RegularRoundPage;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
@@ -17,7 +15,7 @@ public class InputPlayersVM : ViewModelBase {
     
     public RelayCommand AddPlayerCommand => new(_ => AddPlayer(), _ => Players.Count < 11);
     public RelayCommand<Player> RemovePlayerCommand => new(RemovePlayer, _ => Players.Count > 0);
-    public RelayCommand BackCommand => new(_ => GoToMainMenu());
+    public RelayCommand BackCommand => new(_ => BackToMenu());
     public RelayCommand StartGameCommand => new(_ => StartGame());
 
     public InputPlayersVM() {
@@ -57,6 +55,13 @@ public class InputPlayersVM : ViewModelBase {
         }
         
         WeakestLinkLogic.CurrentSession.AllPlayers.Remove(player);
+    }
+    
+    /// <summary>
+    /// Возвращает в главное меню
+    /// </summary>
+    private void BackToMenu() {
+        GoToMainMenu();
     }
 
     /// <summary>

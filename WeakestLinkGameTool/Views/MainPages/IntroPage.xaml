@@ -10,13 +10,13 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
 
     <UserControl.DataContext>
-        <mainVMs:IntroVM />
+        <mainVMs:IntroVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -26,32 +26,41 @@
           Background="{StaticResource CommonBackgroundBrush}"
           ShowGridLines="False">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="4*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="1"
                                     Style="{StaticResource DefaultText}"
                                     Text="{Binding CurrentTitle}"
-                                    TextAlignment="Center" 
+                                    Visibility="{Binding IsIntroFinished, Converter={StaticResource VisibilityConverter}}"
+                                    TextAlignment="Center"
                                     FontSize="50"/>
 
-        <Button Grid.Row="1" Grid.Column="1"
-                Height="350"
-                Width="700"
-                Visibility="{Binding IsIntroFinished, Converter={StaticResource InvertVisibilityConverter}}"
-                Style="{StaticResource DefaultButton}"
-                IsEnabled="{Binding IsFirstTitle}"
-                Content="Начать вступление"
-                FontSize="80"
-                Command="{Binding StartIntroCommand}" />
-        
+        <StackPanel Grid.Row="1" Grid.Column="1"
+                    Visibility="{Binding IsIntroFinished, Converter={StaticResource InvertVisibilityConverter}}">
+            <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                        Text="{Binding IntroText}"
+                                        TextAlignment="Center"
+                                        FontSize="50"
+                                        Margin="0 30"/>
+
+            <Button Height="250"
+                    Width="500"
+                    Style="{StaticResource DefaultButton}"
+                    IsEnabled="{Binding IsIntroStarted, Converter={StaticResource InvertBooleanConverter}}"
+                    Content="Начать вступление"
+                    FontSize="60"
+                    Margin="0 30"
+                    Command="{Binding StartIntroCommand}"/>
+        </StackPanel>
+
         <Button Grid.Row="2" Grid.Column="0"
                 Height="140"
                 Width="280"
@@ -60,8 +69,8 @@
                 IsEnabled="{Binding IsFirstTitle, Converter={StaticResource InvertBooleanConverter}}"
                 Content="Назад"
                 FontSize="40"
-                Command="{Binding BackTitleCommand}" />
-        
+                Command="{Binding BackTitleCommand}"/>
+
         <Border Grid.Row="2" Grid.Column="2"
                 Visibility="{Binding IsIntroFinished, Converter={StaticResource VisibilityConverter}}">
             <Button Height="140"
@@ -71,9 +80,9 @@
                     Content="Далее"
                     Visibility="{Binding IsLastTitle, Converter={StaticResource InvertVisibilityConverter}}"
                     FontSize="40"
-                    Command="{Binding NextTitleCommand}"/>       
+                    Command="{Binding NextTitleCommand}"/>
         </Border>
-        
+
         <Button Grid.Row="2" Grid.Column="2"
                 Height="140"
                 Width="280"
@@ -81,6 +90,6 @@
                 Style="{StaticResource DefaultButton}"
                 Content="К правилам"
                 FontSize="40"
-                Command="{Binding RulesCommand}" />
+                Command="{Binding RulesCommand}"/>
     </Grid>
 </UserControl>

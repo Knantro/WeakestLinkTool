@@ -55,8 +55,8 @@ public class RulesVM : ViewModelBase {
     public RelayCommand StartGameCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>());
     
     public RulesVM() {
-        CurrentRule = Rules[currentRuleIndex];
-        // TODO: Музыка
+        CurrentRule = Rules[currentRuleIndex]; 
+        SoundManager.Play(SoundName.GENERAL_STING);
     }
 
     /// <summary>

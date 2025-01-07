@@ -9,6 +9,14 @@ public class IntroVM : ViewModelBase {
     private int currentTitleIndex = 0;
     private string currentTitle;
     private bool isIntroFinished;
+    private bool isIntroStarted;
+
+    /// <summary>
+    /// Текст интро
+    /// </summary>
+    public string IntroText => $"Вот {WeakestLinkLogic.CurrentSession.AllPlayers.Count} участников сегодняшней игры.{Environment.NewLine}" +
+                               $"Из них только один сможет забрать денежный приз, размером до {WeakestLinkLogic.MaxPossibleGain.Decline("рубль", "рубля", "рублей")}{Environment.NewLine}" +
+                               $"Остальные покинут студию ни с чем, по мере того как раунд за раундом команда назовёт их \"слабым звеном\"";
 
     /// <summary>
     /// Страницы вступления
@@ -25,6 +33,14 @@ public class IntroVM : ViewModelBase {
     /// Было ли совершено первое пролистывание вступления
     /// </summary>
     public bool IsFirstNextTitleDone { get; set; }
+
+    /// <summary>
+    /// Началось ли интро
+    /// </summary>
+    public bool IsIntroStarted {
+        get => isIntroStarted;
+        set => SetField(ref isIntroStarted, value);
+    }
 
     /// <summary>
     /// Закончилось ли интро
@@ -67,13 +83,18 @@ public class IntroVM : ViewModelBase {
     /// <summary>
     /// Начинает вступление
     /// </summary>
-    public RelayCommand StartIntroCommand => new(_ => { // TODO: Исправить после введения музыки
-        IsIntroFinished = true;
+    public RelayCommand StartIntroCommand => new(async _ => {
+        IsIntroStarted = true;
+        // TODO: Избавиться от костыля (этап экрана игрока)
+        await Task.Delay(3 * 1000);
+        await SoundManager.FadeWith(SoundName.INTRO, SoundName.OPENING_TITLES, SoundConst.OPENING_TITLES_FADE, TimeSpan.FromMilliseconds(SoundConst.OPENING_TITLES_POSITION_MS));
         CurrentTitle = Titles[currentTitleIndex];
+        await Task.Delay(12 * 1000);
+        IsIntroFinished = true;
     }); 
     
     public IntroVM() {
-        
+        SoundManager.LoopPlay(SoundName.INTRO, SoundConst.INTRO_LOOP_POSITION_A, SoundConst.INTRO_LOOP_POSITION_B);
     }
 
     /// <summary>
@@ -82,7 +103,10 @@ public class IntroVM : ViewModelBase {
     /// <param name="forward">Направление изменения страницы. По умолчанию - True, то есть следующая</param>
     private void ChangeTitle(bool forward = true) {
         if (forward && !IsFirstNextTitleDone) {
-            // TODO: Музыка
+            SoundManager.Play(SoundName.SHORT_STING);
+            SoundManager.SetVolumeCoefficient(SoundName.GENERAL_BED, 0.2f);
+            SoundManager.FadeWith(SoundName.SHORT_STING, SoundName.GENERAL_BED, null, 3000, 
+                soundInPositionA: SoundConst.GENERAL_BED_LOOP_POSITION_A, soundInPositionB: SoundConst.GENERAL_BED_LOOP_POSITION_B);
             IsFirstNextTitleDone = true;
         }
         

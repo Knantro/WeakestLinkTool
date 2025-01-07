@@ -15,6 +15,7 @@ namespace WeakestLinkGameTool.ViewModels.MainVMs;
 public class RegularRoundPanelVM : ViewModelBase {
     private Player currentPlayer;
     private TimeSpan timeLeft;
+    private bool isRoundPaused;
     private Stopwatch answerStopwatch = new();
     private bool isRoundStarted;
     private bool isRoundPlayingNow;
@@ -124,6 +125,14 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// <summary>
     /// 
     /// </summary>
+    public bool IsRoundPaused {
+        get => isRoundPaused;
+        set => SetField(ref isRoundPaused, value);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public string TimeText => timeLeft.ToString("m\\:ss");
 
     public string RoundEndNextButtonText { get; set; } = "Следующая подколка";
@@ -133,7 +142,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     public RelayCommand BankCommand { get; set; }
     public RelayCommand MeasureTimeCommand { get; set; }
     public RelayCommand PauseRoundCommand { get; set; }
-    public RelayCommand ContinueRoundCommand { get; set; }
+    public RelayCommand ResumeRoundCommand { get; set; }
     public RelayCommand PreviousQuestionCommand { get; set; }
     public RelayCommand NextQuestionCommand { get; set; }
     
@@ -141,6 +150,8 @@ public class RegularRoundPanelVM : ViewModelBase {
     public RelayCommand RoundEndCommand { get; set; }
 
     public RegularRoundPanelVM() {
+        SoundManager.Play(SoundName.GENERAL_STING);
+        
         // Реверс для отображения
         MoneyTree = new ObservableCollection<MoneyTreeNodeVisual>(WeakestLinkLogic.MoneyTree.Select(x => x.ConvertToVisual()).Reverse());
         MoneyTree.Last().IsActive = true;
@@ -153,8 +164,8 @@ public class RegularRoundPanelVM : ViewModelBase {
         WrongAnswerCommand = new RelayCommand(_ => MarkWrongAnswer(), _ => IsRoundPlayingNow);
         BankCommand = new RelayCommand(_ => BankMoney(), _ => IsRoundPlayingNow && MoneyTree.FirstOrDefault(x => x.InChain) != null);
         MeasureTimeCommand = new RelayCommand(_ => StartAnswerMeasuring(), _ => IsRoundPlayingNow);
-        PauseRoundCommand = new RelayCommand(_ => PauseRound(), _ => IsRoundPlayingNow);
-        ContinueRoundCommand = new RelayCommand(_ => ResumeRound(), _ => IsRoundPlayingNow);
+        PauseRoundCommand = new RelayCommand(_ => PauseRound(), _ => IsRoundPlayingNow && !IsRoundPaused);
+        ResumeRoundCommand = new RelayCommand(_ => ResumeRound(), _ => IsRoundPlayingNow && IsRoundPaused);
         PreviousQuestionCommand = new RelayCommand(_ => PreviousQuestion(), _ => IsRoundPlayingNow && QuestionIndex > 0);
         NextQuestionCommand = new RelayCommand(_ => NextQuestion(), _ => IsRoundPlayingNow);
         
@@ -172,7 +183,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         if (TimeLeft.TotalSeconds < 1) {
             timer.Stop();
             await Task.Delay(3000);
-            
+            SoundManager.Resume(SoundName.GENERAL_BED);
             CompleteRound();
         }
     }
@@ -200,19 +211,12 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void StartRound() {
-        // TODO: Музыка
+        SoundManager.Play(SoundName.FromRound(CurrentRound.Timer!.Value));
+        SoundManager.Pause(SoundName.GENERAL_BED);
         NextPlayerQuestion();
         WeakestLinkLogic.ResetTempPlayerParams();
         IsRoundStarted = true;
         IsRoundPlayingNow = true;
-        StartTimer();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private void StartTimer() {
-        // TODO: Музыка
         timer.Start();
     }
 
@@ -220,16 +224,20 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void ResumeRound() {
-        // TODO: Музыка
         timer.Resume();
+        IsRoundPaused = false;
+        SoundManager.Play(SoundName.START_TIMER);
+        SoundManager.Resume(SoundName.FromRound(CurrentRound.Timer!.Value));
     }
 
     /// <summary>
     /// 
     /// </summary>
     private void PauseRound() {
-        // TODO: Музыка
         timer.Pause();
+        IsRoundPaused = true;
+        SoundManager.Play(SoundName.STOP_TIMER);
+        SoundManager.Pause(SoundName.FromRound(CurrentRound.Timer!.Value));
     }
 
     /// <summary>
@@ -294,7 +302,9 @@ public class RegularRoundPanelVM : ViewModelBase {
         if (money > 0) {
             if (Bank + money >= MoneyTree.First().Value) {
                 money = MoneyTree.First().Value - Bank;
-                // TODO: Музыка
+                SoundManager.Play(SoundName.TARGET_STING);
+                SoundManager.Resume(SoundName.GENERAL_BED);
+                SoundManager.Stop(SoundName.FromRound(CurrentRound.Timer!.Value));
                 timer.Stop();
                 CompleteRound();
             }

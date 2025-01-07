@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using WeakestLinkGameTool.Commands;
+using WeakestLinkGameTool.Logic;
+using WeakestLinkGameTool.Logic.Sounds;
 using WeakestLinkGameTool.ViewModels.Base;
 using WeakestLinkGameTool.Views.MainPages;
 

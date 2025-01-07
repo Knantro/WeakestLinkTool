@@ -110,6 +110,12 @@ public class VotingPanelVM : ViewModelBase {
         Players = new ObservableCollection<Player>(WeakestLinkLogic.CurrentSession.ActivePlayers);
         IsVotingInProgress = true;
         IsRoundStatisticsSelected = true;
+        Task.Run(async () => {
+            SoundManager.Pause(SoundName.GENERAL_BED);
+            SoundManager.Play(SoundName.GENERAL_STING);
+            await Task.Delay(2300); // TODO: Magic const
+            SoundManager.LoopPlay(SoundName.VOTING_BED, SoundConst.VOTING_BED_LOOP_POSITION_A, SoundConst.VOTING_BED_LOOP_POSITION_B);
+        });
         // SelectedPlayer = DesignData.Player1;
         // IsPersonalStatisticsSelected = true;
         // IsVotingDone = true;
@@ -182,7 +188,8 @@ public class VotingPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void StopVoting() {
-        // TODO: Музыка
+        SoundManager.FadeWith(SoundName.VOTING_BED, SoundName.GENERAL_STING, 2000, fadeInMilliseconds: null); // TODO: Magic const
+        SoundManager.Resume(SoundName.GENERAL_BED);
         IsVotingInProgress = false;
     }
 
@@ -190,7 +197,7 @@ public class VotingPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void DoneVoting() {
-        // TODO: Музыка
+        SoundManager.Play(SoundName.VOTING_STING);
         IsVotingDone = true;
     }
 }

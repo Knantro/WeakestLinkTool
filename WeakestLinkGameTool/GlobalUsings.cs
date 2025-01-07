@@ -6,3 +6,5 @@ global using System.Text.Json.Serialization;
 global using NLog;
 global using Microsoft.Extensions.DependencyInjection;
 global using WeakestLinkGameTool.Extensions;
+global using WeakestLinkGameTool.Logic;
+global using WeakestLinkGameTool.Logic.Sounds;

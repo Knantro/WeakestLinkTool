@@ -15,7 +15,7 @@ public partial class MainWindow : Window {
     {
         InitializeComponent();
         
-        MainDataContext.CurrentMWPage = Activator.CreateInstance<EndGamePage>();
+        MainDataContext.CurrentMWPage = Activator.CreateInstance<MainMenuPage>();
 
         // SourceInitialized += (sender, args) => {
         //     var secondWindow = new PlayerWindow {

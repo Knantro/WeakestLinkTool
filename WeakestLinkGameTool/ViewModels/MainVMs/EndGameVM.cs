@@ -88,9 +88,12 @@ public class EndGameVM : ViewModelBase {
     public RelayCommand<Player> SelectStatisticsCommand => new(FormPersonalStatistics);
     public RelayCommand StartNewGameCommand => new(_ => StartNewGame());
     public RelayCommand FullStatisticsCommand => new(_ => ShowFullGameStatistics());
-    public RelayCommand ToMenuCommand => new(_ => GoToMainMenu());
-    
+    public RelayCommand ToMenuCommand => new(_ => GoToMenu());
+
     public EndGameVM() {
+        SoundManager.FadeWith(SoundName.WINNER_THEME, SoundName.CLOSING_TITLES, fadeOutMilliseconds: 500, // TODO: Magic const
+            soundInPositionA: SoundConst.CLOSING_TITLES_LOOP_POSITION_A, soundInPositionB: SoundConst.CLOSING_TITLES_LOOP_POSITION_B);
+        
         Winner = WeakestLinkLogic.CurrentSession.Winner;
         FirstFinalist = WeakestLinkLogic.CurrentSession.FirstFinalist;
         FirstFinalistAnswers = WeakestLinkLogic.CurrentSession.CurrentRound.Statistics.PlayersStatistics[FirstFinalist].FinalRoundAnswers;
@@ -106,7 +109,16 @@ public class EndGameVM : ViewModelBase {
     /// 
     /// </summary>
     private void StartNewGame() {
-        
+        // TODO: ChangeMWPage<InputPlayersPage>();
+        // TODO: WeakestLinkLogic.ResetSession();
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    private void GoToMenu() {
+        SoundManager.FadeWith(SoundName.CLOSING_TITLES, SoundName.CLOSING_TITLES_STING, SoundConst.CLOSING_TITLES_FADE, TimeSpan.FromMilliseconds(SoundConst.CLOSING_TITLES_POSITION_MS));
+        GoToMainMenu();
     }
 
     /// <summary>

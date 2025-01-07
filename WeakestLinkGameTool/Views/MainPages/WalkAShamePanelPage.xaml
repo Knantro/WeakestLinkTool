@@ -9,13 +9,13 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
 
     <UserControl.DataContext>
-        <mainVMs:WalkAShamePanelVM />
+        <mainVMs:WalkAShamePanelVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -25,14 +25,14 @@
           ShowGridLines="False"
           Background="{StaticResource WalkAShameBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="4*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <controls:OutlinedTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
@@ -41,22 +41,24 @@
                                     FontSize="50"
                                     Text="Слабое звено"
                                     VerticalAlignment="Top"/>
-        
-        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
-                Background="{StaticResource GrayButtonBrush}"
-                Height="350"
-                Width="700"
-                Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource InvertVisibilityConverter}}"
-                Style="{StaticResource DefaultButton}"
-                Content="Объявить слабое звено"
-                FontSize="75"
-                Command="{Binding DeclareWeakestLinkCommand}" />
 
-        <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
-                                    Style="{StaticResource DefaultText}"
-                                    FontSize="50"
-                                    Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource VisibilityConverter}}"
-                                    Text="{Binding KickedPlayer.Name, StringFormat={}{0}\, вы - самое слабое звено\, прощайте!}" />
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center">
+            <controls:OutlinedTextBlock
+                Style="{StaticResource DefaultText}"
+                FontSize="50"
+                Margin="0 20"
+                Text="{Binding KickedPlayer.Name, StringFormat={}{0}\, вы - самое слабое звено\, прощайте!}"/>
+
+            <Button Background="{StaticResource GrayButtonBrush}"
+                    Height="250"
+                    Width="500"
+                    Margin="0 20"
+                    Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource InvertVisibilityConverter}}"
+                    Style="{StaticResource DefaultButton}"
+                    Content="Объявить слабое звено"
+                    FontSize="50"
+                    Command="{Binding DeclareWeakestLinkCommand}"/>
+        </StackPanel>
 
         <Button Grid.Row="2" Grid.Column="2"
                 Height="140"
@@ -66,6 +68,6 @@
                 Background="{StaticResource GrayButtonBrush}"
                 Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource VisibilityConverter}}"
                 Content="Новый раунд"
-                Command="{Binding PreRoundInstructionCommand}" />
+                Command="{Binding PreRoundInstructionCommand}"/>
     </Grid>
 </UserControl>

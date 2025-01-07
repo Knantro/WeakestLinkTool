@@ -9,15 +9,14 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
 
     <UserControl.InputBindings>
-        <!-- TODO: Done bindings -->
-        <KeyBinding Key="D1" Command="{Binding}"  />
-        <KeyBinding Key="D2" Command="{Binding}" />
-        <KeyBinding Key="D3" Command="{Binding}" />
-        <KeyBinding Key="D4" Command="{Binding}" />
-        <KeyBinding Key="D5" Command="{Binding}" />
-        <KeyBinding Key="D6" Command="{Binding}" />
-        <KeyBinding Key="D7" Command="{Binding}" />
-        <KeyBinding Key="D8" Command="{Binding}" />
+        <KeyBinding Key="D1" Command="{Binding CorrectAnswerCommand}"  />
+        <KeyBinding Key="D2" Command="{Binding WrongAnswerCommand}" />
+        <KeyBinding Key="D3" Command="{Binding BankCommand}" />
+        <KeyBinding Key="D4" Command="{Binding MeasureTimeCommand}" />
+        <KeyBinding Key="D5" Command="{Binding PauseRoundCommand}" />
+        <KeyBinding Key="D6" Command="{Binding ResumeRoundCommand}" />
+        <KeyBinding Key="D7" Command="{Binding PreviousQuestionCommand}" />
+        <KeyBinding Key="D8" Command="{Binding NextQuestionCommand}" />
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -243,7 +242,7 @@
                     Height="120"
                     Width="260"
                     Padding="0"
-                    Command="{Binding ContinueRoundCommand}"
+                    Command="{Binding ResumeRoundCommand}"
                     Style="{StaticResource DefaultButton}"
                     Content="6. Продолжить раунд" FontSize="30" />
             <Button VerticalAlignment="Center"

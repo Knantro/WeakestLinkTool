@@ -25,6 +25,12 @@ public static class FilePaths {
         GetFullDataPath(GAME_SESSION_TEMPLATE.Replace("*", sessionNumber.ToString()));
 
     /// <summary>
+    /// Возвращает массив из путей до файлов музыки игры
+    /// </summary>
+    /// <returns>Абсолютные пути до файлов музыки</returns>
+    public static string[] GetSoundPaths() => Directory.GetFiles(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Sounds"));
+
+    /// <summary>
     /// Получить полный путь до файла с хранилищем информации определённого типа
     /// </summary>
     /// <param name="fileName">Имя файла (рекомендуется брать из полей <see cref="FilePaths"/> типа)</param>

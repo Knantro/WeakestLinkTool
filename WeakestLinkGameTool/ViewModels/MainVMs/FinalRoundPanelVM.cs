@@ -140,7 +140,8 @@ public class FinalRoundPanelVM : ViewModelBase {
     public RelayCommand EndGameCommand => new(_ => EndGame());
 
     public FinalRoundPanelVM() {
-        // TODO: Музыка
+        SoundManager.Play(SoundName.FINAL_BEGIN_STING);
+        
         WeakestLinkLogic.NextRound();
         FirstPlayer = WeakestLinkLogic.CurrentSession.ActivePlayers[0];
         SecondPlayer = WeakestLinkLogic.CurrentSession.ActivePlayers[1];
@@ -174,7 +175,9 @@ public class FinalRoundPanelVM : ViewModelBase {
     /// </summary>
     /// <param name="player"></param>
     private void StartFinalRound(Player player) {
-        // TODO: Музыка
+        SoundManager.FadeWith(SoundName.GENERAL_BED, SoundName.PENALTY_SHOOTOUT_BED, fadeOutMilliseconds: 200, // TODO: Magic const
+            soundInPositionA: SoundConst.PENALTY_SHOOTOUT_BED_LOOP_POSITION_A, soundInPositionB: SoundConst.PENALTY_SHOOTOUT_BED_LOOP_POSITION_B);      
+        
         if (player != FirstPlayer) {
             (FirstPlayer, SecondPlayer) = (SecondPlayer, FirstPlayer);
         }
@@ -301,7 +304,8 @@ public class FinalRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void StartSuddenDeath() {
-        // TODO: Музыка
+        SoundManager.FadeWith(SoundName.PENALTY_SHOOTOUT_BED, SoundName.SUDDEN_DEATH_BED, fadeOutMilliseconds: 200, // TODO: Magic const
+            soundInPositionA: SoundConst.SUDDEN_DEATH_BED_LOOP_POSITION_A, soundInPositionB: SoundConst.SUDDEN_DEATH_BED_LOOP_POSITION_B);
         IsTie = false;
         CurrentPlayer = FirstPlayer;
         InfoText = string.Empty;
@@ -372,10 +376,9 @@ public class FinalRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private bool CheckWin() {
-        // TODO: Музыка
-        
         if (FirstPlayerAnswersPanel.Count(x => x.IsRight == true) > 
             SecondPlayerAnswersPanel.Count(x => x.IsRight == true) + SecondPlayerAnswersPanel.Count(x => x.IsRight == null)) {
+            WinSound();
             FirstPlayer.IsWinner = true;
             WeakestLinkLogic.CurrentSession.Winner = FirstPlayer;
             IsGameEnd = true;
@@ -387,6 +390,7 @@ public class FinalRoundPanelVM : ViewModelBase {
 
         if (SecondPlayerAnswersPanel.Count(x => x.IsRight == true) >
             FirstPlayerAnswersPanel.Count(x => x.IsRight == true) + FirstPlayerAnswersPanel.Count(x => x.IsRight == null)) {
+            WinSound();
             SecondPlayer.IsWinner = true;
             WeakestLinkLogic.CurrentSession.Winner = SecondPlayer;
             IsGameEnd = true;
@@ -397,6 +401,15 @@ public class FinalRoundPanelVM : ViewModelBase {
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void WinSound() {
+        SoundManager.FadeWith(IsSuddenDeath ? SoundName.SUDDEN_DEATH_BED : SoundName.PENALTY_SHOOTOUT_BED, SoundName.WINNER_THEME, fadeOutMilliseconds: 1000, // TODO: Magic const
+            soundInPositionA: SoundConst.WINNER_THEME_LOOP_POSITION_A, // TODO: Magic const
+            soundInPositionB: SoundConst.WINNER_THEME_LOOP_POSITION_B);
     }
 
     /// <summary>

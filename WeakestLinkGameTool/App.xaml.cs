@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using WeakestLinkGameTool.Logic;
+using WeakestLinkGameTool.Logic.Sounds;
 using WeakestLinkGameTool.ViewModels.Base;
 
 namespace WeakestLinkGameTool;
@@ -60,6 +59,12 @@ public partial class App : Application {
         Settings = FileStorage.Load<AppSettings>(FilePaths.GetFullPath(FilePaths.APPSETTINGS)) ?? new AppSettings();
         
         ServiceProvider = serviceCollection.BuildServiceProvider();
+    }
+    
+    protected override void OnExit(ExitEventArgs e)
+    {
+        base.OnExit(e);
+        SoundManager.DisposeAll();
     }
 
     private void ConfigureServices(IServiceCollection services) {
