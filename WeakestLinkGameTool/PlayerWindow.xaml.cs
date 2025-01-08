@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using WeakestLinkGameTool.ViewModels.Base;
-using WeakestLinkGameTool.Views;
 using WeakestLinkGameTool.Views.MainPages;
 
 namespace WeakestLinkGameTool;
@@ -10,10 +10,12 @@ namespace WeakestLinkGameTool;
 /// </summary>
 public partial class PlayerWindow : Window
 {
+    public MainWindowViewModel MainDataContext => App.ServiceProvider.GetService<MainWindowViewModel>();
+    
     public PlayerWindow()
     {
         InitializeComponent();
         
-        ((MainWindowViewModel)DataContext).CurrentMWPage = Activator.CreateInstance<EditorPage>();
+        ((MainWindowViewModel)DataContext).CurrentPWPage = Activator.CreateInstance<MainMenuPage>();
     }
 }

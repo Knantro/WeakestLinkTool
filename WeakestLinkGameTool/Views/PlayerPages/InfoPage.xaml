@@ -6,6 +6,7 @@
              xmlns:playerVMs="clr-namespace:WeakestLinkGameTool.ViewModels.PlayerVMs"
              xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
              mc:Ignorable="d"
+             Focusable="True"
              d:DesignHeight="1080"
              d:DesignWidth="1920">
 
@@ -71,8 +72,7 @@
                     Height="100"
                     BorderBrush="Black"
                     BorderThickness="1"
-                    Width="240"
-                    Opacity="{Binding BankAnimatedO}">
+                    Width="240">
                 <controls:OutlinedTextBlock Text="{Binding CurrentTotalBank}"
                                             FontSize="45"
                                             Style="{StaticResource DefaultText}" />

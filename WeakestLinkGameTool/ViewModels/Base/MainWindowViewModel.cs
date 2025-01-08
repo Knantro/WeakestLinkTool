@@ -2,9 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Forms;
-using WeakestLinkGameTool.Logic;
+using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.Models.Visual;
+using Application = System.Windows.Application;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace WeakestLinkGameTool.ViewModels.Base; 
@@ -94,9 +95,26 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => windowStyle;
         set => SetField(ref windowStyle, value);
     }
+    
+    public RelayCommand<CancelEventArgs> ClosingCommand { get; }
 
     public MainWindowViewModel() {
         RestoreSettings();
+        ClosingCommand = new RelayCommand<CancelEventArgs>(OnClosingWindow);
+    }
+
+    public void OnClosingWindow(CancelEventArgs e) {
+        e.Cancel = true;
+        ShowMessageBox("Вы уверены, что хотите выйти из игры?", "Предупреждение", MessageBoxButton.YesNo);
+        OnDialogResult += ClosingDialogResult;
+    }
+
+    private void ClosingDialogResult(MessageBoxResult result) {
+        if (result == MessageBoxResult.Yes) {
+            Application.Current.Shutdown();
+        }
+
+        OnDialogResult -= ClosingDialogResult;
     }
 
     /// <summary>

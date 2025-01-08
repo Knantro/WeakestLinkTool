@@ -20,6 +20,16 @@ public static class NumberExtensions {
         number >= left && number <= right;
 
     /// <summary>
+    /// Проверяет, что число находится в интервале
+    /// </summary>
+    /// <param name="number">Исходное число</param>
+    /// <param name="left">Левая граница интервала</param>
+    /// <param name="right">Правая граница интервала</param>
+    /// <returns>True, если число внутри интервала, иначе False</returns>
+    public static bool InRange(this float number, float left, float right) =>
+        number >= left && number <= right;
+
+    /// <summary>
     /// Склоняет существительное в зависимости от числительного перед ним
     /// </summary>
     /// <param name="num">Число</param>

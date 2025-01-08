@@ -13,6 +13,12 @@ public class ViewModelBase : INPCBase, IDisposable {
     protected MainWindowViewModel mainWindowViewModel = App.ServiceProvider.GetService<MainWindowViewModel>();
     protected static Random rand = new();
 
+    #region PlayerVMEvents
+
+
+
+    #endregion
+
     public ViewModelBase() {
         mainWindowViewModel.OnDialogResult += OnDialogResult;
     }

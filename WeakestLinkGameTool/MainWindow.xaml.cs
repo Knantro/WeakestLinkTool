@@ -8,21 +8,23 @@ namespace WeakestLinkGameTool;
 /// Окно ведущего
 /// </summary>
 public partial class MainWindow : Window {
-
     public MainWindowViewModel MainDataContext => App.ServiceProvider.GetService<MainWindowViewModel>();
-    
-    public MainWindow()
-    {
+
+    private PlayerWindow playerWindow = new();
+
+    public MainWindow() {
         InitializeComponent();
-        
+
         MainDataContext.CurrentMWPage = Activator.CreateInstance<MainMenuPage>();
 
-        // SourceInitialized += (sender, args) => {
-        //     var secondWindow = new PlayerWindow {
-        //         Owner = this
-        //     };
-        //
-        //     secondWindow.Show();
-        // };
+        SourceInitialized += (_, _) => {
+            playerWindow.Show();
+        };
+    }
+
+    protected override void OnClosed(EventArgs e) {
+        base.OnClosed(e);
+        
+        playerWindow.Close();
     }
 }

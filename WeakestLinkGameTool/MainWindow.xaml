@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:base="clr-namespace:WeakestLinkGameTool.ViewModels.Base"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         
@@ -22,11 +22,13 @@
         
         WindowStartupLocation="CenterScreen"
         Title="Weakest Link Game">
-
-    <!-- <Window.DataContext> -->
-    <!--     <base:MainWindowViewModel /> -->
-    <!-- </Window.DataContext> -->
     
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Closing">
+            <b:InvokeCommandAction Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
+
     <Viewbox MaxWidth="1920"
              MaxHeight="1080"
              Stretch="Uniform"

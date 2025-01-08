@@ -15,11 +15,12 @@ namespace WeakestLinkGameTool.ViewModels.MainVMs;
 public class RegularRoundPanelVM : ViewModelBase {
     private Player currentPlayer;
     private TimeSpan timeLeft;
-    private bool isRoundPaused;
     private Stopwatch answerStopwatch = new();
     private bool isRoundStarted;
     private bool isRoundPlayingNow;
+    private bool isRoundPaused;
     private bool isRoundEnded;
+    private bool isAnswerTimeMeasuring;
     private Question currentQuestion;
     private Question followingQuestion;
     private Joke currentJoke;
@@ -125,6 +126,14 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// <summary>
     /// 
     /// </summary>
+    public bool IsAnswerTimeMeasuring {
+        get => isAnswerTimeMeasuring;
+        set => SetField(ref isAnswerTimeMeasuring, value);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public bool IsRoundPaused {
         get => isRoundPaused;
         set => SetField(ref isRoundPaused, value);
@@ -140,7 +149,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     public RelayCommand CorrectAnswerCommand { get; set; }
     public RelayCommand WrongAnswerCommand { get; set; }
     public RelayCommand BankCommand { get; set; }
-    public RelayCommand MeasureTimeCommand { get; set; }
+    public RelayCommand MeasureAnswerTimeCommand { get; set; }
     public RelayCommand PauseRoundCommand { get; set; }
     public RelayCommand ResumeRoundCommand { get; set; }
     public RelayCommand PreviousQuestionCommand { get; set; }
@@ -163,7 +172,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         CorrectAnswerCommand = new RelayCommand(async _ => await MarkCorrectAnswer(), _ => IsRoundPlayingNow);
         WrongAnswerCommand = new RelayCommand(_ => MarkWrongAnswer(), _ => IsRoundPlayingNow);
         BankCommand = new RelayCommand(_ => BankMoney(), _ => IsRoundPlayingNow && MoneyTree.FirstOrDefault(x => x.InChain) != null);
-        MeasureTimeCommand = new RelayCommand(_ => StartAnswerMeasuring(), _ => IsRoundPlayingNow);
+        MeasureAnswerTimeCommand = new RelayCommand(_ => StartAnswerMeasuring(), _ => IsRoundPlayingNow && !IsAnswerTimeMeasuring && !IsRoundPaused);
         PauseRoundCommand = new RelayCommand(_ => PauseRound(), _ => IsRoundPlayingNow && !IsRoundPaused);
         ResumeRoundCommand = new RelayCommand(_ => ResumeRound(), _ => IsRoundPlayingNow && IsRoundPaused);
         PreviousQuestionCommand = new RelayCommand(_ => PreviousQuestion(), _ => IsRoundPlayingNow && QuestionIndex > 0);
@@ -235,6 +244,8 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// </summary>
     private void PauseRound() {
         timer.Pause();
+        answerStopwatch.Reset();
+        IsAnswerTimeMeasuring = false;
         IsRoundPaused = true;
         SoundManager.Play(SoundName.STOP_TIMER);
         SoundManager.Pause(SoundName.FromRound(CurrentRound.Timer!.Value));
@@ -289,6 +300,8 @@ public class RegularRoundPanelVM : ViewModelBase {
         answerStopwatch.Stop();
         var answerTime = answerStopwatch.Elapsed.TotalSeconds;
         answerStopwatch.Reset();
+        
+        IsAnswerTimeMeasuring = false;
 
         return answerTime;
     }
@@ -302,11 +315,13 @@ public class RegularRoundPanelVM : ViewModelBase {
         if (money > 0) {
             if (Bank + money >= MoneyTree.First().Value) {
                 money = MoneyTree.First().Value - Bank;
-                SoundManager.Play(SoundName.TARGET_STING);
-                SoundManager.Resume(SoundName.GENERAL_BED);
-                SoundManager.Stop(SoundName.FromRound(CurrentRound.Timer!.Value));
-                timer.Stop();
-                CompleteRound();
+                if (TimeLeft.TotalSeconds >= 1) {
+                    SoundManager.Play(SoundName.TARGET_STING);
+                    SoundManager.Resume(SoundName.GENERAL_BED);
+                    SoundManager.Stop(SoundName.FromRound(CurrentRound.Timer!.Value));
+                    timer.Stop();
+                    CompleteRound();
+                }
             }
             
             Bank += money;
@@ -332,6 +347,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// </summary>
     private void StartAnswerMeasuring() {
         if (!answerStopwatch.IsRunning) {
+            IsAnswerTimeMeasuring = true;
             answerStopwatch.Start();
         }
     }
@@ -340,6 +356,8 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void NextQuestion() {
+        answerStopwatch.Reset();
+        IsAnswerTimeMeasuring = false;
         QuestionIndex++;
         CurrentQuestion = WeakestLinkLogic.NextQuestion();
         FollowingQuestion = WeakestLinkLogic.NextFollowingQuestion();
@@ -349,6 +367,8 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void PreviousQuestion() {
+        answerStopwatch.Reset();
+        IsAnswerTimeMeasuring = false;
         QuestionIndex--;
         CurrentQuestion = WeakestLinkLogic.PreviousQuestion();
         FollowingQuestion = WeakestLinkLogic.NextFollowingQuestion();

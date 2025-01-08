@@ -8,6 +8,7 @@
              xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
              xmlns:playerVMs="clr-namespace:WeakestLinkGameTool.ViewModels.PlayerVMs"
              mc:Ignorable="d"
+             Focusable="True"
              d:DesignHeight="1080" d:DesignWidth="1920">
 
     <UserControl.InputBindings>

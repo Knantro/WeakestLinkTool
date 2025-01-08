@@ -407,7 +407,7 @@ public class FinalRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void WinSound() {
-        SoundManager.FadeWith(IsSuddenDeath ? SoundName.SUDDEN_DEATH_BED : SoundName.PENALTY_SHOOTOUT_BED, SoundName.WINNER_THEME, fadeOutMilliseconds: 1000, // TODO: Magic const
+        SoundManager.FadeWith(IsSuddenDeath ? SoundName.SUDDEN_DEATH_BED : SoundName.PENALTY_SHOOTOUT_BED, SoundName.WINNER_THEME, fadeOutMilliseconds: 1500, // TODO: Magic const
             soundInPositionA: SoundConst.WINNER_THEME_LOOP_POSITION_A, // TODO: Magic const
             soundInPositionB: SoundConst.WINNER_THEME_LOOP_POSITION_B);
     }

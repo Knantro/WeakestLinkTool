@@ -6,6 +6,7 @@
              xmlns:viewModels="clr-namespace:WeakestLinkGameTool.ViewModels"
              xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
              mc:Ignorable="d"
+             Focusable="True"
              d:DesignHeight="1080" 
              d:DesignWidth="1920">
 

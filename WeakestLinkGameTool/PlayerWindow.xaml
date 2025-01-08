@@ -6,14 +6,28 @@
         xmlns:base="clr-namespace:WeakestLinkGameTool.ViewModels.Base"
         mc:Ignorable="d"
         Title="Weakest Link Game - Player Window"
-        ResizeMode="CanMinimize"
-        WindowState="Maximized">
+        ResizeMode="CanResize"
+        
+        DataContext="{Binding Path=MainDataContext, RelativeSource={RelativeSource Self}}"
+        
+        MinHeight="{Binding Height}"
+        Height="{Binding Height}"
+        MaxHeight="{Binding Height}"
+        
+        MinWidth="{Binding Width}"
+        Width="{Binding Width}"
+        MaxWidth="{Binding Width}"
+        
+        WindowState="{Binding WindowState}"
+        WindowStyle="{Binding WindowStyle}">
 
-    <Window.DataContext>
-        <base:MainWindowViewModel />
-    </Window.DataContext>
-
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <ContentControl Content="{Binding CurrentPWPage}" />
-    </Grid>
+    <Viewbox MaxWidth="1920"
+             MaxHeight="1080"
+             Stretch="Uniform"
+             StretchDirection="Both">
+        <Grid Width="1920"
+              Height="1080">
+            <ContentControl Content="{Binding CurrentPWPage}" />
+        </Grid>
+    </Viewbox>
 </Window>

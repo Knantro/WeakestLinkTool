@@ -43,7 +43,7 @@ public static class SoundManager {
     /// <param name="volume"></param>
     public static void SetVolume(string soundName, float volume) {
         if (audios.TryGetValue(soundName, out var audio)) {
-            audio.Volume = volume;
+            audio.SetVolume(volume);
         }
         else logger.Warn($"Audio '{soundName}' does not exist");
     }
@@ -65,7 +65,42 @@ public static class SoundManager {
     /// </summary>
     /// <param name="volume"></param>
     public static void SetVolumeAll(float volume) {
-        audios.Values.ForEach(x => x.Volume = volume);
+        audios.Values.ForEach(x => x.SetVolume(volume));
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="soundName"></param>
+    /// <param name="destVolume"></param>
+    /// <param name="duration"></param>
+    public static async Task FadeVolume(string soundName, float destVolume, int duration)
+    {
+        if (!destVolume.InRange(0f, 1f)) {
+            logger.Warn($"Destination volume '{destVolume}' is out of range");
+            return;
+        }
+        
+        if (audios.TryGetValue(soundName, out var audio)) {
+            if (Math.Abs(destVolume - audio.VolumeCoefficient) < 10e-9) {
+                logger.Warn("Destination volume is equal to audio volume");
+                return;
+            }
+            
+            var startVolume = audio.VolumeCoefficient;
+            const int steps = 100; // Количество шагов
+            var volumeStep = (destVolume - startVolume) / steps;
+            var stepDuration = duration / steps;
+
+            for (var i = 1; i <= steps; i++)
+            {
+                audio.SetVolumeCoefficient(startVolume + i * volumeStep);
+                await Task.Delay(stepDuration);
+            }
+            
+            audio.SetVolumeCoefficient(destVolume);
+        }
+        else logger.Warn($"Audio '{soundName}' does not exist");
     }
 
     /// <summary>
@@ -147,6 +182,7 @@ public static class SoundManager {
         try {
             if (audios.TryGetValue(soundName, out var audio)) {
                 audio.AudioOut.Stop();
+                audio.Fade.BeginFadeIn(0);
                 audio.Media.Position = 0;
             }
             else logger.Warn($"Audio '{soundName}' does not exist or played before");

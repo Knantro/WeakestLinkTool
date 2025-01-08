@@ -117,7 +117,7 @@ public class EndGameVM : ViewModelBase {
     /// 
     /// </summary>
     private void GoToMenu() {
-        SoundManager.FadeWith(SoundName.CLOSING_TITLES, SoundName.CLOSING_TITLES_STING, SoundConst.CLOSING_TITLES_FADE, TimeSpan.FromMilliseconds(SoundConst.CLOSING_TITLES_POSITION_MS));
+        SoundManager.FadeWith(SoundName.CLOSING_TITLES, SoundName.CLOSING_TITLES_STING, fadeOutMilliseconds: SoundConst.CLOSING_TITLES_FADE);
         GoToMainMenu();
     }
 

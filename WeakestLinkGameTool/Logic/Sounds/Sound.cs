@@ -30,30 +30,37 @@ public class Sound : IDisposable {
     /// 
     /// </summary>
     public float VolumeCoefficient { get; private set; }
-
+    
     /// <summary>
     /// 
     /// </summary>
-    public float Volume {
-        get => VolumeProvider.Volume; 
-        set => VolumeProvider.Volume = value * VolumeCoefficient;
-    }
+    public float Volume { get; private set; }
 
     public Sound(LoopAudioReader media, WasapiOut audioOut, FadeInOutSampleProvider fade, VolumeWaveProvider16 volumeProvider) {
         Media = media;
         AudioOut = audioOut;
         Fade = fade;
         VolumeProvider = volumeProvider;
+        Volume = VolumeProvider.Volume;
         VolumeCoefficient = 1;
     }
 
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="volume"></param>
+    public void SetVolume(float volume) {
+        Volume = volume;
+        VolumeProvider.Volume = volume * VolumeCoefficient;
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="coefficient"></param>
     public void SetVolumeCoefficient(float coefficient) {
         VolumeCoefficient = coefficient;
-        Volume = VolumeProvider.Volume;
+        VolumeProvider.Volume = Volume * coefficient;
     }
     
     /// <summary>

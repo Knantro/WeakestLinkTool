@@ -47,7 +47,7 @@ public class WalkAShamePanelVM : ViewModelBase {
     private void PreRoundInstruction() {
         Task.Run(async () => {
             await SoundManager.FadeWith(SoundName.WALK_OF_SHAME, SoundName.AFTER_INTERVIEW_STING, fadeOutMilliseconds: 3000); // TODO: Magic const
-            await Task.Delay(2000); // TODO: Magic const
+            await Task.Delay(1500); // TODO: Magic const
             SoundManager.Resume(SoundName.GENERAL_BED);
         });
         ChangeMWPage<NextRoundInstructionPage>();

@@ -47,6 +47,7 @@ public partial class MessageBox : UserControl
             mainWindowViewModel.RaiseDialogResult(result);
         };
         button.Background = Brushes.MidnightBlue;
+        button.Margin = new Thickness(10, 0, 10, 0);
         button.FontSize = 35;
         button.Height = 90;
         button.Width = 230;
