@@ -4,9 +4,12 @@ namespace WeakestLinkGameTool.ViewModels.PlayerVMs;
 
 public class IntroVM : ViewModelBase {
     
-    public event EventHandler IntroPlayRequested;
-    
     private bool isIntroVisible;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public event EventHandler IntroPlayRequested;
 
     /// <summary>
     /// 

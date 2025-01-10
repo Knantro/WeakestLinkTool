@@ -43,8 +43,17 @@ public class ViewModelBase : INPCBase, IDisposable {
     /// </summary>
     /// <typeparam name="T">Тип новой страницы, на которую нужно поменять</typeparam>
     protected void ChangePWPage<T>() where T : UserControl {
+        (mainWindowViewModel.CurrentPWPage.DataContext as ViewModelBase)?.Dispose();
         mainWindowViewModel.CurrentPWPage = Activator.CreateInstance<T>();
     }
+
+    /// <summary>
+    /// Возвращает текущий контекст страницы окна игрока
+    /// </summary>
+    /// <typeparam name="T">Тип контекста данных</typeparam>
+    /// <returns>Объект контекста данных страницы игрока</returns>
+    protected T GetPlayerPageDataContext<T>() where T : ViewModelBase => 
+        mainWindowViewModel.CurrentPWPage.DataContext as T;
 
     /// <summary>
     /// Меняет текущую страницу на главное меню
@@ -105,7 +114,7 @@ public class ViewModelBase : INPCBase, IDisposable {
     /// <summary>
     /// Освободить ресурсы
     /// </summary>
-    public void Dispose() {
+    public virtual void Dispose() {
         mainWindowViewModel.OnDialogResult -= OnDialogResult;
     }
 }

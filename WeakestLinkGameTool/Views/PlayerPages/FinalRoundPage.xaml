@@ -3,63 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModels="clr-namespace:WeakestLinkGameTool.ViewModels"
-             xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
-             xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
              xmlns:playerVMs="clr-namespace:WeakestLinkGameTool.ViewModels.PlayerVMs"
              mc:Ignorable="d"
              Focusable="True"
-             d:DesignHeight="1080" d:DesignWidth="1920">
-
-    <UserControl.InputBindings>
-        <!-- TODO: Done bindings -->
-        <KeyBinding Key="D1" Command="{Binding}" />
-        <KeyBinding Key="D2" Command="{Binding}" />
-        <KeyBinding Key="D3" Command="{Binding}" />
-    </UserControl.InputBindings>
+             d:DesignHeight="1080" d:DesignWidth="1920"
+             Background="{StaticResource CommonBackgroundBrush}">
 
     <UserControl.DataContext>
-        <playerVMs:FinalRoundVM />
+        <playerVMs:FinalRoundVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid HorizontalAlignment="Stretch"
+    <Grid Name="FinalRoundPanel"
+          HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
-          Background="{StaticResource CommonBackgroundBrush}"
-          ShowGridLines="True">
+          ShowGridLines="False"
+          Opacity="0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="4.4*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4.4*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"
-                    Visibility="{Binding IsFinalRoundPlaying, Converter={StaticResource VisibilityConverter}}">
-            <StackPanel Margin="0 0 0 20" Orientation="Horizontal">
-                <Button HorizontalAlignment="Left"
+        <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">
+            <Grid Margin="0 0 0 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Margin="3 0"
                         Height="120" Width="380"
                         Padding="0"
                         Background="{StaticResource GrayButtonBrush}"
-                        Style="{StaticResource DefaultButton}"
-                        Content="{Binding FirstPlayer.Name}" FontSize="50" />
+                        Style="{StaticResource DefaultNonClickableButton}"
+                        Content="{Binding FirstPlayer.Name}" FontSize="50"/>
 
-                <ItemsControl ItemsSource="{Binding FirstPlayerAnswersPanel}">
+                <ItemsControl HorizontalAlignment="Center" Grid.Column="1"
+                              ItemsSource="{Binding FirstPlayerAnswersPanel}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" />
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -71,27 +68,34 @@
                                     Foreground="{Binding Foreground}"
                                     Background="{Binding Background}"
                                     Margin="3 0"
-                                    Style="{StaticResource DefaultButton}"
+                                    Style="{StaticResource DefaultNonClickableButton}"
                                     Content="{Binding Text}"
-                                    FontSize="{Binding FontSize}" />
+                                    FontSize="{Binding FontSize}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </StackPanel>
-            <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
-                <Button HorizontalAlignment="Left"
+            </Grid>
+
+            <Grid Margin="0 20 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Margin="3 0"
                         Height="120" Width="380"
                         Padding="0"
                         Background="{StaticResource GrayButtonBrush}"
-                        Style="{StaticResource DefaultButton}"
-                        Content="{Binding SecondPlayer.Name}" FontSize="50" />
+                        Style="{StaticResource DefaultNonClickableButton}"
+                        Content="{Binding SecondPlayer.Name}" FontSize="50"/>
 
-                <ItemsControl ItemsSource="{Binding SecondPlayerAnswersPanel}">
+                <ItemsControl HorizontalAlignment="Center" Grid.Column="1"
+                              ItemsSource="{Binding SecondPlayerAnswersPanel}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" />
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -103,14 +107,13 @@
                                     Foreground="{Binding Foreground}"
                                     Background="{Binding Background}"
                                     Margin="3 0"
-                                    Style="{StaticResource DefaultButton}"
+                                    Style="{StaticResource DefaultNonClickableButton}"
                                     Content="{Binding Text}"
-                                    FontSize="{Binding FontSize}" />
+                                    FontSize="{Binding FontSize}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </StackPanel>
+            </Grid>
         </StackPanel>
-
     </Grid>
 </UserControl>

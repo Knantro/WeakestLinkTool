@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.Models.Statistics;
@@ -12,6 +13,7 @@ public class VotingPanelVM : ViewModelBase {
     
     private bool isRoundStatisticsSelected;
     private bool isPersonalStatisticsSelected;
+    private bool votingCanStop;
     private bool isVotingInProgress;
     private bool isVotingDone;
     private Player selectedPlayer;
@@ -48,6 +50,14 @@ public class VotingPanelVM : ViewModelBase {
             SetField(ref isPersonalStatisticsSelected, value);
             OnPropertyChanged(nameof(PersonalPlayerStatistics));
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool VotingCanStop {
+        get => votingCanStop;
+        set => SetField(ref votingCanStop, value);
     }
 
     /// <summary>
@@ -99,7 +109,7 @@ public class VotingPanelVM : ViewModelBase {
     public RelayCommand<Player> IncreaseVoteCommand => new(IncreasePlayerVotes, _ => !IsVotingInProgress);
     public RelayCommand<Player> KickPlayerCommand => new(KickPlayer);
     public RelayCommand RoundStatisticsCommand => new(_ => ShowRoundStatistics());
-    public RelayCommand StopVotingCommand => new(_ => StopVoting());
+    public RelayCommand StopVotingCommand => new(_ => StopVoting(), _ => VotingCanStop);
     public RelayCommand DoneVotingCommand => new(_ => DoneVoting());
     
     public VotingPanelVM() {
@@ -110,23 +120,19 @@ public class VotingPanelVM : ViewModelBase {
         Players = new ObservableCollection<Player>(WeakestLinkLogic.CurrentSession.ActivePlayers);
         IsVotingInProgress = true;
         IsRoundStatisticsSelected = true;
-        Task.Run(async () => {
-            SoundManager.Pause(SoundName.GENERAL_BED);
-            SoundManager.Play(SoundName.GENERAL_STING);
-            await Task.Delay(2300); // TODO: Magic const
-            SoundManager.LoopPlay(SoundName.VOTING_BED, SoundConst.VOTING_BED_LOOP_POSITION_A, SoundConst.VOTING_BED_LOOP_POSITION_B);
-        });
-        // SelectedPlayer = DesignData.Player1;
-        // IsPersonalStatisticsSelected = true;
-        // IsVotingDone = true;
-        //
-        // Players = DesignData.Players;
-        //
-        // IsVotingDone = false;
-        //
-        // PersonalPlayerStatistics = DesignData.PlayerStatistics;
-        //
-        // RoundStatistics = new ObservableCollection<PlayerStatistics>(DesignData.RoundStatistics.PlayersStatistics.Values);
+        StartVoting();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private async Task StartVoting() {
+        SoundManager.Pause(SoundName.GENERAL_BED);
+        SoundManager.Play(SoundName.GENERAL_STING);
+        await Task.Delay(2300); // TODO: Magic const
+        SoundManager.LoopPlay(SoundName.VOTING_BED, SoundConst.VOTING_BED_LOOP_POSITION_A, SoundConst.VOTING_BED_LOOP_POSITION_B);
+        VotingCanStop = true;
+        CommandManager.InvalidateRequerySuggested();
     }
     
     /// <summary>

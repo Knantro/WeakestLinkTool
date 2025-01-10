@@ -1,23 +1,28 @@
-﻿using System.Windows;
-using WeakestLinkGameTool.ViewModels.Base;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using WeakestLinkGameTool.ViewModels.Base;
 
 namespace WeakestLinkGameTool.ViewModels.PlayerVMs;
 
 public class InfoVM : ViewModelBase {
-
-    private Brush background;
+    private int currentTotalBank;
+    
+    public event EventHandler<bool> TotalBankVisibilityChanged;
 
     /// <summary>
     /// 
     /// </summary>
-    public Brush Background {
-        get => background;
-        set => SetField(ref background, value);
+    public int CurrentTotalBank {
+        get => currentTotalBank;
+        set => SetField(ref currentTotalBank, value);
     }
     
     public InfoVM() {
-        Background = Application.Current.Resources["CommonBackgroundBrush"] as LinearGradientBrush;
+        CurrentTotalBank = WeakestLinkLogic.CurrentSession.FullBank;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ToggleFullBankVisibility(bool isShow) {
+        TotalBankVisibilityChanged?.Invoke(this, isShow);
     }
 }

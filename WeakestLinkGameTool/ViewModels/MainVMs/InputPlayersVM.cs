@@ -3,6 +3,7 @@ using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.ViewModels.Base;
 using WeakestLinkGameTool.Views.MainPages;
+using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
@@ -20,6 +21,7 @@ public class InputPlayersVM : ViewModelBase {
 
     public InputPlayersVM() {
         WeakestLinkLogic.InitSession();
+        ChangePWPage<EmptyPage>();
     }
 
     /// <summary>
@@ -73,7 +75,7 @@ public class InputPlayersVM : ViewModelBase {
             return;
         }
         
-        ChangeMWPage<IntroPage>();
-        // TODO: ChangePWPage<PlayerGamePanelPage>();
+        ChangeMWPage<IntroPanelPage>();
+        ChangePWPage<IntroPage>();
     }
 }

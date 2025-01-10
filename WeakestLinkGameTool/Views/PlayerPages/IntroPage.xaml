@@ -25,9 +25,9 @@
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
           ShowGridLines="True"
           Background="Black">
-        <MediaElement Name="MediaElement" 
+        <MediaElement Name="WLIntro" 
                       LoadedBehavior="Manual" 
-                      Source="/weakest_link_intro.mp4" 
+                      Source="weakest_link_intro.mp4" 
                       HorizontalAlignment="Stretch" 
                       VerticalAlignment="Stretch"
                       Visibility="{Binding IsIntroVisible, Converter={StaticResource VisibilityConverter}}"/>

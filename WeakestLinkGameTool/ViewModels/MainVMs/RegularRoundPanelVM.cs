@@ -8,7 +8,9 @@ using WeakestLinkGameTool.Helpers;
 using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.Models.Visual;
 using WeakestLinkGameTool.ViewModels.Base;
+using WeakestLinkGameTool.ViewModels.PlayerVMs;
 using WeakestLinkGameTool.Views.MainPages;
+using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
@@ -16,6 +18,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     private Player currentPlayer;
     private TimeSpan timeLeft;
     private Stopwatch answerStopwatch = new();
+    private bool canStartRound;
     private bool isRoundStarted;
     private bool isRoundPlayingNow;
     private bool isRoundPaused;
@@ -27,6 +30,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     private int bank;
     private int jokesUsedCount;
     private int questionIndex;
+    private RegularRoundVM playerDataContext;
 
     private DispatcherTimerEx timer = new(DispatcherPriority.Render) { Interval = TimeSpan.FromSeconds(1) };
 
@@ -46,6 +50,14 @@ public class RegularRoundPanelVM : ViewModelBase {
     public Player CurrentPlayer {
         get => currentPlayer;
         set => SetField(ref currentPlayer, value);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool CanStartRound {
+        get => canStartRound;
+        set => SetField(ref canStartRound, value);
     }
 
     /// <summary>
@@ -171,7 +183,7 @@ public class RegularRoundPanelVM : ViewModelBase {
 
         CorrectAnswerCommand = new RelayCommand(async _ => await MarkCorrectAnswer(), _ => IsRoundPlayingNow);
         WrongAnswerCommand = new RelayCommand(_ => MarkWrongAnswer(), _ => IsRoundPlayingNow);
-        BankCommand = new RelayCommand(_ => BankMoney(), _ => IsRoundPlayingNow && MoneyTree.FirstOrDefault(x => x.InChain) != null);
+        BankCommand = new RelayCommand(async _ => await BankMoney(), _ => IsRoundPlayingNow && MoneyTree.FirstOrDefault(x => x.InChain) != null);
         MeasureAnswerTimeCommand = new RelayCommand(_ => StartAnswerMeasuring(), _ => IsRoundPlayingNow && !IsAnswerTimeMeasuring && !IsRoundPaused);
         PauseRoundCommand = new RelayCommand(_ => PauseRound(), _ => IsRoundPlayingNow && !IsRoundPaused);
         ResumeRoundCommand = new RelayCommand(_ => ResumeRound(), _ => IsRoundPlayingNow && IsRoundPaused);
@@ -182,6 +194,17 @@ public class RegularRoundPanelVM : ViewModelBase {
         CurrentRound = WeakestLinkLogic.NextRound();
         TimeLeft = CurrentRound.Timer!.Value;
         timer.Tick += async (_, _) => await TimerTick();
+        
+        ChangePWPage<RegularRoundPage>();
+        playerDataContext = GetPlayerPageDataContext<RegularRoundVM>();
+        AwaitedShowRoundPanel();
+    }
+
+    private async Task AwaitedShowRoundPanel() {
+        await Task.Delay(2000);
+        playerDataContext.ShowRoundPanel();
+        CanStartRound = true;
+        CommandManager.InvalidateRequerySuggested();
     }
 
     /// <summary>
@@ -189,10 +212,13 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// </summary>
     private async Task TimerTick() {
         TimeLeft -= TimeSpan.FromSeconds(1);
+        playerDataContext.TimerTick();
+        
         if (TimeLeft.TotalSeconds < 1) {
             timer.Stop();
             await Task.Delay(3000);
             SoundManager.Resume(SoundName.GENERAL_BED);
+            playerDataContext.HideRoundPanel();
             CompleteRound();
         }
     }
@@ -257,18 +283,18 @@ public class RegularRoundPanelVM : ViewModelBase {
     private async Task MarkCorrectAnswer() {
         var answerTime = StopAndGetAnswerTime();
         WeakestLinkLogic.CorrectAnswer(currentPlayer, answerTime);
+
+        Task.Run(async () => await playerDataContext.MarkCorrectAnswer());
         
-        await UIDispatcherInvokeAsync(async () => {
-            var chainIndex = MoneyTree.IndexOf(MoneyTree.LastOrDefault(x => x.IsActive));
-            if (chainIndex != -1) {
-                MoneyTree[chainIndex].InChain = true;
-                await Task.Delay(200);
-                MoneyTree[chainIndex].IsActive = false;
-                if (chainIndex > 0) {
-                    MoneyTree[chainIndex - 1].IsActive = true;
-                }
+        var chainIndex = MoneyTree.IndexOf(MoneyTree.LastOrDefault(x => x.IsActive));
+        if (chainIndex != -1) {
+            MoneyTree[chainIndex].InChain = true;
+            await Task.Delay(200);
+            MoneyTree[chainIndex].IsActive = false;
+            if (chainIndex > 0) {
+                MoneyTree[chainIndex - 1].IsActive = true;
             }
-        });
+        }
 
         NextPlayerQuestion();
     }
@@ -279,6 +305,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     private void MarkWrongAnswer() {
         var answerTime = StopAndGetAnswerTime();
         WeakestLinkLogic.WrongAnswer(currentPlayer, answerTime);
+        playerDataContext.MarkWrongAnswer();
         ResetMoneyChain();
         NextPlayerQuestion();
     }
@@ -309,24 +336,30 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// <summary>
     /// 
     /// </summary>
-    private void BankMoney() {
+    private async Task BankMoney() {
         var money = MoneyTree.FirstOrDefault(x => x.InChain)?.Value ?? 0;
 
         if (money > 0) {
-            if (Bank + money >= MoneyTree.First().Value) {
-                money = MoneyTree.First().Value - Bank;
+            if (Bank + money >= MoneyTree.First().Value) money = MoneyTree.First().Value - Bank;
+            
+            playerDataContext.BankMoney(money);
+            Bank += money;
+            WeakestLinkLogic.BankMoney(currentPlayer, money);
+            ResetMoneyChain();
+
+            if (Bank == MoneyTree.First().Value) {
+                IsRoundPlayingNow = false;
+                
                 if (TimeLeft.TotalSeconds >= 1) {
                     SoundManager.Play(SoundName.TARGET_STING);
                     SoundManager.Resume(SoundName.GENERAL_BED);
                     SoundManager.Stop(SoundName.FromRound(CurrentRound.Timer!.Value));
                     timer.Stop();
+                    await Task.Delay(2000);
+                    playerDataContext.HideRoundPanel();
                     CompleteRound();
                 }
             }
-            
-            Bank += money;
-            WeakestLinkLogic.BankMoney(currentPlayer, money);
-            ResetMoneyChain();
         }
     }
 
@@ -378,7 +411,6 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void NextJoke() {
-        CurrentJoke = WeakestLinkLogic.NextJoke();
         jokesUsedCount++;
         
         if (jokesUsedCount == 3) {
@@ -390,6 +422,9 @@ public class RegularRoundPanelVM : ViewModelBase {
             
             CurrentJoke = new Joke { Text = "Один из вас должен уйти ни с чем. Пришло время определить самое слабое звено" };
         }
+        else {
+            CurrentJoke = WeakestLinkLogic.NextJoke();
+        }
     }
 
     /// <summary>
@@ -399,6 +434,9 @@ public class RegularRoundPanelVM : ViewModelBase {
         WeakestLinkLogic.FormRegularRoundStatistics();
         WeakestLinkLogic.SaveEditableData();
         if (WeakestLinkLogic.CurrentSession.CurrentRound.IsPreFinal) ChangeMWPage<FinalRoundInstructionPage>();
-        else ChangeMWPage<VotingPanelPage>();
+        else {
+            ChangeMWPage<VotingPanelPage>();
+            ChangePWPage<VotingPage>();
+        }
     }
 }

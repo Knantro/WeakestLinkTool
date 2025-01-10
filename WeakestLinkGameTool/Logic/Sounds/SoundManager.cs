@@ -109,14 +109,15 @@ public static class SoundManager {
     /// <param name="soundName"></param>
     /// <param name="positionA"></param>
     /// <param name="positionB"></param>
-    public static void LoopPlay(string soundName, long positionA, long positionB) {
+    /// <param name="restoreFade"></param>
+    public static void LoopPlay(string soundName, long positionA, long positionB, bool restoreFade = true) {
         if (audios.TryGetValue(soundName, out var audio)) {
             audio.Media.LoopEnabled = true;
             audio.Media.PositionA = positionA;
             audio.Media.PositionB = positionB;
 
             audio.AudioOut.Stop();
-            audio.Fade.BeginFadeIn(0);
+            if (restoreFade) audio.Fade.BeginFadeIn(0);
             audio.Media.Position = 0;
             audio.AudioOut.Play();
         }
@@ -127,13 +128,13 @@ public static class SoundManager {
     /// 
     /// </summary>
     /// <param name="soundName"></param>
-    public static void Play(string soundName) {
+    public static void Play(string soundName, bool restoreFade = true) {
         try {
             if (audios.TryGetValue(soundName, out var audio)) {
                 audio.Media.LoopEnabled = false;
 
                 audio.AudioOut.Stop();
-                audio.Fade.BeginFadeIn(0);
+                if (restoreFade) audio.Fade.BeginFadeIn(0);
                 audio.Media.Position = 0;
                 audio.AudioOut.Play();
             }
@@ -248,7 +249,7 @@ public static class SoundManager {
                 if (fadeInMilliseconds.HasValue) audioRight.Fade.BeginFadeIn(fadeInMilliseconds.Value);
                 if (fadeOutMilliseconds.HasValue) audioLeft.Fade.BeginFadeOut(fadeOutMilliseconds.Value);
 
-                if (soundInPositionA.HasValue && soundInPositionB.HasValue) LoopPlay(soundFadeIn, soundInPositionA.Value, soundInPositionB.Value);
+                if (soundInPositionA.HasValue && soundInPositionB.HasValue) LoopPlay(soundFadeIn, soundInPositionA.Value, soundInPositionB.Value, !fadeInMilliseconds.HasValue);
                 else audioRight.AudioOut.Play();
 
                 if (fadeOutMilliseconds.HasValue) {

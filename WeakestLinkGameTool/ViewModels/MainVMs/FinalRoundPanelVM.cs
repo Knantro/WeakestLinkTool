@@ -1,9 +1,12 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.Models.Visual;
 using WeakestLinkGameTool.ViewModels.Base;
+using WeakestLinkGameTool.ViewModels.PlayerVMs;
 using WeakestLinkGameTool.Views.MainPages;
+using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
@@ -21,6 +24,8 @@ public class FinalRoundPanelVM : ViewModelBase {
     private bool isSuddenDeath;
     private bool isGameEnd;
     private int questionIndex;
+    private bool canEndGame;
+    private FinalRoundVM playerDataContext;
 
     private bool turnSwitch = true; // true - ход первого игрока, false - второго
     private int currentQuestionNumber = 1;
@@ -130,14 +135,22 @@ public class FinalRoundPanelVM : ViewModelBase {
         get => questionIndex;
         set => SetField(ref questionIndex, value);
     }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool CanEndGame {
+        get => canEndGame;
+        set => SetField(ref canEndGame, value);
+    }
 
     public RelayCommand<Player> StartFinalRoundCommand => new(StartFinalRound);
     public RelayCommand CorrectAnswerCommand => new(async _ => await CorrectAnswer(), _ => (!IsTie || IsSuddenDeath) && IsFinalRoundPlaying);
-    public RelayCommand WrongAnswerCommand => new(_ => WrongAnswer(), _ => (!IsTie || IsSuddenDeath) && IsFinalRoundPlaying);
+    public RelayCommand WrongAnswerCommand => new(async _ => await WrongAnswer(), _ => (!IsTie || IsSuddenDeath) && IsFinalRoundPlaying);
     public RelayCommand NextQuestionCommand => new(_ => NextQuestion(), _ => (!IsTie || IsSuddenDeath) && IsFinalRoundPlaying);
     public RelayCommand PreviousQuestionCommand => new(_ => PreviousQuestion(), _ => QuestionIndex > 0 && IsFinalRoundPlaying);
     public RelayCommand StartSuddenDeathCommand => new(_ => StartSuddenDeath());
-    public RelayCommand EndGameCommand => new(_ => EndGame());
+    public RelayCommand EndGameCommand => new(_ => EndGame(), _ => CanEndGame);
 
     public FinalRoundPanelVM() {
         SoundManager.Play(SoundName.FINAL_BEGIN_STING);
@@ -168,6 +181,10 @@ public class FinalRoundPanelVM : ViewModelBase {
             new FinalQuestionVisual { QuestionNumber = 4, IsActive = false },
             new FinalQuestionVisual { QuestionNumber = 5, IsActive = false },
         ];
+        
+        ChangePWPage<FinalRoundPage>();
+
+        playerDataContext = GetPlayerPageDataContext<FinalRoundVM>();
     }
     
     /// <summary>
@@ -182,6 +199,10 @@ public class FinalRoundPanelVM : ViewModelBase {
             (FirstPlayer, SecondPlayer) = (SecondPlayer, FirstPlayer);
         }
 
+        playerDataContext.SetupPlayers(FirstPlayer, SecondPlayer);
+
+        ShowPlayerFinalRoundPanel();
+        
         IsFinalRoundStarted = true;
         CurrentPlayer = FirstPlayer;
         InfoText = null;
@@ -191,11 +212,18 @@ public class FinalRoundPanelVM : ViewModelBase {
         IsFinalRoundPlaying = true;
     }
 
+    private async Task ShowPlayerFinalRoundPanel() {
+        await Task.Delay(2000);
+        playerDataContext.ShowFinalRoundPanel();
+    }
+
     /// <summary>
     /// 
     /// </summary>
     private async Task CorrectAnswer() {
         WeakestLinkLogic.CorrectAnswer(CurrentPlayer);
+        
+        playerDataContext.CorrectAnswer(currentQuestionNumber);
         
         if (turnSwitch) {
             FirstPlayerAnswersPanel.First(x => x.QuestionNumber == currentQuestionNumber).IsActive = false;
@@ -237,8 +265,10 @@ public class FinalRoundPanelVM : ViewModelBase {
     /// <summary>
     /// 
     /// </summary>
-    private void WrongAnswer() {
+    private async Task WrongAnswer() {
         WeakestLinkLogic.WrongAnswer(CurrentPlayer);
+        
+        playerDataContext.WrongAnswer(currentQuestionNumber);
         
         if (turnSwitch) {
             FirstPlayerAnswersPanel.First(x => x.QuestionNumber == currentQuestionNumber).IsActive = false;
@@ -262,6 +292,7 @@ public class FinalRoundPanelVM : ViewModelBase {
             if (IsTie) {
                 if (IsSuddenDeath) {
                     NextUsedQuestion();
+                    await Task.Delay(2000);
                     AddSuddenDeathQuestion();
                 }
                 else {
@@ -322,6 +353,8 @@ public class FinalRoundPanelVM : ViewModelBase {
         SecondPlayerAnswersPanel.Clear();
         FirstPlayerAnswersPanel.Add(new FinalQuestionVisual { QuestionNumber = currentQuestionNumber, IsActive = true });
         SecondPlayerAnswersPanel.Add(new FinalQuestionVisual { QuestionNumber = currentQuestionNumber, IsActive = false });
+
+        playerDataContext.AddSuddenDeathQuestion(currentQuestionNumber);
     }
 
     /// <summary>
@@ -385,6 +418,7 @@ public class FinalRoundPanelVM : ViewModelBase {
             IsSuddenDeath = false;
             IsFinalRoundPlaying = false;
             EndGameText = $"{FirstPlayer.Name}, сегодня вы - самое сильное звено, и уходите домой с суммой {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}. {SecondPlayer.Name}, вы уходите ни с чем.{Environment.NewLine}Вы смотрели \"Слабое звено\", это была всего лишь игра! До встречи!";
+            HidePlayerFinalRoundPanel();
             return true;
         }
 
@@ -397,10 +431,18 @@ public class FinalRoundPanelVM : ViewModelBase {
             IsSuddenDeath = false;
             IsFinalRoundPlaying = false;
             EndGameText = $"{SecondPlayer.Name}, сегодня вы - самое сильное звено, и уходите домой с суммой {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}. {FirstPlayer.Name}, вы уходите ни с чем.{Environment.NewLine}Вы смотрели \"Слабое звено\", это была всего лишь игра! До встречи!";
+            HidePlayerFinalRoundPanel();
             return true;
         }
 
         return false;
+    }
+
+    private async Task HidePlayerFinalRoundPanel() {
+        await Task.Delay(2000);
+        playerDataContext.HideFinalRoundPanel();
+        CanEndGame = true;
+        CommandManager.InvalidateRequerySuggested();
     }
 
     /// <summary>
@@ -417,6 +459,6 @@ public class FinalRoundPanelVM : ViewModelBase {
     /// </summary>
     private void EndGame() {
         WeakestLinkLogic.FormFinalRoundStatistics();
-        ChangeMWPage<EndGamePage>();
+        ChangeMWPage<EndGamePanelPage>();
     }
 }

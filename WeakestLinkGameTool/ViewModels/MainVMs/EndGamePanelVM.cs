@@ -4,10 +4,12 @@ using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.Models.Statistics;
 using WeakestLinkGameTool.Models.Visual;
 using WeakestLinkGameTool.ViewModels.Base;
+using WeakestLinkGameTool.ViewModels.PlayerVMs;
+using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
-public class EndGameVM : ViewModelBase {
+public class EndGamePanelVM : ViewModelBase {
 
     private bool isFullGameStatisticsSelected;
     private bool isPersonalStatisticsSelected;
@@ -90,7 +92,7 @@ public class EndGameVM : ViewModelBase {
     public RelayCommand FullStatisticsCommand => new(_ => ShowFullGameStatistics());
     public RelayCommand ToMenuCommand => new(_ => GoToMenu());
 
-    public EndGameVM() {
+    public EndGamePanelVM() {
         SoundManager.FadeWith(SoundName.WINNER_THEME, SoundName.CLOSING_TITLES, fadeOutMilliseconds: 500, // TODO: Magic const
             soundInPositionA: SoundConst.CLOSING_TITLES_LOOP_POSITION_A, soundInPositionB: SoundConst.CLOSING_TITLES_LOOP_POSITION_B);
         
@@ -103,6 +105,8 @@ public class EndGameVM : ViewModelBase {
         Players = new ObservableCollection<Player>(WeakestLinkLogic.CurrentSession.AllPlayers);
         FullGameStatistics = new ObservableCollection<FullPlayerStatistics>(WeakestLinkLogic.CurrentSession.GetFullGameStatistics());
         IsFullGameStatisticsSelected = true;
+        
+        ChangePWPage<EndGamePage>();
     }
 
     /// <summary>
@@ -118,6 +122,7 @@ public class EndGameVM : ViewModelBase {
     /// </summary>
     private void GoToMenu() {
         SoundManager.FadeWith(SoundName.CLOSING_TITLES, SoundName.CLOSING_TITLES_STING, fadeOutMilliseconds: SoundConst.CLOSING_TITLES_FADE);
+        GetPlayerPageDataContext<EndGameVM>().CompleteCreditsImmediately();
         GoToMainMenu();
     }
 

@@ -105,6 +105,7 @@
                 Height="350"
                 Width="700"
                 Visibility="{Binding IsRoundStarted, Converter={StaticResource InvertVisibilityConverter}}"
+                IsEnabled="{Binding CanStartRound}"
                 Style="{StaticResource DefaultButton}"
                 Content="Начать раунд"
                 FontSize="80"

@@ -1,15 +1,19 @@
-﻿using WeakestLinkGameTool.Commands;
+﻿using System.Windows.Input;
+using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.ViewModels.Base;
+using WeakestLinkGameTool.ViewModels.PlayerVMs;
 using WeakestLinkGameTool.Views.MainPages;
+using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
-public class IntroVM : ViewModelBase {
+public class IntroPanelVM : ViewModelBase {
     
     private int currentTitleIndex = 0;
     private string currentTitle;
     private bool isIntroFinished;
     private bool isIntroStarted;
+    private bool isStartEnabled;
 
     /// <summary>
     /// Текст интро
@@ -40,6 +44,14 @@ public class IntroVM : ViewModelBase {
     public bool IsIntroStarted {
         get => isIntroStarted;
         set => SetField(ref isIntroStarted, value);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool IsStartEnabled {
+        get => isStartEnabled;
+        set => SetField(ref isStartEnabled, value);
     }
 
     /// <summary>
@@ -78,23 +90,32 @@ public class IntroVM : ViewModelBase {
     /// <summary>
     /// Переходит к правилам игры
     /// </summary>
-    public RelayCommand RulesCommand => new(_ => ChangeMWPage<RulesPage>());
+    public RelayCommand RulesCommand => new(_ => {
+        ChangeMWPage<RulesPage>();
+        ChangePWPage<GameRulesPage>();
+    });
     
     /// <summary>
     /// Начинает вступление
     /// </summary>
     public RelayCommand StartIntroCommand => new(async _ => {
         IsIntroStarted = true;
-        // TODO: Избавиться от костыля (этап экрана игрока)
-        await Task.Delay(3 * 1000);
+        GetPlayerPageDataContext<IntroVM>().PlayIntro();
         await SoundManager.FadeWith(SoundName.INTRO, SoundName.OPENING_TITLES, SoundConst.OPENING_TITLES_FADE, TimeSpan.FromMilliseconds(SoundConst.OPENING_TITLES_POSITION_MS));
         CurrentTitle = Titles[currentTitleIndex];
-        await Task.Delay(12 * 1000);
+        await Task.Delay(11 * 1000); // TODO: Magic const
         IsIntroFinished = true;
-    }); 
+    }, _ => IsStartEnabled && !IsIntroStarted); 
     
-    public IntroVM() {
+    public IntroPanelVM() {
         SoundManager.LoopPlay(SoundName.INTRO, SoundConst.INTRO_LOOP_POSITION_A, SoundConst.INTRO_LOOP_POSITION_B);
+        WaitStartEnable();
+    }
+
+    private async Task WaitStartEnable() {
+        await Task.Delay(3000); // TODO: Magic const
+        IsStartEnabled = true;
+        CommandManager.InvalidateRequerySuggested();
     }
 
     /// <summary>
@@ -103,9 +124,10 @@ public class IntroVM : ViewModelBase {
     /// <param name="forward">Направление изменения страницы. По умолчанию - True, то есть следующая</param>
     private void ChangeTitle(bool forward = true) {
         if (forward && !IsFirstNextTitleDone) {
+            // TODO: Плавное увеличение громкости
             SoundManager.Play(SoundName.SHORT_STING);
             SoundManager.SetVolumeCoefficient(SoundName.GENERAL_BED, 0.2f);
-            SoundManager.FadeWith(SoundName.SHORT_STING, SoundName.GENERAL_BED, null, 3000, 
+            SoundManager.FadeWith(SoundName.SHORT_STING, SoundName.GENERAL_BED, null, 3000, // TODO: Magic const
                 soundInPositionA: SoundConst.GENERAL_BED_LOOP_POSITION_A, soundInPositionB: SoundConst.GENERAL_BED_LOOP_POSITION_B);
             IsFirstNextTitleDone = true;
         }

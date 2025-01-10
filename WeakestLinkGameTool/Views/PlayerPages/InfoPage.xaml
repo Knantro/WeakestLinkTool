@@ -23,14 +23,14 @@
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-          ShowGridLines="True"
-          Background="{Binding Background, TargetNullValue={StaticResource CommonBackgroundBrush}}">
+          ShowGridLines="False"
+          Background="{StaticResource CommonBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="6*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="1" x:Name="TotalBankGrid">
+        <Grid Grid.Row="1" x:Name="TotalBankGrid" Opacity="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="240" />
@@ -43,7 +43,7 @@
                      Width="500"
                      Height="30"
                      Fill="{StaticResource GrayButtonBrush}"
-                     Stretch="Fill" Stroke="Blue" StrokeThickness="1">
+                     Stretch="Fill" Stroke="Black" StrokeThickness="1">
                 <Polygon.Points>
                     <Point X="0" Y="1" />
                     <Point X="2" Y="0" />

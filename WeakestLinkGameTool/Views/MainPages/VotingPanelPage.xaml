@@ -437,16 +437,18 @@
                 Content="Статистика раунда"
                 Command="{Binding RoundStatisticsCommand}" />
         
-        <Button Grid.Row="4" Grid.Column="2"
-                Height="140"
-                Width="300"
-                FontSize="40"
-                Style="{StaticResource DefaultButton}"
-                Background="{StaticResource RedButtonBrush}"
-                Visibility="{Binding IsVotingDone, Converter={StaticResource InvertVisibilityConverter}}"
-                IsEnabled="{Binding IsAllVotesGiven}"
-                Content="Завершить голосование"
-                Command="{Binding DoneVotingCommand}" />
+        <Border Grid.Row="4" Grid.Column="2"
+                Visibility="{Binding IsVotingInProgress, Converter={StaticResource InvertVisibilityConverter}}">
+            <Button Height="140"
+                    Width="300"
+                    FontSize="40"
+                    Style="{StaticResource DefaultButton}"
+                    Background="{StaticResource RedButtonBrush}"
+                    Visibility="{Binding IsVotingDone, Converter={StaticResource InvertVisibilityConverter}}"
+                    IsEnabled="{Binding IsAllVotesGiven}"
+                    Content="Завершить голосование"
+                    Command="{Binding DoneVotingCommand}" />
+        </Border>
 
         <Button Grid.Row="4" Grid.Column="2"
                 Height="140"

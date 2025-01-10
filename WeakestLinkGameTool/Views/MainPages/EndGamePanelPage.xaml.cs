@@ -2,8 +2,8 @@
 
 namespace WeakestLinkGameTool.Views.MainPages;
 
-public partial class IntroPage : UserControl {
-    public IntroPage() {
+public partial class EndGamePanelPage : UserControl {
+    public EndGamePanelPage() {
         InitializeComponent();
     }
 }

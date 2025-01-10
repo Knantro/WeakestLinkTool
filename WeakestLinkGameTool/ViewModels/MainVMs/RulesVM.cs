@@ -1,5 +1,6 @@
 ﻿using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.ViewModels.Base;
+using WeakestLinkGameTool.ViewModels.PlayerVMs;
 using WeakestLinkGameTool.Views.MainPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
@@ -48,6 +49,12 @@ public class RulesVM : ViewModelBase {
 
     public RelayCommand NextRuleCommand => new(_ => ChangeRule());
     public RelayCommand BackRuleCommand => new(_ => ChangeRule(false));
+    public RelayCommand StartDemoCommand => new(async _ => await GetPlayerPageDataContext<GameRulesVM>().StartDemo());
+    public RelayCommand StopDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().StopDemo());
+    public RelayCommand ShowRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().ShowRoundPanel());
+    public RelayCommand HideRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().HideRoundPanel());
+    public RelayCommand WrongAnswerDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().WrongAnswerDemo());
+    public RelayCommand BankDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().BankDemo());
     
     /// <summary>
     /// Переходит к правилам игры

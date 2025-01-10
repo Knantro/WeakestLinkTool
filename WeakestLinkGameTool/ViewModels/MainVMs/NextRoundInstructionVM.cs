@@ -1,6 +1,8 @@
 ﻿using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.ViewModels.Base;
+using WeakestLinkGameTool.ViewModels.PlayerVMs;
 using WeakestLinkGameTool.Views.MainPages;
+using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
@@ -8,6 +10,9 @@ public class NextRoundInstructionVM : ViewModelBase {
     
     private int currentInstructionIndex = 0;
     private string currentInstruction;
+    private bool showTotalBankToggle = true;
+
+    public event EventHandler FullBankVisibleChanged;
 
     /// <summary>
     /// Страницы вступления
@@ -58,9 +63,11 @@ public class NextRoundInstructionVM : ViewModelBase {
             OnPropertyChanged(nameof(IsLastInstruction));
         }
     }
-
+    
     public RelayCommand NextInstructionCommand => new(_ => ChangeInstruction());
     public RelayCommand BackInstructionCommand => new(_ => ChangeInstruction(false));
+    public RelayCommand ShowFullBankCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(true));
+    public RelayCommand HideFullBankVisibleCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(false));
     
     /// <summary>
     /// Переходит к правилам игры
@@ -70,7 +77,7 @@ public class NextRoundInstructionVM : ViewModelBase {
     public NextRoundInstructionVM() {
         Instructions = Instructions.Where(x => !string.IsNullOrEmpty(x)).ToList();
         CurrentInstruction = Instructions[currentInstructionIndex];
-        // TODO: Музыка
+        ChangePWPage<InfoPage>();
     }
 
     /// <summary>

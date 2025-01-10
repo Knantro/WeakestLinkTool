@@ -66,7 +66,7 @@ public class WeakestLinkLogic {
     /// <summary>
     /// Можно ли начать игру
     /// </summary>
-    public bool CanStartGame => CurrentSession?.AllPlayers.Count.InRange(4, 11) == true && // TODO: TEST_REMOVE
+    public bool CanStartGame => CurrentSession?.AllPlayers.Count.InRange(3, 11) == true && // TODO: TEST_REMOVE
     // public bool CanStartGame => CurrentSession?.AllPlayers.Count.InRange(7, 11) == true && 
         CurrentSession?.AllPlayers.All(x => !string.IsNullOrEmpty(x.Name)) == true; 
 

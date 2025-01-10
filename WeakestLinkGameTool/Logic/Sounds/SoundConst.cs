@@ -3,7 +3,6 @@
 public class SoundConst {
     public const long CLOSING_TITLES_LOOP_POSITION_A           = 722_661;
     public const long CLOSING_TITLES_LOOP_POSITION_B           = 1_050_138;
-    public const long CLOSING_TITLES_POSITION_MS               = 1_050_138;
     public const int CLOSING_TITLES_FADE                       = 100;
     public const long GENERAL_BED_LOOP_POSITION_A              = 1_298_911;
     public const long GENERAL_BED_LOOP_POSITION_B              = 3_925_882;
@@ -11,7 +10,7 @@ public class SoundConst {
     public const long INTRO_LOOP_POSITION_B                    = 1_028_058;
     public const long MAIN_STING_BED_LOOP_POSITION_A           = 1_338_820;
     public const long MAIN_STING_BED_LOOP_POSITION_B           = 3_963_760;
-    public const long OPENING_TITLES_POSITION_MS               = 14418;
+    public const long OPENING_TITLES_POSITION_MS               = 15649;
     public const int OPENING_TITLES_FADE                       = 500;
     public const long PENALTY_SHOOTOUT_BED_LOOP_POSITION_A     = 1_415_819;
     public const long PENALTY_SHOOTOUT_BED_LOOP_POSITION_B     = 2_792_084;

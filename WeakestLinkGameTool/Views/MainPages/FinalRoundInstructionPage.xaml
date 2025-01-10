@@ -51,6 +51,27 @@
                 FontSize="40"
                 Command="{Binding BackInstructionCommand}" />
         
+        <StackPanel Grid.Row="2" Grid.Column="1" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+            <Button Height="140"
+                    Width="280"
+                    Style="{StaticResource DefaultButton}"
+                    Content="Скрыть банк"
+                    FontSize="40"
+                    Margin="20 0"
+                    Command="{Binding HideFullBankVisibleCommand}" />
+            
+            <Button Height="140"
+                    Width="280"
+                    Style="{StaticResource DefaultButton}"
+                    Content="Показать банк"
+                    FontSize="40"
+                    Margin="20 0"
+                    Command="{Binding ShowFullBankCommand}" />
+        </StackPanel>
+        
         <Button Grid.Row="2" Grid.Column="2"
                 Height="140"
                 Width="280"
