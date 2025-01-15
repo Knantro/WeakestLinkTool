@@ -5,6 +5,7 @@ using WeakestLinkGameTool.Models.Statistics;
 using WeakestLinkGameTool.Models.Visual;
 using WeakestLinkGameTool.ViewModels.Base;
 using WeakestLinkGameTool.ViewModels.PlayerVMs;
+using WeakestLinkGameTool.Views.MainPages;
 using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
@@ -113,8 +114,9 @@ public class EndGamePanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void StartNewGame() {
-        // TODO: ChangeMWPage<InputPlayersPage>();
-        // TODO: WeakestLinkLogic.ResetSession();
+        SoundManager.Stop(SoundName.CLOSING_TITLES);
+        WeakestLinkLogic.NewSessionSamePlayers();
+        ChangeMWPage<RegularRoundPage>();
     }
     
     /// <summary>

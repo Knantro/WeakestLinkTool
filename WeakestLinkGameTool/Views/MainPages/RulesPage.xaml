@@ -56,7 +56,8 @@
                                     Style="{StaticResource DefaultText}"
                                     Text="{Binding CurrentRule}"
                                     TextAlignment="Center" 
-                                    FontSize="50"/>
+                                    FontSize="50"
+                                    Visibility="{Binding IsRulesStarted, Converter={StaticResource VisibilityConverter}}"/>
         
         <Button Grid.Row="2" Grid.Column="0"
                 Height="140"
@@ -85,6 +86,19 @@
                     Content="2. Скрыть демо"
                     FontSize="40"
                     Command="{Binding HideRoundPanelCommand}" />
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1" Grid.Column="1"
+                    Visibility="{Binding IsRulesStarted, Converter={StaticResource InvertVisibilityConverter}}"
+                    VerticalAlignment="Center">
+            <Button Height="250"
+                    Width="500"
+                    Style="{StaticResource DefaultButton}"
+                    IsEnabled="{Binding IsRulesStarted, Converter={StaticResource InvertBooleanConverter}}"
+                    Content="Начать правила"
+                    FontSize="60"
+                    VerticalAlignment="Center"
+                    Command="{Binding StartRulesCommand}"/>
         </StackPanel>
         
         <StackPanel Grid.Row="2" Grid.Column="1" 

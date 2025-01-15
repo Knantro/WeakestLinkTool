@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:base="clr-namespace:WeakestLinkGameTool.ViewModels.Base"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Weakest Link Game - Player Window"
         ResizeMode="CanMinimize"
@@ -20,6 +21,12 @@
         
         WindowState="{Binding WindowState}"
         WindowStyle="{Binding WindowStyle}">
+    
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Closing">
+            <b:InvokeCommandAction Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
 
     <Viewbox MaxWidth="1920"
              MaxHeight="1080"

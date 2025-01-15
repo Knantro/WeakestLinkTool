@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using WeakestLinkGameTool.Commands;
@@ -34,6 +33,7 @@ public class RegularRoundPanelVM : ViewModelBase {
 
     private DispatcherTimerEx timer = new(DispatcherPriority.Render) { Interval = TimeSpan.FromSeconds(1) };
 
+
     /// <summary>
     /// Денежная цепь
     /// </summary>
@@ -43,7 +43,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     public Round CurrentRound { get; set; }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -166,13 +166,13 @@ public class RegularRoundPanelVM : ViewModelBase {
     public RelayCommand ResumeRoundCommand { get; set; }
     public RelayCommand PreviousQuestionCommand { get; set; }
     public RelayCommand NextQuestionCommand { get; set; }
-    
+
     public RelayCommand StartRoundCommand => new(_ => StartRound());
     public RelayCommand RoundEndCommand { get; set; }
 
     public RegularRoundPanelVM() {
         SoundManager.Play(SoundName.GENERAL_STING);
-        
+
         // Реверс для отображения
         MoneyTree = new ObservableCollection<MoneyTreeNodeVisual>(WeakestLinkLogic.MoneyTree.Select(x => x.ConvertToVisual()).Reverse());
         MoneyTree.Last().IsActive = true;
@@ -181,20 +181,20 @@ public class RegularRoundPanelVM : ViewModelBase {
         firstElem.Height = 108;
         firstElem.FontSize = 60;
 
-        CorrectAnswerCommand = new RelayCommand(async _ => await MarkCorrectAnswer(), _ => IsRoundPlayingNow);
-        WrongAnswerCommand = new RelayCommand(_ => MarkWrongAnswer(), _ => IsRoundPlayingNow);
+        CorrectAnswerCommand = new RelayCommand(async _ => await MarkCorrectAnswer(), _ => IsRoundPlayingNow && IsAnswerTimeMeasuring);
+        WrongAnswerCommand = new RelayCommand(_ => MarkWrongAnswer(), _ => IsRoundPlayingNow && IsAnswerTimeMeasuring);
         BankCommand = new RelayCommand(async _ => await BankMoney(), _ => IsRoundPlayingNow && MoneyTree.FirstOrDefault(x => x.InChain) != null);
         MeasureAnswerTimeCommand = new RelayCommand(_ => StartAnswerMeasuring(), _ => IsRoundPlayingNow && !IsAnswerTimeMeasuring && !IsRoundPaused);
         PauseRoundCommand = new RelayCommand(_ => PauseRound(), _ => IsRoundPlayingNow && !IsRoundPaused);
         ResumeRoundCommand = new RelayCommand(_ => ResumeRound(), _ => IsRoundPlayingNow && IsRoundPaused);
         PreviousQuestionCommand = new RelayCommand(_ => PreviousQuestion(), _ => IsRoundPlayingNow && QuestionIndex > 0);
         NextQuestionCommand = new RelayCommand(_ => NextQuestion(), _ => IsRoundPlayingNow);
-        
+
         RoundEndCommand = new RelayCommand(_ => NextJoke());
         CurrentRound = WeakestLinkLogic.NextRound();
         TimeLeft = CurrentRound.Timer!.Value;
         timer.Tick += async (_, _) => await TimerTick();
-        
+
         ChangePWPage<RegularRoundPage>();
         playerDataContext = GetPlayerPageDataContext<RegularRoundVM>();
         AwaitedShowRoundPanel();
@@ -213,7 +213,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     private async Task TimerTick() {
         TimeLeft -= TimeSpan.FromSeconds(1);
         playerDataContext.TimerTick();
-        
+
         if (TimeLeft.TotalSeconds < 1) {
             timer.Stop();
             await Task.Delay(3000);
@@ -226,14 +226,13 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// <summary>
     /// 
     /// </summary>
-    private void CompleteRound()
-    {
+    private void CompleteRound() {
         IsRoundPlayingNow = false;
         CommandManager.InvalidateRequerySuggested();
         IsRoundEnded = true;
 
         if (WeakestLinkLogic.CurrentSession.CurrentRound.IsPreFinal) {
-            RoundEndNextButtonText= "К финалу";
+            RoundEndNextButtonText = "К финалу";
             RoundEndCommand = new RelayCommand(_ => EndRound());
 
             OnPropertyChanged(nameof(RoundEndNextButtonText));
@@ -285,7 +284,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         WeakestLinkLogic.CorrectAnswer(currentPlayer, answerTime);
 
         Task.Run(async () => await playerDataContext.MarkCorrectAnswer());
-        
+
         var chainIndex = MoneyTree.IndexOf(MoneyTree.LastOrDefault(x => x.IsActive));
         if (chainIndex != -1) {
             MoneyTree[chainIndex].InChain = true;
@@ -309,7 +308,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         ResetMoneyChain();
         NextPlayerQuestion();
     }
-    
+
     /// <summary>
     ///
     /// </summary>
@@ -327,7 +326,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         answerStopwatch.Stop();
         var answerTime = answerStopwatch.Elapsed.TotalSeconds;
         answerStopwatch.Reset();
-        
+
         IsAnswerTimeMeasuring = false;
 
         return answerTime;
@@ -341,7 +340,7 @@ public class RegularRoundPanelVM : ViewModelBase {
 
         if (money > 0) {
             if (Bank + money >= MoneyTree.First().Value) money = MoneyTree.First().Value - Bank;
-            
+
             playerDataContext.BankMoney(money);
             Bank += money;
             WeakestLinkLogic.BankMoney(currentPlayer, money);
@@ -349,7 +348,7 @@ public class RegularRoundPanelVM : ViewModelBase {
 
             if (Bank == MoneyTree.First().Value) {
                 IsRoundPlayingNow = false;
-                
+
                 if (TimeLeft.TotalSeconds >= 1) {
                     SoundManager.Play(SoundName.TARGET_STING);
                     SoundManager.Resume(SoundName.GENERAL_BED);
@@ -412,14 +411,14 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// </summary>
     private void NextJoke() {
         jokesUsedCount++;
-        
+
         if (jokesUsedCount == 3) {
-            RoundEndNextButtonText= "Запустить голосование";
+            RoundEndNextButtonText = "Запустить голосование";
             RoundEndCommand = new RelayCommand(_ => EndRound());
 
             OnPropertyChanged(nameof(RoundEndNextButtonText));
             OnPropertyChanged(nameof(RoundEndCommand));
-            
+
             CurrentJoke = new Joke { Text = "Один из вас должен уйти ни с чем. Пришло время определить самое слабое звено" };
         }
         else {
@@ -431,7 +430,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void EndRound() {
-        WeakestLinkLogic.FormRegularRoundStatistics();
+        WeakestLinkLogic.EndRegularRound();
         WeakestLinkLogic.SaveEditableData();
         if (WeakestLinkLogic.CurrentSession.CurrentRound.IsPreFinal) ChangeMWPage<FinalRoundInstructionPage>();
         else {

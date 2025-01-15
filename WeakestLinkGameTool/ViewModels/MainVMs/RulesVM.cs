@@ -6,8 +6,8 @@ using WeakestLinkGameTool.Views.MainPages;
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
 public class RulesVM : ViewModelBase {
-    
     private int currentRuleIndex = 0;
+    private bool isRulesStarted;
     private string currentRule;
 
     /// <summary>
@@ -34,6 +34,14 @@ public class RulesVM : ViewModelBase {
     /// Является ли текущая страница вступления последней
     /// </summary>
     public bool IsLastRule => currentRuleIndex == Rules.Count - 1;
+
+    /// <summary>
+    /// Начато ли объяснение правил игры
+    /// </summary>
+    public bool IsRulesStarted {
+        get => isRulesStarted;
+        set => SetField(ref isRulesStarted, value);
+    }
     
     /// <summary>
     /// Текущая страница вступления
@@ -47,14 +55,15 @@ public class RulesVM : ViewModelBase {
         }
     }
 
-    public RelayCommand NextRuleCommand => new(_ => ChangeRule());
+    public RelayCommand NextRuleCommand => new(_ => ChangeRule(), _ => IsRulesStarted);
     public RelayCommand BackRuleCommand => new(_ => ChangeRule(false));
-    public RelayCommand StartDemoCommand => new(async _ => await GetPlayerPageDataContext<GameRulesVM>().StartDemo());
-    public RelayCommand StopDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().StopDemo());
-    public RelayCommand ShowRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().ShowRoundPanel());
-    public RelayCommand HideRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().HideRoundPanel());
-    public RelayCommand WrongAnswerDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().WrongAnswerDemo());
-    public RelayCommand BankDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().BankDemo());
+    public RelayCommand StartRulesCommand => new(_ => StartRules());
+    public RelayCommand StartDemoCommand => new(async _ => await GetPlayerPageDataContext<GameRulesVM>().StartDemo(), _ => IsRulesStarted);
+    public RelayCommand StopDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().StopDemo(), _ => IsRulesStarted);
+    public RelayCommand ShowRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().ShowRoundPanel(), _ => IsRulesStarted);
+    public RelayCommand HideRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().HideRoundPanel(), _ => IsRulesStarted);
+    public RelayCommand WrongAnswerDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().WrongAnswerDemo(), _ => IsRulesStarted);
+    public RelayCommand BankDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().BankDemo(), _ => IsRulesStarted);
     
     /// <summary>
     /// Переходит к правилам игры
@@ -72,5 +81,14 @@ public class RulesVM : ViewModelBase {
     /// <param name="forward">Направление изменения страницы. По умолчанию - True, то есть следующая</param>
     private void ChangeRule(bool forward = true) {
         CurrentRule = Rules[forward ? ++currentRuleIndex : --currentRuleIndex];
+    }
+
+    /// <summary>
+    /// Начать объяснение правил игры
+    /// </summary>
+    private void StartRules() {
+        SoundManager.Play(SoundName.GENERAL_STING);
+        
+        IsRulesStarted = true;
     }
 }

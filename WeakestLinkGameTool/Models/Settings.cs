@@ -11,4 +11,9 @@ public class Settings {
     /// Разрешение экрана
     /// </summary>
     public Resolution ScreenResolution { get; set; }
+    
+    /// <summary>
+    /// Громкость музыки
+    /// </summary>
+    public float Volume { get; set; }
 }

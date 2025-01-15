@@ -10,7 +10,7 @@ public class GameSession {
     /// <summary>
     /// Глобальный идентификатор игровой сессии
     /// </summary>
-    public Guid SessionID { get; private set; } = Guid.NewGuid();
+    public int SessionID { get; private set; } = Guid.NewGuid().GetHashCode();
 
     /// <summary>
     /// Список игроков текущей сессии

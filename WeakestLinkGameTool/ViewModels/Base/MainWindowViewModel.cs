@@ -24,6 +24,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     private bool isMessageBoxVisible;
     private double width = 1280 - 2 * SystemParameters.MinimizedWindowHeight + 2;
     private double height = 720;
+    private float volume = 1;
     private WindowState windowState = WindowState.Normal;
     private WindowStyle windowStyle = WindowStyle.SingleBorderWindow;
 
@@ -78,6 +79,14 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     public double Height {
         get => height;
         set => SetField(ref height, value);
+    }
+    
+    /// <summary>
+    /// Громкость музыки
+    /// </summary>
+    public float Volume {
+        get => volume;
+        set => SetField(ref volume, value);
     }
     
     /// <summary>
@@ -146,6 +155,17 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     }
 
     /// <summary>
+    /// Меняет громкость музыки
+    /// </summary>
+    /// <param name="newVolume">Новая громкость музыки</param>
+    public void ChangeVolume(float newVolume) {
+        Volume = newVolume;
+        SoundManager.SetVolumeAll(newVolume);
+        
+        SaveSettings();
+    }
+
+    /// <summary>
     /// Меняет разрешение экрана
     /// </summary>
     /// <param name="resolution">Разрешение экрана</param>
@@ -181,6 +201,8 @@ public class MainWindowViewModel : INotifyPropertyChanged {
 
             Width = settings.ScreenResolution.Width;
             Height = settings.ScreenResolution.Height;
+            Volume = settings.Volume;
+            SoundManager.SetVolumeAll(Volume);
             
             if (settings.ScreenResolution.IsFullScreenResolution()) {
                 WindowState = WindowState.Maximized;
@@ -199,6 +221,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     private void SaveSettings() {
         settings ??= new Settings();
         settings.ScreenResolution = new Resolution(Width, Height);
+        settings.Volume = Volume;
         
         FileStorage.Save(settings, FilePaths.GetFullDataPath(FilePaths.SETTINGS));
     }

@@ -8,7 +8,7 @@
              xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
              mc:Ignorable="d"
              Focusable="True"
-             d:DesignHeight="1080" 
+             d:DesignHeight="1080"
              d:DesignWidth="1920">
 
     <UserControl.DataContext>
@@ -20,6 +20,114 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <!--Control colors.-->
+            <Color x:Key="ControlLightColor">White</Color>
+
+            <!--Border colors-->
+            <Color x:Key="BorderLightColor">#FFCCCCCC</Color>
+            <Color x:Key="BorderDarkColor">#FF444444</Color>
+
+            <!--Control-specific resources.-->
+            <Color x:Key="SliderTrackDarkColor">#FFC5CBF9</Color>
+
+            <Style x:Key="SliderButtonStyle"
+                   TargetType="{x:Type RepeatButton}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true"/>
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true"/>
+                <Setter Property="IsTabStop"
+                        Value="false"/>
+                <Setter Property="Focusable"
+                        Value="false"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border Background="Transparent"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SliderThumbStyle"
+                   TargetType="{x:Type Thumb}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true"/>
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true"/>
+                <Setter Property="Height"
+                        Value="40"/>
+                <Setter Property="Width"
+                        Value="40"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Ellipse x:Name="Ellipse"
+                                     StrokeThickness="1"
+                                     Fill="#00BBBB"
+                                     Stroke="{StaticResource MessageBoxBackgroundBrush}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--Template when the orientation of the Slider is Vertical.-->
+            <ControlTemplate x:Key="VerticalSlider"
+                             TargetType="{x:Type Slider}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"
+                                          MinWidth="{TemplateBinding MinWidth}"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border x:Name="TrackBackground"
+                            Margin="0"
+                            CornerRadius="10"
+                            Width="20"
+                            Grid.Column="1"
+                            BorderThickness="1"
+                            Background="AntiqueWhite">
+                        <!-- <Border.Background> -->
+                        <!--     <LinearGradientBrush EndPoint="1,0" -->
+                        <!--                          StartPoint="0.25,0"> -->
+                        <!--         <GradientStop Color="{DynamicResource ControlLightColor}" -->
+                        <!--                       Offset="0"/> -->
+                        <!--         <GradientStop Color="{DynamicResource SliderTrackDarkColor}" -->
+                        <!--                       Offset="1"/> -->
+                        <!--     </LinearGradientBrush> -->
+                        <!-- </Border.Background> -->
+                    </Border>
+                    <Track Grid.Column="1"
+                           x:Name="PART_Track">
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Style="{StaticResource SliderButtonStyle}"
+                                          Command="Slider.DecreaseLarge"/>
+                        </Track.DecreaseRepeatButton>
+                        <Track.Thumb>
+                            <Thumb Style="{StaticResource SliderThumbStyle}"/>
+                        </Track.Thumb>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Style="{StaticResource SliderButtonStyle}"
+                                          Command="Slider.IncreaseLarge"/>
+                        </Track.IncreaseRepeatButton>
+                    </Track>
+                </Grid>
+            </ControlTemplate>
+
+            <Style TargetType="{x:Type Slider}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true"/>
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true"/>
+                <Style.Triggers>
+                    <Trigger Property="Orientation"
+                             Value="Vertical">
+                        <Setter Property="Template"
+                                Value="{StaticResource VerticalSlider}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -32,36 +140,86 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
-        <StackPanel HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-            <controls:OutlinedTextBlock Text="Разрешение экрана" 
+
+        <StackPanel>
+            <controls:OutlinedTextBlock Text="Настройки"
                                         Style="{StaticResource DefaultText}"
-                                        FontSize="50"/>
-            <Button Margin="0 20" Height="120" Width="500"  Style="{StaticResource DefaultButton}" 
-                    Content="1024x576" FontSize="45"
-                    Command="{Binding ChangeResolutionCommand}"
-                    CommandParameter="1024x576"/>
-            <Button Margin="0 20" Height="120" Width="500"  Style="{StaticResource DefaultButton}" 
-                    Content="1280x720" FontSize="45"
-                    Command="{Binding ChangeResolutionCommand}"
-                    CommandParameter="1280x720"/>
-            <Button Margin="0 20" Height="120" Width="500"  Style="{StaticResource DefaultButton}" 
-                    Content="1366x768" FontSize="45"
-                    Command="{Binding ChangeResolutionCommand}"
-                    CommandParameter="1366x768"/>
-            <Button Margin="0 20" Height="120" Width="500"  Style="{StaticResource DefaultButton}" 
-                    Content="1600x900" FontSize="45"
-                    Command="{Binding ChangeResolutionCommand}"
-                    CommandParameter="1600x900"/>
-            <Button Margin="0 20" Height="120" Width="500"  Style="{StaticResource DefaultButton}" 
-                    Content="Полный экран" FontSize="45"
-                    Command="{Binding ChangeResolutionCommand}"
-                    CommandParameter="Full"/>
-            <Button Margin="0 40" Height="120" Width="500"  Style="{StaticResource DefaultButton}" 
-                    Content="Назад" FontSize="45"
-                    Command="{Binding BackCommand}"/>
+                                        FontSize="50"
+                                        Margin="0 20 0 40"
+                                        VerticalAlignment="Top"/>
+            
+            <StackPanel VerticalAlignment="Center"
+                        Visibility="{Binding SettingSelected, Converter={StaticResource InvertCollapseVisibilityConverter}}">
+                <Button Margin="0 10" Height="200" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="Разрешение экрана" FontSize="45"
+                        Command="{Binding SelectSettingCommand}"
+                        CommandParameter="Resolution"/>
+                <Button Margin="0 10" Height="200" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="Громкость музыки" FontSize="45"
+                        Command="{Binding SelectSettingCommand}"
+                        CommandParameter="Volume"/>
+                
+                <Button Margin="0 357" Height="120" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="Назад" FontSize="45"
+                        Command="{Binding BackCommand}"/>
+            </StackPanel>
+
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Visibility="{Binding ResolutionSettingSelected, Converter={StaticResource CollapseVisibilityConverter}}">
+                <controls:OutlinedTextBlock Text="Разрешение экрана"
+                                            Style="{StaticResource DefaultText}"
+                                            FontSize="50"/>
+                <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="1024x576" FontSize="45"
+                        Command="{Binding ChangeResolutionCommand}"
+                        CommandParameter="1024x576"/>
+                <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="1280x720" FontSize="45"
+                        Command="{Binding ChangeResolutionCommand}"
+                        CommandParameter="1280x720"/>
+                <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="1366x768" FontSize="45"
+                        Command="{Binding ChangeResolutionCommand}"
+                        CommandParameter="1366x768"/>
+                <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="1600x900" FontSize="45"
+                        Command="{Binding ChangeResolutionCommand}"
+                        CommandParameter="1600x900"/>
+                <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="Полный экран" FontSize="45"
+                        Command="{Binding ChangeResolutionCommand}"
+                        CommandParameter="Full"/>
+                <Button Margin="0 40" Height="120" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="Назад" FontSize="45"
+                        Command="{Binding ReturnCommand}"/>
+            </StackPanel>
+
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Visibility="{Binding VolumeSettingSelected, Converter={StaticResource CollapseVisibilityConverter}}">
+                <controls:OutlinedTextBlock Text="Громкость музыки"
+                                            Style="{StaticResource DefaultText}"
+                                            FontSize="50"/>
+
+                <Border Width="100" Background="{StaticResource TextBoxBackgroundBrush}"
+                        CornerRadius="30"
+                        Margin="0 10"
+                        Padding="0 15">
+                    <Slider Orientation="Vertical"
+                            TickPlacement="None"
+                            Minimum="0"
+                            Maximum="100"
+                            Height="680"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Value="{Binding Volume}"/>
+                </Border>
+
+                <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
+                        Content="Назад" FontSize="45"
+                        Command="{Binding ReturnCommand}"/>
+            </StackPanel>
         </StackPanel>
-        
     </Grid>
 </UserControl>

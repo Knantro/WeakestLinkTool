@@ -57,6 +57,20 @@
         <GradientStop Color="Black" Offset="0.3"/>
         <GradientStop Color="DarkGray" Offset="2"/>
     </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="EndGameCreditsBorderBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#27768C" Offset="0.1"/>
+        <GradientStop Color="#B1B9B1" Offset="0.3"/>
+        <GradientStop Color="#002625" Offset="0.6"/>
+        <GradientStop Color="Black" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="EndGameCreditsBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="Black" Offset="0.1"/>
+        <GradientStop Color="#002625" Offset="0.3"/>
+        <GradientStop Color="#27768C" Offset="0.7"/>
+        <GradientStop Color="#B1B9B1" Offset="1"/>
+    </LinearGradientBrush>
 
     <Style x:Key="DefaultText" TargetType="{x:Type controls:OutlinedTextBlock}">
         <Setter Property="HorizontalAlignment" Value="Center"/>

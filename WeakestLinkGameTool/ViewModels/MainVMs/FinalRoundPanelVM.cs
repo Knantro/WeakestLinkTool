@@ -413,12 +413,12 @@ public class FinalRoundPanelVM : ViewModelBase {
             SecondPlayerAnswersPanel.Count(x => x.IsRight == true) + SecondPlayerAnswersPanel.Count(x => x.IsRight == null)) {
             WinSound();
             FirstPlayer.IsWinner = true;
-            WeakestLinkLogic.CurrentSession.Winner = FirstPlayer;
             IsGameEnd = true;
             IsSuddenDeath = false;
             IsFinalRoundPlaying = false;
             EndGameText = $"{FirstPlayer.Name}, сегодня вы - самое сильное звено, и уходите домой с суммой {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}. {SecondPlayer.Name}, вы уходите ни с чем.{Environment.NewLine}Вы смотрели \"Слабое звено\", это была всего лишь игра! До встречи!";
             HidePlayerFinalRoundPanel();
+            WeakestLinkLogic.SetupWinner(FirstPlayer);
             return true;
         }
 
@@ -426,12 +426,12 @@ public class FinalRoundPanelVM : ViewModelBase {
             FirstPlayerAnswersPanel.Count(x => x.IsRight == true) + FirstPlayerAnswersPanel.Count(x => x.IsRight == null)) {
             WinSound();
             SecondPlayer.IsWinner = true;
-            WeakestLinkLogic.CurrentSession.Winner = SecondPlayer;
             IsGameEnd = true;
             IsSuddenDeath = false;
             IsFinalRoundPlaying = false;
             EndGameText = $"{SecondPlayer.Name}, сегодня вы - самое сильное звено, и уходите домой с суммой {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}. {FirstPlayer.Name}, вы уходите ни с чем.{Environment.NewLine}Вы смотрели \"Слабое звено\", это была всего лишь игра! До встречи!";
             HidePlayerFinalRoundPanel();
+            WeakestLinkLogic.SetupWinner(SecondPlayer);
             return true;
         }
 
@@ -458,7 +458,7 @@ public class FinalRoundPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void EndGame() {
-        WeakestLinkLogic.FormFinalRoundStatistics();
+        WeakestLinkLogic.EndGame();
         ChangeMWPage<EndGamePanelPage>();
     }
 }

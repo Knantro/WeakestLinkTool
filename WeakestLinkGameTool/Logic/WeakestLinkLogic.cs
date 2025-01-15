@@ -9,6 +9,7 @@ namespace WeakestLinkGameTool.Logic;
 /// </summary>
 public class WeakestLinkLogic {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+    private static readonly Logger gameLogger = LogManager.GetCurrentClassLogger();
     private const string DEFAULT_MONEY_TREE_STRING = "1000;2000;5000;10000;20000;30000;40000;50000";
     private TimeSpan firstRoundTimer = new(0, 3, 0);
     private int currentQuestionIndex = -1;
@@ -83,7 +84,18 @@ public class WeakestLinkLogic {
     /// Создаёт игровую сессию
     /// </summary>
     public void InitSession() {
+        gameLogger.GameLog(CurrentSession.SessionID, $"Игра начинается. Участвуют игроки: {string.Join(Environment.NewLine, CurrentSession.AllPlayers.Select(x => $"{x.Number}. {x.Name}"))}");
+        
         CurrentSession = new GameSession();
+    }
+
+    /// <summary>
+    /// Создаёт новую сессию с теми же игроками
+    /// </summary>
+    public void NewSessionSamePlayers() {
+        var players = CurrentSession.AllPlayers.Select(x => new Player { Number = x.Number, Name = x.Name }).ToList();
+        CurrentSession = new GameSession { AllPlayers = players };
+        gameLogger.GameLog(CurrentSession.SessionID, $"Начинается новая игра с теми же игроками: {string.Join(Environment.NewLine, CurrentSession.AllPlayers.Select(x => $"{x.Number}. {x.Name}"))}");
     }
 
     /// <summary>
@@ -116,6 +128,8 @@ public class WeakestLinkLogic {
                     Player = p
                 }),
         };
+        
+        gameLogger.GameLog(CurrentSession.SessionID, $"Начался {(CurrentSession.CurrentRound.IsFinal ? "финал" : $"раунд - {CurrentSession.CurrentRound.Number}")}");
 
         return CurrentSession.CurrentRound;
     }
@@ -151,6 +165,7 @@ public class WeakestLinkLogic {
     /// Загружает игровые данные
     /// </summary>
     private void LoadData() {
+       
         var questions = FileStorage.Load<List<Question>>(FilePaths.GetFullDataPath(FilePaths.QUESTIONS));
         RegularQuestions = questions == null ? [] : questions.Where(x => !x.IsFinal).Shuffle().ToList();
         FinalQuestions = questions == null ? [] : questions.Where(x => x.IsFinal).Shuffle().ToList();
@@ -175,8 +190,11 @@ public class WeakestLinkLogic {
     /// </summary>
     /// <returns></returns>
     public Player GetStartRoundPlayer() {
-        var player = CurrentSession.ActivePlayers.FirstOrDefault(x => x.IsStrongestLink) ?? CurrentSession.ActivePlayers.OrderBy(x => x.Name).First();
+        var player = CurrentSession.ActivePlayers.FirstOrDefault(x => x.IsStrongestLink) ?? CurrentSession.CurrentRound.Statistics.PlayersStatistics.Values.First(x => !x.Player.IsKicked).Player;
         currentPlayerIndex = CurrentSession.ActivePlayers.IndexOf(player);
+        
+        gameLogger.GameLog(CurrentSession.SessionID, $"Раунд начинается с игрока - {player.Name}");
+        
         return player;
     }
 
@@ -185,7 +203,11 @@ public class WeakestLinkLogic {
     /// </summary>
     /// <returns></returns>
     public Player GetNextPlayer() {
-        return currentPlayerIndex < CurrentSession.ActivePlayers.Count - 1 ? CurrentSession.ActivePlayers[++currentPlayerIndex] : CurrentSession.ActivePlayers[currentPlayerIndex = 0];
+        var player = currentPlayerIndex < CurrentSession.ActivePlayers.Count - 1 ? CurrentSession.ActivePlayers[++currentPlayerIndex] : CurrentSession.ActivePlayers[currentPlayerIndex = 0];
+        
+        gameLogger.GameLog(CurrentSession.SessionID, $"Отвечает игрок - {player.Name}");
+
+        return player;
     }
 
     /// <summary>
@@ -201,7 +223,13 @@ public class WeakestLinkLogic {
         
         if (UnusedRegularQuestions.Count == 0) RegularQuestions.ForEach(x => x.IsUsed = false);
         
-        return currentQuestionIndex < UnusedRegularQuestions.Count - 1 ? UnusedRegularQuestions[++currentQuestionIndex] : UnusedRegularQuestions[currentQuestionIndex = 0];
+        var question = currentQuestionIndex < UnusedRegularQuestions.Count - 1 ? UnusedRegularQuestions[++currentQuestionIndex] : UnusedRegularQuestions[currentQuestionIndex = 0];
+        
+        gameLogger.GameLog(CurrentSession.SessionID, isUsed 
+            ? $"Текущий вопрос: {question.Text} (ответ: {question.Answer})"
+            : $"Вопрос изменён на следующий: {question.Text} (ответ: {question.Answer})");
+
+        return question;
     }
 
     /// <summary>
@@ -225,7 +253,11 @@ public class WeakestLinkLogic {
     public Question PreviousQuestion() {
         if (UnusedRegularQuestions.Count == 0) RegularQuestions.ForEach(x => x.IsUsed = false);
         
-        return currentQuestionIndex != 0 ? UnusedRegularQuestions[--currentQuestionIndex] : UnusedRegularQuestions[currentQuestionIndex = UnusedRegularQuestions.Count - 1];
+        var question = currentQuestionIndex != 0 ? UnusedRegularQuestions[--currentQuestionIndex] : UnusedRegularQuestions[currentQuestionIndex = UnusedRegularQuestions.Count - 1];
+        
+        gameLogger.GameLog(CurrentSession.SessionID, $"Вопрос изменён на следующий: {question.Text} (ответ: {question.Answer})");
+
+        return question;
     }
     
     /// <summary>
@@ -237,6 +269,7 @@ public class WeakestLinkLogic {
 
         var joke = currentQuestionIndex < UnusedJokes.Count - 1 ? UnusedJokes[++currentQuestionIndex] : UnusedJokes[currentQuestionIndex = 0];
         joke.IsUsed = true;
+        gameLogger.GameLog(CurrentSession.SessionID, $"{joke}");
         return joke;
     }
     
@@ -247,6 +280,7 @@ public class WeakestLinkLogic {
     /// <returns>Следующий вопрос финала из списка</returns>
     public Question NextFinalQuestion(bool isUsed = false) {
         if (isUsed && currentFinalQuestionIndex >= 0) {
+            gameLogger.GameLog(CurrentSession.SessionID, $"Текущий вопрос финала: {UnusedRegularQuestions[currentQuestionIndex].Text}");
             UnusedFinalQuestions[currentFinalQuestionIndex].IsUsed = true;
             currentFinalQuestionIndex--;
         }
@@ -275,9 +309,11 @@ public class WeakestLinkLogic {
         var playerStatistics = CurrentSession.CurrentRound.Statistics.PlayersStatistics[player];
 
         if (CurrentSession.CurrentRound.IsFinal) {
+            gameLogger.GameLog(CurrentSession.SessionID, $"Финалист {player.Name} отвечает верно");
             playerStatistics.FinalRoundAnswers.Add(true);
         }
         else {
+            gameLogger.GameLog(CurrentSession.SessionID, $"Игрок {player.Name} отвечает верно");
             playerStatistics.CorrectAnswers++;
             playerStatistics.AnswerSpeeds.Add(answerTime);
         }
@@ -292,9 +328,11 @@ public class WeakestLinkLogic {
         var playerStatistics = CurrentSession.CurrentRound.Statistics.PlayersStatistics[player];
 
         if (CurrentSession.CurrentRound.IsFinal) {
+            gameLogger.GameLog(CurrentSession.SessionID, $"Финалист {player.Name} отвечает неверно");
             playerStatistics.FinalRoundAnswers.Add(false);
         }
         else {
+            gameLogger.GameLog(CurrentSession.SessionID, $"Игрок {player.Name} отвечает верно");
             playerStatistics.WrongAnswers++;
             playerStatistics.AnswerSpeeds.Add(answerTime);
         }
@@ -306,6 +344,7 @@ public class WeakestLinkLogic {
     /// <param name="player"></param>
     /// <param name="money"></param>
     public void BankMoney(Player player, int money) {
+        gameLogger.GameLog(CurrentSession.SessionID, $"Игрок {player.Name} кладёт в банк {money.Decline("рубль", "рубля", "рублей")}");
         if (CurrentSession.CurrentRound.IsPreFinal) money *= 2; // Все деньги предфинального раунда умножаются на 2
         
         var playerStatistics = CurrentSession.CurrentRound.Statistics.PlayersStatistics[player];
@@ -318,30 +357,41 @@ public class WeakestLinkLogic {
     /// <summary>
     /// 
     /// </summary>
-    public void FormRegularRoundStatistics() {
+    public void EndRegularRound() {
+        gameLogger.GameLog(CurrentSession.SessionID, "Раунд завершён");
+        
         CurrentSession.CurrentRound.Statistics.PlayersStatistics = CurrentSession.CurrentRound.Statistics.PlayersStatistics
             .OrderByDescending(x => (double)x.Value.CorrectAnswers / (x.Value.CorrectAnswers + x.Value.WrongAnswers))
             .ThenByDescending(x => x.Value.BankedMoney)
             .ThenBy(x => x.Value.AverageSpeed)
             .ToDictionary(x => x.Key, x => x.Value);
         
-        CurrentSession.CurrentRound.Statistics.PlayersStatistics.First().Value.IsStrongestLink = true;
-        CurrentSession.CurrentRound.Statistics.PlayersStatistics.First().Value.Player.IsStrongestLink = true;
-        CurrentSession.CurrentRound.Statistics.PlayersStatistics.Last().Value.IsWeakestLink = true;
-        CurrentSession.CurrentRound.Statistics.PlayersStatistics.Last().Value.Player.IsWeakestLink = true;
+        var strongestLink = CurrentSession.CurrentRound.Statistics.PlayersStatistics.First().Value;
+        strongestLink.IsStrongestLink = true;
+        strongestLink.Player.IsStrongestLink = true;
+        
+        var weakestLink = CurrentSession.CurrentRound.Statistics.PlayersStatistics.Last().Value;
+        weakestLink.IsWeakestLink = true;
+        weakestLink.Player.IsWeakestLink = true;
         
         CurrentSession.ActivePlayers.ForEach(x => {
             x.Statistics.Add(CurrentSession.CurrentRound.Statistics.PlayersStatistics[x]);
         });
+        
+        gameLogger.GameLog(CurrentSession.SessionID, $"Сильное звено - {strongestLink.Player.Name}. Слабое звено - {weakestLink.Player.Name}");
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public void FormFinalRoundStatistics() {
+    public void EndGame() {
+        gameLogger.GameLog(CurrentSession.SessionID, "Игра завершена");
+        
         CurrentSession.ActivePlayers.ForEach(x => {
             x.Statistics.Add(CurrentSession.CurrentRound.Statistics.PlayersStatistics[x]);
         });
+        
+        ExcelStatistics.Generate(CurrentSession);
     }
 
     /// <summary>
@@ -349,6 +399,7 @@ public class WeakestLinkLogic {
     /// </summary>
     /// <param name="player"></param>
     public void KickPlayer(Player player) {
+        gameLogger.GameLog(CurrentSession.SessionID, $"Игрок {player.Name} объявлен слабым звеном и уходит из игры ни с чем");
         CurrentSession.CurrentRound.KickedPlayer = player;
         player.IsKicked = true;
     }
@@ -359,5 +410,15 @@ public class WeakestLinkLogic {
     /// <returns></returns>
     public Player GetCurrentKickedPlayer() {
         return CurrentSession.CurrentRound.KickedPlayer;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player"></param>
+    public void SetupWinner(Player player) {
+        gameLogger.GameLog(CurrentSession.SessionID, $"Финальный раунд завершён{Environment.NewLine}Победу одержал финалист игры - {player.Name}");
+        
+        CurrentSession.Winner = player;
     }
 }

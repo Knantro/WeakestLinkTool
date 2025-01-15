@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using WeakestLinkGameTool.Models;
 
 namespace WeakestLinkGameTool.Extensions;
 
@@ -68,5 +69,15 @@ public static class LoggerExtensions {
     /// <param name="name">Имя члена, вызвавшего метод логгирования</param>
     public static void SignedFatal(this Logger logger, Exception ex = null, string message = "", [CallerMemberName] string name = null) {
         logger.Fatal(ex, $"[{name}] {message}");
+    }
+
+    /// <summary>
+    /// Записывает лог игры
+    /// </summary>
+    /// <param name="logger">Исходный логгер</param>
+    /// <param name="sessionID">Идентификатор сессии</param>
+    /// <param name="message">Сообщение</param>
+    public static void GameLog(this Logger logger, int sessionID, string message) {
+        logger.Info($"[{sessionID}] {message}");
     }
 }

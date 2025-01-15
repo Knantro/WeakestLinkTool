@@ -7,22 +7,20 @@ namespace WeakestLinkGameTool.Logic;
 /// Пути к хранилищу информации по типам
 /// </summary>
 public static class FilePaths {
-    public const string TITLES = "titles.txt";
-    public const string GAME_SESSION_TEMPLATE = "game_session_*.txt";
-    public const string GAME_SESSIONS = "game_sessions.json";
-    public const string GAME_STATISTICS = "statistics.xlsx";
+    public const string GAME_STATISTICS_TABLE = "session_statistics.xlsx";
     public const string QUESTIONS = "questions.json";
     public const string JOKES = "jokes.json";
     public const string SETTINGS = "settings.json";
     public const string APPSETTINGS = "appsettings.json";
+    public const string SESSIONS_FOLDER = "Sessions";
 
     /// <summary>
-    /// Возвращает полный путь до файла истории игровой сессии с определённым номером
+    /// Возвращает полный путь до файла статистики игровой сессии с определённым номером
     /// </summary>
-    /// <param name="sessionNumber">Порядковый номер игровой сессии</param>
-    /// <returns>Абсолютный путь до файла истории игровой сессии с определённым номером</returns>
-    public static string GetSessionFilePath(int sessionNumber) => 
-        GetFullDataPath(GAME_SESSION_TEMPLATE.Replace("*", sessionNumber.ToString()));
+    /// <param name="sessionNumber">Номер игровой сессии</param>
+    /// <returns>Абсолютный путь до файла статистики игровой сессии с определённым номером</returns>
+    public static string GetSessionStatisticsFilePath(int sessionNumber) => 
+        GetFullDataPath(Path.Combine(SESSIONS_FOLDER, $"[{sessionNumber}] {GAME_STATISTICS_TABLE}"));
 
     /// <summary>
     /// Возвращает массив из путей до файлов музыки игры
