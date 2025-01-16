@@ -153,7 +153,7 @@ public class FinalRoundPanelVM : ViewModelBase {
     public RelayCommand EndGameCommand => new(_ => EndGame(), _ => CanEndGame);
 
     public FinalRoundPanelVM() {
-        SoundManager.Play(SoundName.FINAL_BEGIN_STING);
+        SoundManager.PlayWithVolumeFade(SoundName.FINAL_BEGIN_STING, SoundName.GENERAL_BED, 0.1f, 100, 700); // TODO: Magic const
         
         WeakestLinkLogic.NextRound();
         FirstPlayer = WeakestLinkLogic.CurrentSession.ActivePlayers[0];

@@ -171,7 +171,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     public RelayCommand RoundEndCommand { get; set; }
 
     public RegularRoundPanelVM() {
-        SoundManager.Play(SoundName.GENERAL_STING);
+        SoundManager.PlayWithVolumeFade(SoundName.GENERAL_STING, SoundName.GENERAL_BED, 0.1f, 300, 500); // TODO: Magic const
 
         // Реверс для отображения
         MoneyTree = new ObservableCollection<MoneyTreeNodeVisual>(WeakestLinkLogic.MoneyTree.Select(x => x.ConvertToVisual()).Reverse());
@@ -350,8 +350,8 @@ public class RegularRoundPanelVM : ViewModelBase {
                 IsRoundPlayingNow = false;
 
                 if (TimeLeft.TotalSeconds >= 1) {
-                    SoundManager.Play(SoundName.TARGET_STING);
                     SoundManager.Resume(SoundName.GENERAL_BED);
+                    SoundManager.PlayWithVolumeFade(SoundName.TARGET_STING, SoundName.GENERAL_BED, 0.1f, 100, 1000); // TODO: Magic const
                     SoundManager.Stop(SoundName.FromRound(CurrentRound.Timer!.Value));
                     timer.Stop();
                     await Task.Delay(2000);

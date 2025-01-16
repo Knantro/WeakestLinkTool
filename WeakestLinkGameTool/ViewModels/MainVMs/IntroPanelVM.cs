@@ -124,9 +124,8 @@ public class IntroPanelVM : ViewModelBase {
     /// <param name="forward">Направление изменения страницы. По умолчанию - True, то есть следующая</param>
     private void ChangeTitle(bool forward = true) {
         if (forward && !IsFirstNextTitleDone) {
-            // TODO: Плавное увеличение громкости
             SoundManager.Play(SoundName.SHORT_STING);
-            SoundManager.SetVolumeCoefficient(SoundName.GENERAL_BED, 0.2f);
+            SoundManager.SetVolumeCoefficient(SoundName.GENERAL_BED, 0.5f);
             SoundManager.FadeWith(SoundName.SHORT_STING, SoundName.GENERAL_BED, null, 3000, // TODO: Magic const
                 soundInPositionA: SoundConst.GENERAL_BED_LOOP_POSITION_A, soundInPositionB: SoundConst.GENERAL_BED_LOOP_POSITION_B);
             IsFirstNextTitleDone = true;

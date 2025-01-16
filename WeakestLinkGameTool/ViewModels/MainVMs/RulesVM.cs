@@ -72,7 +72,7 @@ public class RulesVM : ViewModelBase {
     
     public RulesVM() {
         CurrentRule = Rules[currentRuleIndex]; 
-        SoundManager.Play(SoundName.GENERAL_STING);
+        SoundManager.PlayWithVolumeFade(SoundName.GENERAL_STING, SoundName.GENERAL_BED, 0.1f, 300, 500); // TODO: Magic const
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public class RulesVM : ViewModelBase {
     /// Начать объяснение правил игры
     /// </summary>
     private void StartRules() {
-        SoundManager.Play(SoundName.GENERAL_STING);
+        SoundManager.PlayWithVolumeFade(SoundName.GENERAL_STING, SoundName.GENERAL_BED, 0.1f, 300, 500); // TODO: Magic const
         
         IsRulesStarted = true;
     }

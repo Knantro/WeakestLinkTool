@@ -203,7 +203,7 @@ public class VotingPanelVM : ViewModelBase {
     /// 
     /// </summary>
     private void DoneVoting() {
-        SoundManager.Play(SoundName.VOTING_STING);
+        SoundManager.PlayWithVolumeFade(SoundName.VOTING_STING, SoundName.GENERAL_BED, 0.1f, 100, 500); // TODO: Magic const
         IsVotingDone = true;
     }
 }

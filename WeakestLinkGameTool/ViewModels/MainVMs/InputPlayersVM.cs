@@ -74,7 +74,8 @@ public class InputPlayersVM : ViewModelBase {
             mainWindowViewModel.ShowMessageBox("Игроков не может быть меньше 7 или больше 11 и у всех игроков должно быть имя", "Ошибка");
             return;
         }
-        
+
+        WeakestLinkLogic.StartGame();
         ChangeMWPage<IntroPanelPage>();
         ChangePWPage<IntroPage>();
     }

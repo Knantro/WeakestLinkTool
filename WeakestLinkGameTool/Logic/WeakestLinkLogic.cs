@@ -9,7 +9,7 @@ namespace WeakestLinkGameTool.Logic;
 /// </summary>
 public class WeakestLinkLogic {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-    private static readonly Logger gameLogger = LogManager.GetCurrentClassLogger();
+    private static readonly Logger gameLogger = LogManager.GetLogger("fileGameLog");
     private const string DEFAULT_MONEY_TREE_STRING = "1000;2000;5000;10000;20000;30000;40000;50000";
     private TimeSpan firstRoundTimer = new(0, 3, 0);
     private int currentQuestionIndex = -1;
@@ -84,9 +84,14 @@ public class WeakestLinkLogic {
     /// Создаёт игровую сессию
     /// </summary>
     public void InitSession() {
-        gameLogger.GameLog(CurrentSession.SessionID, $"Игра начинается. Участвуют игроки: {string.Join(Environment.NewLine, CurrentSession.AllPlayers.Select(x => $"{x.Number}. {x.Name}"))}");
-        
         CurrentSession = new GameSession();
+    }
+
+    /// <summary>
+    /// Начинает игру записью в истории игры
+    /// </summary>
+    public void StartGame() {
+        gameLogger.GameLog(CurrentSession.SessionID, $"Игра начинается. Участвуют игроки: {string.Join(" ", CurrentSession.AllPlayers.Select(x => $"{x.Number}. {x.Name}"))}");
     }
 
     /// <summary>
@@ -95,7 +100,7 @@ public class WeakestLinkLogic {
     public void NewSessionSamePlayers() {
         var players = CurrentSession.AllPlayers.Select(x => new Player { Number = x.Number, Name = x.Name }).ToList();
         CurrentSession = new GameSession { AllPlayers = players };
-        gameLogger.GameLog(CurrentSession.SessionID, $"Начинается новая игра с теми же игроками: {string.Join(Environment.NewLine, CurrentSession.AllPlayers.Select(x => $"{x.Number}. {x.Name}"))}");
+        gameLogger.GameLog(CurrentSession.SessionID, $"Начинается новая игра с теми же игроками: {string.Join(" ", CurrentSession.AllPlayers.Select(x => $"{x.Number}. {x.Name}"))}");
     }
 
     /// <summary>

@@ -115,6 +115,7 @@ public class EndGamePanelVM : ViewModelBase {
     /// </summary>
     private void StartNewGame() {
         SoundManager.Stop(SoundName.CLOSING_TITLES);
+        SoundManager.LoopPlay(SoundName.GENERAL_BED, SoundConst.GENERAL_BED_LOOP_POSITION_A, SoundConst.GENERAL_BED_LOOP_POSITION_B);
         WeakestLinkLogic.NewSessionSamePlayers();
         ChangeMWPage<RegularRoundPage>();
     }

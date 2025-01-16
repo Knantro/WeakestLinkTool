@@ -12,27 +12,28 @@
 
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Load">
-            <b:CallMethodAction MethodName="Focus" TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+            <b:CallMethodAction MethodName="Focus"
+                                TargetObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
         </b:EventTrigger>
     </b:Interaction.Triggers>
 
     <UserControl.InputBindings>
-        <KeyBinding Key="D1" Command="{Binding ShowRoundPanelCommand}"  />
-        <KeyBinding Key="D2" Command="{Binding HideRoundPanelCommand}" />
-        <KeyBinding Key="D3" Command="{Binding StartDemoCommand}" />
-        <KeyBinding Key="D4" Command="{Binding StopDemoCommand}" />
-        <KeyBinding Key="D5" Command="{Binding BankDemoCommand}" />
-        <KeyBinding Key="D6" Command="{Binding WrongAnswerDemoCommand}" />
+        <KeyBinding Key="D1" Command="{Binding ShowRoundPanelCommand}"/>
+        <KeyBinding Key="D2" Command="{Binding HideRoundPanelCommand}"/>
+        <KeyBinding Key="D3" Command="{Binding StartDemoCommand}"/>
+        <KeyBinding Key="D4" Command="{Binding StopDemoCommand}"/>
+        <KeyBinding Key="D5" Command="{Binding BankDemoCommand}"/>
+        <KeyBinding Key="D6" Command="{Binding WrongAnswerDemoCommand}"/>
     </UserControl.InputBindings>
-    
+
     <UserControl.DataContext>
-        <mainVMs:RulesVM />
+        <mainVMs:RulesVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -42,34 +43,35 @@
           Background="{StaticResource CommonBackgroundBrush}"
           ShowGridLines="False">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="4*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="1"
                                     Style="{StaticResource DefaultText}"
                                     Text="{Binding CurrentRule}"
-                                    TextAlignment="Center" 
+                                    TextAlignment="Center"
                                     FontSize="50"
                                     Visibility="{Binding IsRulesStarted, Converter={StaticResource VisibilityConverter}}"/>
-        
+
         <Button Grid.Row="2" Grid.Column="0"
                 Height="140"
                 Width="280"
+                Visibility="{Binding IsRulesStarted, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
                 IsEnabled="{Binding IsFirstRule, Converter={StaticResource InvertBooleanConverter}}"
                 Content="Назад"
                 FontSize="40"
-                Command="{Binding BackRuleCommand}" />
-        
-        <StackPanel Grid.Row="0" Grid.Column="1" 
-                    VerticalAlignment="Center" 
+                Command="{Binding BackRuleCommand}"/>
+
+        <StackPanel Grid.Row="0" Grid.Column="1"
+                    VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <Button Margin="10 0"
@@ -78,16 +80,16 @@
                     Style="{StaticResource DefaultButton}"
                     Content="1. Показать демо"
                     FontSize="40"
-                    Command="{Binding ShowRoundPanelCommand}" />
+                    Command="{Binding ShowRoundPanelCommand}"/>
             <Button Margin="10 0"
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
                     Content="2. Скрыть демо"
                     FontSize="40"
-                    Command="{Binding HideRoundPanelCommand}" />
+                    Command="{Binding HideRoundPanelCommand}"/>
         </StackPanel>
-        
+
         <StackPanel Grid.Row="1" Grid.Column="1"
                     Visibility="{Binding IsRulesStarted, Converter={StaticResource InvertVisibilityConverter}}"
                     VerticalAlignment="Center">
@@ -100,9 +102,9 @@
                     VerticalAlignment="Center"
                     Command="{Binding StartRulesCommand}"/>
         </StackPanel>
-        
-        <StackPanel Grid.Row="2" Grid.Column="1" 
-                    VerticalAlignment="Center" 
+
+        <StackPanel Grid.Row="2" Grid.Column="1"
+                    VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <Button Margin="10 0"
@@ -111,40 +113,42 @@
                     Style="{StaticResource DefaultButton}"
                     Content="3. Старт демо"
                     FontSize="40"
-                    Command="{Binding StartDemoCommand}" />
+                    Command="{Binding StartDemoCommand}"/>
             <Button Margin="10 0"
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
                     Content="4. Стоп демо"
                     FontSize="40"
-                    Command="{Binding StopDemoCommand}" />
+                    Command="{Binding StopDemoCommand}"/>
             <Button Margin="10 0"
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
                     Content="5. Банк демо"
                     FontSize="40"
-                    Command="{Binding BankDemoCommand}" />
+                    Command="{Binding BankDemoCommand}"/>
             <Button Margin="10 0"
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
                     Content="6. Неверно демо"
                     FontSize="40"
-                    Command="{Binding WrongAnswerDemoCommand}" />
+                    Command="{Binding WrongAnswerDemoCommand}"/>
         </StackPanel>
-        
-        <Button Grid.Row="2" Grid.Column="2"
-                Height="140"
-                Width="280"
-                Style="{StaticResource DefaultButton}"
-                IsEnabled="{Binding IsLastRule, Converter={StaticResource InvertBooleanConverter}}"
-                Content="Далее"
-                Visibility="{Binding IsLastRule, Converter={StaticResource InvertVisibilityConverter}}"
-                FontSize="40"
-                Command="{Binding NextRuleCommand}"/>
-        
+
+        <Border Grid.Row="2" Grid.Column="2"
+                Visibility="{Binding IsRulesStarted, Converter={StaticResource VisibilityConverter}}">
+            <Button Height="140"
+                    Width="280"
+                    Style="{StaticResource DefaultButton}"
+                    IsEnabled="{Binding IsLastRule, Converter={StaticResource InvertBooleanConverter}}"
+                    Content="Далее"
+                    Visibility="{Binding IsLastRule, Converter={StaticResource InvertVisibilityConverter}}"
+                    FontSize="40"
+                    Command="{Binding NextRuleCommand}"/>
+        </Border>
+
         <Button Grid.Row="2" Grid.Column="2"
                 Height="140"
                 Width="280"
@@ -152,6 +156,6 @@
                 Style="{StaticResource DefaultButton}"
                 Content="Начать игру"
                 FontSize="40"
-                Command="{Binding StartGameCommand}" />
+                Command="{Binding StartGameCommand}"/>
     </Grid>
 </UserControl>

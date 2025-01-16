@@ -90,7 +90,7 @@ public static class SoundManager {
             var startVolume = audio.VolumeCoefficient;
             const int steps = 100; // Количество шагов
             var volumeStep = (destVolume - startVolume) / steps;
-            var stepDuration = duration / steps;
+            var stepDuration = duration / steps == 0 ? 1 : duration / steps;
 
             for (var i = 1; i <= steps; i++)
             {
@@ -101,6 +101,27 @@ public static class SoundManager {
             audio.SetVolumeCoefficient(destVolume);
         }
         else logger.Warn($"Audio '{soundName}' does not exist");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="soundName"></param>
+    /// <param name="soundToFadeName"></param>
+    /// <param name="fadeVolume"></param>
+    /// <param name="fadeDuration"></param>
+    /// <param name="awaitTime"></param>
+    public static async Task PlayWithVolumeFade(string soundName, string soundToFadeName, float fadeVolume, int fadeDuration, int awaitTime) {
+        if (!audios.ContainsKey(soundName) || !audios.TryGetValue(soundToFadeName, out var soundToFade)) {
+            logger.Warn($"One of the sounds: {soundName}, {soundToFadeName} doesn't exist");
+            return;
+        }
+        
+        Play(soundName);
+        var recoverVolume = soundToFade.VolumeCoefficient;
+        await FadeVolume(soundToFadeName, fadeVolume, fadeDuration);
+        await Task.Delay(awaitTime);
+        await FadeVolume(soundToFadeName, recoverVolume, fadeDuration);
     }
 
     /// <summary>
