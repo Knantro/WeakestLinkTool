@@ -119,8 +119,8 @@ public class VotingPanelVM : ViewModelBase {
         RoundNumber = WeakestLinkLogic.CurrentSession.CurrentRound.Number;
         RoundBank = WeakestLinkLogic.CurrentSession.CurrentRound.BankedMoney ?? 0;
         FullBank = WeakestLinkLogic.CurrentSession.FullBank;
-        RoundStatistics = new ObservableCollection<PlayerStatistics>(WeakestLinkLogic.CurrentSession.CurrentRound.Statistics.PlayersStatistics.Values);
-        Players = new ObservableCollection<Player>(WeakestLinkLogic.CurrentSession.ActivePlayers);
+        RoundStatistics = WeakestLinkLogic.CurrentSession.CurrentRound.Statistics.PlayersStatistics.Values.ToObservableCollection();
+        Players = WeakestLinkLogic.CurrentSession.ActivePlayers.ToObservableCollection();
         IsVotingInProgress = true;
         IsRoundStatisticsSelected = true;
         StartVoting();
@@ -146,7 +146,7 @@ public class VotingPanelVM : ViewModelBase {
     private void FormPersonalStatistics(Player player) {
         logger.Debug($"Form personal statistics for {player.Name}");
         SelectedPlayer = player;
-        PersonalPlayerStatistics = new ObservableCollection<PlayerStatistics>(player.Statistics);
+        PersonalPlayerStatistics = player.Statistics.ToObservableCollection();
         var totalStatistics = WeakestLinkLogic.CurrentSession.GetFullGameStatistics().First(x => x.Player == player);
         PersonalPlayerStatistics.Add(new PlayerStatistics {
             RoundName = "Итого",

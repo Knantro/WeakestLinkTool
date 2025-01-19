@@ -41,7 +41,7 @@ public class GameRulesVM : ViewModelBase {
         logger.SignedDebug();
         ct = cts.Token;
 
-        MoneyTree = new ObservableCollection<MoneyTreeNodeVisual>(WeakestLinkLogic.MoneyTree.Select(x => x.ConvertToVisual()).Reverse());
+        MoneyTree = WeakestLinkLogic.MoneyTree.Select(x => x.ConvertToVisual()).Reverse().ToObservableCollection();
         MoneyTree.Last().IsActive = true;
         var firstElem = MoneyTree.First();
         firstElem.Width = 288;

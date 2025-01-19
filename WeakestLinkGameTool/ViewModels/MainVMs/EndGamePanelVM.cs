@@ -105,8 +105,8 @@ public class EndGamePanelVM : ViewModelBase {
         SecondFinalist = WeakestLinkLogic.CurrentSession.SecondFinalist;
         SecondFinalistAnswers = WeakestLinkLogic.CurrentSession.CurrentRound.Statistics.PlayersStatistics[SecondFinalist].FinalRoundAnswers;
         TotalBank = WeakestLinkLogic.CurrentSession.FullBank;
-        Players = new ObservableCollection<Player>(WeakestLinkLogic.CurrentSession.AllPlayers);
-        FullGameStatistics = new ObservableCollection<FullPlayerStatistics>(WeakestLinkLogic.CurrentSession.GetFullGameStatistics());
+        Players = WeakestLinkLogic.CurrentSession.AllPlayers.ToObservableCollection();
+        FullGameStatistics = WeakestLinkLogic.CurrentSession.GetFullGameStatistics().ToObservableCollection();
         IsFullGameStatisticsSelected = true;
 
         ChangePWPage<EndGamePage>();
@@ -150,7 +150,7 @@ public class EndGamePanelVM : ViewModelBase {
         logger.Debug($"Forming personal statistics for {player.Name}");
         SelectedPlayer = player;
         IsFullGameStatisticsSelected = false;
-        PersonalPlayerStatistics = new ObservableCollection<PlayerStatistics>(player.Statistics.Where(x => x.RoundName != "Финал"));
+        PersonalPlayerStatistics = player.Statistics.Where(x => x.RoundName != "Финал").ToObservableCollection();
         IsPersonalStatisticsSelected = true;
     }
 }
