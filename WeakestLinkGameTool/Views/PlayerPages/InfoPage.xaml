@@ -11,13 +11,13 @@
              d:DesignWidth="1920">
 
     <UserControl.DataContext>
-        <playerVMs:InfoVM />
+        <playerVMs:InfoVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -26,15 +26,15 @@
           ShowGridLines="False"
           Background="{StaticResource CommonBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="6*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="1" x:Name="TotalBankGrid" Opacity="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="240" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="240"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Polygon Grid.Column="0"
                      HorizontalAlignment="Right"
@@ -45,9 +45,9 @@
                      Fill="{StaticResource GrayButtonBrush}"
                      Stretch="Fill" Stroke="Black" StrokeThickness="1">
                 <Polygon.Points>
-                    <Point X="0" Y="1" />
-                    <Point X="2" Y="0" />
-                    <Point X="2" Y="2" />
+                    <Point X="0" Y="1"/>
+                    <Point X="2" Y="0"/>
+                    <Point X="2" Y="2"/>
                 </Polygon.Points>
             </Polygon>
 
@@ -60,9 +60,9 @@
                      Fill="{StaticResource GrayButtonBrush}"
                      Stretch="Fill" Stroke="Black" StrokeThickness="1">
                 <Polygon.Points>
-                    <Point X="0" Y="0" />
-                    <Point X="2" Y="1" />
-                    <Point X="0" Y="2" />
+                    <Point X="0" Y="0"/>
+                    <Point X="2" Y="1"/>
+                    <Point X="0" Y="2"/>
                 </Polygon.Points>
             </Polygon>
 
@@ -75,7 +75,7 @@
                     Width="240">
                 <controls:OutlinedTextBlock Text="{Binding CurrentTotalBank}"
                                             FontSize="45"
-                                            Style="{StaticResource DefaultText}" />
+                                            Style="{StaticResource DefaultText}"/>
             </Border>
         </Grid>
     </Grid>

@@ -4,6 +4,9 @@ using System.Windows.Data;
 
 namespace WeakestLinkGameTool.Converters;
 
+/// <summary>
+/// Конвертер преобразования логического значения в значение типа <see cref="Visibility"/>
+/// </summary>
 public class VisibilityConverter : IValueConverter {
     
     public bool Invert { get; set; }

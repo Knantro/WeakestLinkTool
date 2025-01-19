@@ -6,13 +6,14 @@ using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
+/// <summary>
+/// Модель-представление инструкции перед следующим раундом
+/// </summary>
 public class NextRoundInstructionVM : ViewModelBase {
-    
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private int currentInstructionIndex = 0;
     private string currentInstruction;
     private bool showTotalBankToggle = true;
-
-    public event EventHandler FullBankVisibleChanged;
 
     /// <summary>
     /// Страницы вступления
@@ -64,17 +65,18 @@ public class NextRoundInstructionVM : ViewModelBase {
         }
     }
     
-    public RelayCommand NextInstructionCommand => new(_ => ChangeInstruction());
-    public RelayCommand BackInstructionCommand => new(_ => ChangeInstruction(false));
-    public RelayCommand ShowFullBankCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(true));
-    public RelayCommand HideFullBankVisibleCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(false));
+    public RelayCommand NextInstructionCommand => new(_ => ChangeInstruction(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand BackInstructionCommand => new(_ => ChangeInstruction(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand ShowFullBankCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(true), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand HideFullBankVisibleCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
     
     /// <summary>
     /// Переходит к правилам игры
     /// </summary>
-    public RelayCommand StartRoundCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>());
+    public RelayCommand StartRoundCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>(), _ => !mainWindowViewModel.IsMessageBoxVisible);
     
     public NextRoundInstructionVM() {
+        logger.SignedDebug();
         Instructions = Instructions.Where(x => !string.IsNullOrEmpty(x)).ToList();
         CurrentInstruction = Instructions[currentInstructionIndex];
         ChangePWPage<InfoPage>();
@@ -85,6 +87,7 @@ public class NextRoundInstructionVM : ViewModelBase {
     /// </summary>
     /// <param name="forward">Направление изменения страницы. По умолчанию - True, то есть следующая</param>
     private void ChangeInstruction(bool forward = true) {
+        logger.Debug($"Changing instruction {(forward ? "forward" : "backward")}");
         CurrentInstruction = Instructions[forward ? ++currentInstructionIndex : --currentInstructionIndex];
     }
 }

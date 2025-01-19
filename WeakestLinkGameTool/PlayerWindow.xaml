@@ -7,6 +7,7 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Weakest Link Game - Player Window"
+        Icon="/Assets/Images/weakest_link.ico"
         ResizeMode="CanMinimize"
         
         DataContext="{Binding Path=MainDataContext, RelativeSource={RelativeSource Self}}"

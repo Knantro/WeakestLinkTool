@@ -10,14 +10,22 @@
              Focusable="True"
              d:DesignHeight="1080" d:DesignWidth="1920">
 
+    <UserControl.InputBindings>
+        <KeyBinding Key="D1" Command="{Binding ChangeEditorModeCommand}" CommandParameter="Question"/>
+        <KeyBinding Key="D2" Command="{Binding ChangeEditorModeCommand}" CommandParameter="FinalQuestion"/>
+        <KeyBinding Key="D3" Command="{Binding ChangeEditorModeCommand}" CommandParameter="Joke"/>
+        <KeyBinding Key="Delete" Command="{Binding RemoveItemCommand}"/>
+        <KeyBinding Key="Insert" Command="{Binding AddItemCommand}"/>
+    </UserControl.InputBindings>
+
     <UserControl.DataContext>
-        <mainVMs:EditorVM />
+        <mainVMs:EditorVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -25,20 +33,20 @@
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
           Background="{StaticResource CommonBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="0.3*" />
-            <RowDefinition Height="80" />
-            <RowDefinition Height="0.5*" />
-            <RowDefinition Height="0.3*" />
-            <RowDefinition Height="80" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
 
@@ -51,8 +59,8 @@
                      GroupName="EditorMenu"
                      Command="{Binding ChangeEditorModeCommand}"
                      CommandParameter="Question"
-                     IsChecked="True"
-                     Content="Вопросы " />
+                     IsChecked="{Binding IsQuestionsSelected}"
+                     Content="1. Вопросы"/>
 
         <RadioButton Grid.Row="0"
                      Grid.Column="2"
@@ -63,8 +71,9 @@
                      GroupName="EditorMenu"
                      Command="{Binding ChangeEditorModeCommand}"
                      CommandParameter="FinalQuestion"
-                     Content="Вопросы финала" />
-        
+                     IsChecked="{Binding IsFinalQuestionsSelected}"
+                     Content="2. Вопросы финала"/>
+
         <RadioButton Grid.Row="0"
                      Grid.Column="3"
                      Height="150"
@@ -74,7 +83,8 @@
                      GroupName="EditorMenu"
                      Command="{Binding ChangeEditorModeCommand}"
                      CommandParameter="Joke"
-                     Content="Подколки" />
+                     IsChecked="{Binding IsJokesSelected}"
+                     Content="3. Подколки"/>
 
         <ListBox Grid.Row="0" Grid.Column="0"
                  Grid.RowSpan="8"
@@ -90,12 +100,12 @@
                  SelectedItem="{Binding SelectedItem}">
             <ListBox.Resources>
                 <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="15" />
+                    <Setter Property="CornerRadius" Value="15"/>
                 </Style>
             </ListBox.Resources>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <controls:OutlinedTextBlock Style="{StaticResource DefaultText}" 
+                    <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
                                                 FontSize="45"
                                                 Text="{Binding Text, Mode=TwoWay}"/>
                 </DataTemplate>
@@ -103,10 +113,10 @@
         </ListBox>
 
 
-        <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" 
+        <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
                                     Style="{StaticResource DefaultText}"
                                     FontSize="45"
-                                    Text="{Binding MainInputText}" />
+                                    Text="{Binding MainInputText}"/>
 
         <Border Grid.Row="2" Grid.Column="1"
                 Grid.ColumnSpan="3"
@@ -129,7 +139,7 @@
                                           Padding="-2 0"
                                           Margin="0 -2 0 2"
                                           Text="{Binding SelectedItem.Text}"
-                                          Foreground="Transparent" />
+                                          Foreground="Transparent"/>
             </ScrollViewer>
         </Border>
 
@@ -138,7 +148,7 @@
                                     Style="{StaticResource DefaultText}"
                                     FontSize="45"
                                     Visibility="{Binding IsQuestionEditMode, Converter={StaticResource VisibilityConverter}}"
-                                    Text="Правильный ответ" />
+                                    Text="Правильный ответ"/>
 
         <Border Grid.Row="5" Grid.Column="1"
                 Grid.ColumnSpan="3"
@@ -162,18 +172,17 @@
                                           Margin="0 -2 0 2"
                                           Padding="-2 0"
                                           Text="{Binding Path= SelectedItem.(local:Question.Answer)}"
-                                          Foreground="Transparent" />
+                                          Foreground="Transparent"/>
             </ScrollViewer>
         </Border>
-        
+
         <Button Grid.Row="6" Grid.Column="1"
                 Height="150"
                 Width="330"
                 FontSize="45"
                 Style="{StaticResource DefaultButton}"
                 Content="Удалить"
-                IsEnabled="{Binding HasSelectedItem}"
-                Command="{Binding RemoveItemCommand}" />
+                Command="{Binding RemoveItemCommand}"/>
 
         <Button Grid.Row="6" Grid.Column="3"
                 Height="150"
@@ -181,8 +190,8 @@
                 FontSize="45"
                 Style="{StaticResource DefaultButton}"
                 Content="Добавить"
-                Command="{Binding AddItemCommand}" />
-        
+                Command="{Binding AddItemCommand}"/>
+
         <Button Grid.Row="7" Grid.Column="1"
                 Height="150"
                 Width="330"
@@ -190,8 +199,8 @@
                 Style="{StaticResource DefaultButton}"
                 Content="Назад"
                 IsCancel="True"
-                Command="{Binding BackCommand}" />
-        
+                Command="{Binding BackCommand}"/>
+
         <Button Grid.Row="7" Grid.Column="3"
                 Height="150"
                 Width="330"
@@ -199,6 +208,6 @@
                 Style="{StaticResource DefaultButton}"
                 Content="Сохранить"
                 IsDefault="True"
-                Command="{Binding SaveCommand}" />
+                Command="{Binding SaveCommand}"/>
     </Grid>
 </UserControl>

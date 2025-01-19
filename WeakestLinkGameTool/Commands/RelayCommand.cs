@@ -1,8 +1,7 @@
-﻿using System.Diagnostics;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using WeakestLinkGameTool.Helpers;
 
-namespace WeakestLinkGameTool.Commands; 
+namespace WeakestLinkGameTool.Commands;
 
 /// <summary>
 /// Общий вид команды
@@ -19,7 +18,7 @@ public class RelayCommand : INPCBase, ICommand {
         get => action;
         set => SetField(ref action, value);
     }
-    
+
     /// <summary>
     /// Функция проверки, может ли команда быть запущена
     /// </summary>
@@ -31,40 +30,34 @@ public class RelayCommand : INPCBase, ICommand {
     /// <summary>
     /// Событие изменения возможности активации команды
     /// </summary>
-    public event EventHandler CanExecuteChanged
-    {
+    public event EventHandler CanExecuteChanged {
         add => CommandManager.RequerySuggested += value;
         remove => CommandManager.RequerySuggested -= value;
     }
- 
-    public RelayCommand(Action<object> action, Predicate<object> canExecuteFunc = null)
-    {
+
+    public RelayCommand(Action<object> action, Predicate<object> canExecuteFunc = null) {
         Action = action;
         CanExecuteFunc = canExecuteFunc;
     }
- 
+
     /// <summary>
     /// Проверяет, может ли команда быть запущена
     /// </summary>
     /// <param name="parameter">Параметр команды</param>
     /// <returns>True, если команда может быть запущена, иначе False</returns>
-    public bool CanExecute(object parameter)
-    {
+    public bool CanExecute(object parameter) {
         return CanExecuteFunc == null || CanExecuteFunc(parameter);
     }
- 
+
     /// <summary>
     /// Запускает команду на исполнение
     /// </summary>
     /// <param name="parameter">Параметр команды</param>
-    public void Execute(object parameter)
-    {
-        try
-        {
+    public void Execute(object parameter) {
+        try {
             Action(parameter);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             logger.Warn(e, "Command execution failed");
         }
     }
@@ -78,7 +71,7 @@ public class RelayCommand<T> : INPCBase, ICommand {
     private Logger logger = LogManager.GetCurrentClassLogger();
     private Action<T> action;
     private Predicate<T> canExecuteFunc;
-    
+
     /// <summary>
     /// Действие команды
     /// </summary>
@@ -86,7 +79,7 @@ public class RelayCommand<T> : INPCBase, ICommand {
         get => action;
         set => SetField(ref action, value);
     }
-    
+
     /// <summary>
     /// Функция проверки, может ли команда быть запущена
     /// </summary>
@@ -94,9 +87,8 @@ public class RelayCommand<T> : INPCBase, ICommand {
         get => canExecuteFunc;
         set => SetField(ref canExecuteFunc, value);
     }
-    
-    public RelayCommand(Action<T> action, Predicate<T> canExecuteFunc = null)
-    {
+
+    public RelayCommand(Action<T> action, Predicate<T> canExecuteFunc = null) {
         Action = action;
         CanExecuteFunc = canExecuteFunc;
     }
@@ -113,8 +105,7 @@ public class RelayCommand<T> : INPCBase, ICommand {
     /// <summary>
     /// Событие изменения возможности активации команды
     /// </summary>
-    public event EventHandler CanExecuteChanged
-    {
+    public event EventHandler CanExecuteChanged {
         add => CommandManager.RequerySuggested += value;
         remove => CommandManager.RequerySuggested -= value;
     }
@@ -124,12 +115,10 @@ public class RelayCommand<T> : INPCBase, ICommand {
     /// </summary>
     /// <param name="parameter">Параметр команды</param>
     public void Execute(object parameter) {
-        try
-        {
+        try {
             Action?.Invoke((T)parameter);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             logger.Warn(e, "Command execution failed");
         }
     }

@@ -14,10 +14,19 @@
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
         <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
         <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+        <ApplicationIcon>Assets\Images\weakest_link.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Assets\Images\" />
+        <None Remove="Assets\Images\weakest_link.ico" />
+        <Resource Include="Assets\Images\weakest_link.ico" />
+        <None Remove="Assets\Images\weakest_link.png" />
+        <Resource Include="Assets\Images\weakest_link.png">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
       <Folder Include="Sounds\" />
     </ItemGroup>
 

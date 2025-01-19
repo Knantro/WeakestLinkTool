@@ -11,8 +11,5 @@ public static class RandomExtensions {
     /// <param name="source">Исходная коллекция</param>
     /// <typeparam name="T">Тип коллекции</typeparam>
     /// <returns>Перемешанная коллекция</returns>
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
-    {
-        return source.OrderBy(x => Guid.NewGuid());
-    }
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source) => source.OrderBy(_ => Guid.NewGuid());
 }

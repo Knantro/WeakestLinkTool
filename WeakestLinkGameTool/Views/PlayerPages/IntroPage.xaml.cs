@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
+﻿using System.Windows.Controls;
 using WeakestLinkGameTool.ViewModels.PlayerVMs;
 
 namespace WeakestLinkGameTool.Views.PlayerPages;
@@ -8,10 +6,6 @@ namespace WeakestLinkGameTool.Views.PlayerPages;
 public partial class IntroPage : UserControl {
     public IntroPage() {
         InitializeComponent();
-
-        WLIntro.MediaFailed += (_, e) => {
-            Debugger.Break();
-        };
         
         var vm = DataContext as IntroVM;
         vm!.IntroPlayRequested += (_, _) => {

@@ -4,27 +4,26 @@
 /// Статистика игрока за раунд
 /// </summary>
 public class PlayerStatistics {
-    
     /// <summary>
     /// Номер раунда
     /// </summary>
     public string RoundName { get; set; }
-    
+
     /// <summary>
     /// Игрок
     /// </summary>
     public Player Player { get; set; }
-    
+
     /// <summary>
     /// Количество верных ответов
     /// </summary>
     public int CorrectAnswers { get; set; }
-    
+
     /// <summary>
     /// Количество неверных ответов
     /// </summary>
     public int WrongAnswers { get; set; }
-    
+
     /// <summary>
     /// Количество денег, положенных игроком в банк
     /// </summary>
@@ -42,12 +41,12 @@ public class PlayerStatistics {
     /// Вернёт null если не было ни одного ответа за раунд
     /// </remarks>
     public double? AverageSpeed => AnswerSpeeds.IsAny() ? AnswerSpeeds.Average() : null;
-    
+
     /// <summary>
     /// Был ли игрок 'сильным звеном'
     /// </summary>
     public bool IsStrongestLink { get; set; }
-    
+
     /// <summary>
     /// Был ли игрок 'слабым звеном'
     /// </summary>

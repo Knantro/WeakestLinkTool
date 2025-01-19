@@ -51,14 +51,14 @@ public static class FileStorage {
     public static T Load<T>(string path) {
         try {
             logger.SignedInfo($"Load data from file: {Path.GetFileName(path) ?? "<NULL>"}");
-            
+
             if (!File.Exists(path)) {
                 logger.SignedWarn(message: "No data available to load");
                 return default;
             }
-            
+
             var result = JsonSerializer.Deserialize<T>(File.ReadAllText(path), JsonSerializerOptions);
-            
+
             logger.SignedInfo("Load data successful!");
             return result;
         }

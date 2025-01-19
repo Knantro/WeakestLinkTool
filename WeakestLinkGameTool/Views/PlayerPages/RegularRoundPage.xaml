@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModels="clr-namespace:WeakestLinkGameTool.ViewModels"
              xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
-             xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
              xmlns:playerVMs="clr-namespace:WeakestLinkGameTool.ViewModels.PlayerVMs"
              mc:Ignorable="d"
              Focusable="True"
@@ -13,19 +11,19 @@
              Background="{StaticResource CommonBackgroundBrush}">
 
     <UserControl.DataContext>
-        <playerVMs:RegularRoundVM />
+        <playerVMs:RegularRoundVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Name="RoundPanelGrid"
-        HorizontalAlignment="Stretch"
+          HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           ShowGridLines="False"
           Opacity="0">
@@ -66,7 +64,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
+
         <Border Grid.Row="2" Grid.Column="2"
                 Background="{StaticResource GrayButtonBrush}"
                 CornerRadius="1000000000"
@@ -74,7 +72,7 @@
                 Width="160">
             <controls:OutlinedTextBlock Text="{Binding TimeText}"
                                         FontSize="45"
-                                        Style="{StaticResource DefaultText}" />
+                                        Style="{StaticResource DefaultText}"/>
         </Border>
 
         <Border Grid.Row="2" Grid.Column="0"

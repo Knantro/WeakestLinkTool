@@ -6,7 +6,7 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        
+        Icon="/Assets/Images/weakest_link.ico"
         DataContext="{Binding Path=MainDataContext, RelativeSource={RelativeSource Self}}"
         
         MinHeight="{Binding Height}"

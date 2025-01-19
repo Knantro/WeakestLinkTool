@@ -25,7 +25,7 @@
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
           ShowGridLines="False"
           Background="{StaticResource CommonBackgroundBrush}">
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="0.2*"/>
@@ -63,8 +63,8 @@
                 <Point X="0" Y="6"/>
             </Polygon.Points>
         </Polygon>
-        
-        <ScrollViewer x:Name="ScrollViewerContent" Grid.Column="2" 
+
+        <ScrollViewer x:Name="ScrollViewerContent" Grid.Column="2"
                       VerticalScrollBarVisibility="Hidden"
                       VerticalAlignment="Stretch">
             <StackPanel x:Name="ScrollContent" RenderTransformOrigin="0.5,0.5">
@@ -79,7 +79,7 @@
                                             FontSize="50"/>
             </StackPanel>
         </ScrollViewer>
-        
+
         <controls:OutlinedTextBlock Grid.Column="2" x:Name="ThanksForGame"
                                     Style="{StaticResource DefaultText}"
                                     Text="Спасибо за игру!"

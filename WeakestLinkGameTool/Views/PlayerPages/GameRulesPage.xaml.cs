@@ -13,7 +13,7 @@ public partial class GameRulesPage : UserControl {
             else HideMoneyTree();
         };
     }
-    
+
     private void ShowMoneyTree() {
         if (MoneyTree.Opacity < 10e-9) {
             var anim = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(500));

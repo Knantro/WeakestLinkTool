@@ -1,7 +1,7 @@
 ﻿namespace WeakestLinkGameTool.Logic.Sounds;
 
 /// <summary>
-/// 
+/// Модель названий звуков
 /// </summary>
 public static class SoundName {
     public const string AFTER_INTERVIEW_STING   = "after_interview_sting";
@@ -38,9 +38,9 @@ public static class SoundName {
     public const string WINNER_THEME_V2         = "winner_theme_v2";
     
     /// <summary>
-    /// 
+    /// Возвращает название звука раунда из времени раунда
     /// </summary>
-    /// <param name="timeSpan"></param>
-    /// <returns></returns>
+    /// <param name="timeSpan">Время раунда</param>
+    /// <returns>Название звука раунда</returns>
     public static string FromRound(TimeSpan timeSpan) => $"round_{(int)timeSpan.TotalSeconds}s"; 
 }

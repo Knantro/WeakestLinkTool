@@ -3,14 +3,18 @@
 namespace WeakestLinkGameTool.Helpers;
 
 /// <summary>
-/// 
+/// Расширенный интервальный таймер
 /// </summary>
+/// <remarks>
+/// Основное расширение состоит в методах <see cref="Pause"/> и <see cref="Resume"/>, который позволяет ставить таймер на паузу, фиксируя время остановки.<br/><br/>
+/// Например, таймер с интервалом 1 секунда, таймер остановлен на 0,5 секунде интервала, после использования метода <see cref="Resume"/>, таймер запустится с 0,5 секунды интервала
+/// и через 0,5 секунд, в рамках интервала, будет вызвано событие <see cref="DispatcherTimer.Tick"/>
+/// </remarks>
 public class DispatcherTimerEx : DispatcherTimer {
-    
     private readonly Logger logger = LogManager.GetCurrentClassLogger();
     
     /// <summary>
-    /// 
+    /// Интервал таймера
     /// </summary>
     public new TimeSpan Interval
     {
@@ -19,19 +23,16 @@ public class DispatcherTimerEx : DispatcherTimer {
     }
 
     /// <summary>
-    /// 
+    /// Запущен ли таймер
     /// </summary>
     public new bool IsEnabled
     {
         get => base.IsEnabled;
         set
         {
-            if (value == base.IsEnabled)
-                return;
-            if (value)
-                this.Start();
-            else
-                this.Stop();
+            if (value == base.IsEnabled) return;
+            if (value) Start();
+            else Stop();
         }
     }
 
@@ -61,24 +62,24 @@ public class DispatcherTimerEx : DispatcherTimer {
     }
     
     /// <summary>
-    /// 
+    /// Запускает таймер
     /// </summary>
     public new void Start()
     {
         base.Start();
         startTime = DateTime.Now;
         stopTime = DateTime.MinValue;
-        logger.Debug($"OnTick start: {startTime} stop: {stopTime}");
+        logger.Trace($"OnTick start: {startTime} stop: {stopTime}");
     }
 
     /// <summary>
-    /// 
+    /// Событие очередного истечения интервала времени
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    /// <param name="sender">Инициатор события</param>
+    /// <param name="e">Аргумент события</param>
     private void OnTick(object sender, EventArgs e) {
         startTime = DateTime.Now;
-        logger.Debug($"OnTick start: {startTime}");
+        logger.Trace($"OnTick start: {startTime}");
         if (base.Interval == maxInterval) return;
 
         Stop();
@@ -87,7 +88,7 @@ public class DispatcherTimerEx : DispatcherTimer {
     }
 
     /// <summary>
-    /// 
+    /// Ставит таймер на паузу
     /// </summary>
     public void Pause()
     {
@@ -98,11 +99,11 @@ public class DispatcherTimerEx : DispatcherTimer {
         }
         
         Stop();
-        logger.Debug($"Pause stop: {stopTime}");
+        logger.Trace($"Pause stop: {stopTime}");
     }
 
     /// <summary>
-    /// 
+    /// Продолжает работу таймера
     /// </summary>
     public void Resume()
     {
@@ -115,7 +116,7 @@ public class DispatcherTimerEx : DispatcherTimer {
         }
         else
         {
-            logger.Debug($"Resume start: {startTime} stop: {stopTime}");
+            logger.Trace($"Resume start: {startTime} stop: {stopTime}");
             
             while (maxInterval < stopTime - startTime) {
                 startTime += maxInterval;
@@ -125,7 +126,7 @@ public class DispatcherTimerEx : DispatcherTimer {
             stopTime = DateTime.MinValue;
         }
 
-        logger.Debug($"Resume start: {startTime} stop: {stopTime}");
+        logger.Trace($"Resume start: {startTime} stop: {stopTime}");
         base.Start();
     }
 }

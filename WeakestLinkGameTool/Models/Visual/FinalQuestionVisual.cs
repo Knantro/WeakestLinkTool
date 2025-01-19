@@ -5,11 +5,10 @@ using WeakestLinkGameTool.Helpers;
 namespace WeakestLinkGameTool.Models.Visual;
 
 public class FinalQuestionVisual : INPCBase {
-    
     private bool isActive;
     private bool? isRight;
     private bool? isWrong;
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -54,21 +53,21 @@ public class FinalQuestionVisual : INPCBase {
             OnPropertyChanged(nameof(Padding));
         }
     }
-    
+
     public double FontSize {
         get {
             if (IsWrong == true) return 38;
             return 50;
         }
     }
-    
+
     public Thickness Padding {
         get {
             if (IsRight == true) return new Thickness(0, -5, 0, 5);
             return new Thickness(0);
         }
     }
-    
+
     public string Text {
         get {
             if (IsRight == true) return "\u2714";

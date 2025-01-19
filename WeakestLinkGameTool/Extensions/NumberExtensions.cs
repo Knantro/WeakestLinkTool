@@ -1,6 +1,4 @@
 ﻿using System.Globalization;
-using System.Text;
-using Microsoft.Extensions.Primitives;
 
 namespace WeakestLinkGameTool.Extensions;
 

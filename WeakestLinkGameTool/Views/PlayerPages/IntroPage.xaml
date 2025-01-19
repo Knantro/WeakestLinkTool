@@ -4,20 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:playerVMs="clr-namespace:WeakestLinkGameTool.ViewModels.PlayerVMs"
-             xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
              mc:Ignorable="d"
              Focusable="True"
              d:DesignHeight="1080"
              d:DesignWidth="1920">
 
     <UserControl.DataContext>
-        <playerVMs:IntroVM />
+        <playerVMs:IntroVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -25,10 +24,10 @@
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
           ShowGridLines="True"
           Background="Black">
-        <MediaElement Name="WLIntro" 
-                      LoadedBehavior="Manual" 
-                      Source="weakest_link_intro.mp4" 
-                      HorizontalAlignment="Stretch" 
+        <MediaElement Name="WLIntro"
+                      LoadedBehavior="Manual"
+                      Source="weakest_link_intro.mp4"
+                      HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       Visibility="{Binding IsIntroVisible, Converter={StaticResource VisibilityConverter}}"/>
     </Grid>

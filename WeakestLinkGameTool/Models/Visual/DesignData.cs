@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using WeakestLinkGameTool.Models.Interfaces;
 using WeakestLinkGameTool.Models.Statistics;
 
 namespace WeakestLinkGameTool.Models.Visual;

@@ -2,22 +2,18 @@
 using System.Windows.Controls;
 using System.Windows.Threading;
 using WeakestLinkGameTool.Helpers;
-using WeakestLinkGameTool.Logic;
 using WeakestLinkGameTool.Views.MainPages;
 
-namespace WeakestLinkGameTool.ViewModels.Base; 
+namespace WeakestLinkGameTool.ViewModels.Base;
 
+/// <summary>
+/// Базовая модель-представление для всех остальных VM
+/// </summary>
 public class ViewModelBase : INPCBase, IDisposable {
-    protected static readonly Logger logger = LogManager.GetCurrentClassLogger();
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     protected static readonly WeakestLinkLogic WeakestLinkLogic = App.ServiceProvider.GetService<WeakestLinkLogic>();
     protected MainWindowViewModel mainWindowViewModel = App.ServiceProvider.GetService<MainWindowViewModel>();
     protected static Random rand = new();
-
-    #region PlayerVMEvents
-
-
-
-    #endregion
 
     public ViewModelBase() {
         mainWindowViewModel.OnDialogResult += OnDialogResult;
@@ -34,15 +30,19 @@ public class ViewModelBase : INPCBase, IDisposable {
     /// </summary>
     /// <typeparam name="T">Тип новой страницы, на которую нужно поменять</typeparam>
     protected void ChangeMWPage<T>() where T : UserControl {
+        logger.Debug($"Change MW Page to: {typeof(T).Name}");
+
         (mainWindowViewModel.CurrentMWPage.DataContext as ViewModelBase)?.Dispose();
         mainWindowViewModel.CurrentMWPage = Activator.CreateInstance<T>();
     }
-    
+
     /// <summary>
     /// Поменять текущую страницу окна игрока
     /// </summary>
     /// <typeparam name="T">Тип новой страницы, на которую нужно поменять</typeparam>
     protected void ChangePWPage<T>() where T : UserControl {
+        logger.Debug($"Change PW Page to: {typeof(T).Name}");
+
         (mainWindowViewModel.CurrentPWPage.DataContext as ViewModelBase)?.Dispose();
         mainWindowViewModel.CurrentPWPage = Activator.CreateInstance<T>();
     }
@@ -52,27 +52,29 @@ public class ViewModelBase : INPCBase, IDisposable {
     /// </summary>
     /// <typeparam name="T">Тип контекста данных</typeparam>
     /// <returns>Объект контекста данных страницы игрока</returns>
-    protected T GetPlayerPageDataContext<T>() where T : ViewModelBase => 
-        mainWindowViewModel.CurrentPWPage.DataContext as T;
+    protected T GetPlayerPageDataContext<T>() where T : ViewModelBase {
+        logger.SignedDebug();
+        return mainWindowViewModel.CurrentPWPage.DataContext as T;
+    }
 
     /// <summary>
     /// Меняет текущую страницу на главное меню
     /// </summary>
-    protected void GoToMainMenu() => ChangeMWPage<MainMenuPage>();
-    
+    protected void GoToMainMenu() {
+        logger.Debug($"Go to Main Menu");
+        ChangeMWPage<MainMenuPage>();
+    }
+
     /// <summary>
     /// Запускает указанное действие в контексте потока UI приложения
     /// </summary>
     /// <param name="action">Действие для запуска</param>
-    protected void UIDispatcherInvokeAsync(Action action)
-    {
+    protected void UIDispatcherInvokeAsync(Action action) {
         var dispatchObject = Application.Current.Dispatcher;
-        if (dispatchObject == null || dispatchObject.CheckAccess())
-        {
+        if (dispatchObject == null || dispatchObject.CheckAccess()) {
             action();
         }
-        else
-        {
+        else {
             dispatchObject.InvokeAsync(action);
         }
     }
@@ -81,15 +83,12 @@ public class ViewModelBase : INPCBase, IDisposable {
     /// Запускает указанное действие в контексте потока UI приложения
     /// </summary>
     /// <param name="action">Действие для запуска</param>
-    protected async Task UIDispatcherInvokeAsync(Func<Task> action)
-    {
+    protected async Task UIDispatcherInvokeAsync(Func<Task> action) {
         var dispatchObject = Application.Current.Dispatcher;
-        if (dispatchObject == null || dispatchObject.CheckAccess())
-        {
+        if (dispatchObject == null || dispatchObject.CheckAccess()) {
             await action();
         }
-        else
-        {
+        else {
             await dispatchObject.InvokeAsync(action);
         }
     }
@@ -98,15 +97,12 @@ public class ViewModelBase : INPCBase, IDisposable {
     /// Запускает указанное действие в контексте потока UI приложения синхронно
     /// </summary>
     /// <param name="action">Действие для запуска</param>
-    protected void UIDispatcherInvoke(Action action)
-    {
+    protected void UIDispatcherInvoke(Action action) {
         Dispatcher dispatchObject = Application.Current.Dispatcher;
-        if (dispatchObject == null || dispatchObject.CheckAccess())
-        {
+        if (dispatchObject == null || dispatchObject.CheckAccess()) {
             action();
         }
-        else
-        {
+        else {
             dispatchObject.InvokeAsync(action).GetAwaiter().GetResult();
         }
     }
@@ -115,6 +111,8 @@ public class ViewModelBase : INPCBase, IDisposable {
     /// Освободить ресурсы
     /// </summary>
     public virtual void Dispose() {
+        logger.SignedDebug("Dispose");
+
         mainWindowViewModel.OnDialogResult -= OnDialogResult;
     }
 }

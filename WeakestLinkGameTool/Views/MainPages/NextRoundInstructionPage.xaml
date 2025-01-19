@@ -9,6 +9,13 @@
              Focusable="True"
              d:DesignHeight="1080" d:DesignWidth="1920">
 
+    <UserControl.InputBindings>
+        <KeyBinding Key="Left" Command="{Binding BackInstructionCommand}"/>
+        <KeyBinding Key="Right" Command="{Binding NextInstructionCommand}"/>
+        <KeyBinding Key="D1" Command="{Binding HideFullBankVisibleCommand}"/>
+        <KeyBinding Key="D2" Command="{Binding ShowFullBankCommand}"/>
+    </UserControl.InputBindings>
+    
     <UserControl.DataContext>
         <mainVMs:NextRoundInstructionVM />
     </UserControl.DataContext>
@@ -58,7 +65,7 @@
             <Button Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="Скрыть банк"
+                    Content="1. Скрыть банк"
                     FontSize="40"
                     Margin="20 0"
                     Command="{Binding HideFullBankVisibleCommand}" />
@@ -66,7 +73,7 @@
             <Button Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="Показать банк"
+                    Content="2. Показать банк"
                     FontSize="40"
                     Margin="20 0"
                     Command="{Binding ShowFullBankCommand}" />
@@ -88,6 +95,7 @@
                 Visibility="{Binding IsLastInstruction, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
                 Content="Начать раунд"
+                IsDefault="True"
                 FontSize="40"
                 Command="{Binding StartRoundCommand}" />
     </Grid>

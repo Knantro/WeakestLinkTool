@@ -17,14 +17,13 @@ public partial class MainWindow : Window {
 
         MainDataContext.CurrentMWPage = Activator.CreateInstance<MainMenuPage>();
 
-        SourceInitialized += (_, _) => {
-            playerWindow.Show();
-        };
+        Deactivated += (_, _) => MainDataContext.CurrentMWPage.Focus();
+        SourceInitialized += (_, _) => playerWindow.Show();
     }
 
     protected override void OnClosed(EventArgs e) {
         base.OnClosed(e);
-        
+
         playerWindow.Close();
     }
 }

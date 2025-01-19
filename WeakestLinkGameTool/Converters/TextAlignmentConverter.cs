@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
 namespace WeakestLinkGameTool.Converters;
 
+/// <summary>
+/// Конвертер преобразование <see cref="HorizontalAlignment"/> в <see cref="TextAlignment"/>
+/// </summary>
 public class TextAlignmentConverter : IValueConverter {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
         if (value is not HorizontalAlignment alignment) {

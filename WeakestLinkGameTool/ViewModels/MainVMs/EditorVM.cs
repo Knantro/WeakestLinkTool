@@ -7,15 +7,18 @@ using WeakestLinkGameTool.ViewModels.Base;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
+/// <summary>
+/// Модель-представление экрана редактора
+/// </summary>
 public class EditorVM : ViewModelBase {
-    
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private ITextUsable selectedItem;
 
     /// <summary>
     /// Режим редактирования
     /// </summary>
     public EditorMode EditorMode { get; set; } = EditorMode.Question;
-    
+
     /// <summary>
     /// Текст первичного ввода вопроса или подколки
     /// </summary>
@@ -25,12 +28,12 @@ public class EditorVM : ViewModelBase {
     /// Является ли текущий режим редактирования - режимом редактирования вопросов
     /// </summary>
     public bool IsQuestionEditMode => EditorMode is EditorMode.Question or EditorMode.FinalQuestion;
-    
+
     /// <summary>
     /// Прозрачность текстовых полей
     /// </summary>
     public double TextBoxOpacity => SelectedItem == null ? 0.5 : 1;
-    
+
     /// <summary>
     /// Доступен ли ввод в текстовых полях
     /// </summary>
@@ -49,25 +52,43 @@ public class EditorVM : ViewModelBase {
     }
 
     /// <summary>
+    /// Выбран ли режим редактирования вопросов регулярного раунда (<see cref="EditorMode.Question"/>)
+    /// </summary>
+    public bool IsQuestionsSelected { get; set; }
+
+    /// <summary>
+    /// Выбран ли режим редактирования вопросов финального раунда (<see cref="EditorMode.FinalQuestion"/>)
+    /// </summary>
+    public bool IsFinalQuestionsSelected { get; set; }
+
+    /// <summary>
+    /// Выбран ли режим редактирования вопросов подколок (<see cref="EditorMode.Joke"/>)
+    /// </summary>
+    public bool IsJokesSelected { get; set; }
+
+    /// <summary>
     /// Коллекция текстовых сущностей
     /// </summary>
     public ObservableCollection<ITextUsable> DataCollection { get; set; } = [];
-    
-    public RelayCommand<string> ChangeEditorModeCommand => new(mode => ChangeEditorMode(Enum.Parse<EditorMode>(mode)));
-    public RelayCommand AddItemCommand => new(_ => AddItem());
-    public RelayCommand RemoveItemCommand => new(_ => RemoveItem());
-    public RelayCommand SaveCommand => new(_ => SaveAll());
-    public RelayCommand BackCommand => new(_ => GoToMainMenu());
-    
+
+    public RelayCommand<string> ChangeEditorModeCommand => new(mode => ChangeEditorMode(Enum.Parse<EditorMode>(mode)), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand AddItemCommand => new(_ => AddItem(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand RemoveItemCommand => new(_ => RemoveItem(), _ => HasSelectedItem && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand SaveCommand => new(_ => SaveAll(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand BackCommand => new(_ => GoToMainMenu(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+
     public EditorVM() {
+        logger.SignedDebug();
+        ChangeEditorMode(EditorMode.Question);
         DataCollection = WeakestLinkLogic.RegularQuestions.Select(ITextUsable (x) => x).ToObservableCollection();
     }
-    
+
     /// <summary>
     /// Меняет режим редактирования
     /// </summary>
     /// <param name="mode">Режим редактирования</param>
     private void ChangeEditorMode(EditorMode mode) {
+        logger.Debug($"Change Editor Mode to {mode}");
         EditorMode = mode;
         DataCollection = EditorMode switch {
             EditorMode.Question => WeakestLinkLogic.RegularQuestions.Select(ITextUsable (x) => x).ToObservableCollection(),
@@ -80,12 +101,19 @@ public class EditorVM : ViewModelBase {
         OnPropertyChanged(nameof(DataCollection));
         OnPropertyChanged(nameof(MainInputText));
         OnPropertyChanged(nameof(IsQuestionEditMode));
+        IsQuestionsSelected = EditorMode == EditorMode.Question;
+        IsFinalQuestionsSelected = EditorMode == EditorMode.FinalQuestion;
+        IsJokesSelected = EditorMode == EditorMode.Joke;
+        OnPropertyChanged(nameof(IsQuestionsSelected));
+        OnPropertyChanged(nameof(IsFinalQuestionsSelected));
+        OnPropertyChanged(nameof(IsJokesSelected));
     }
-    
+
     /// <summary>
     /// Добавляет сущность в коллекцию
     /// </summary>
     private void AddItem() {
+        logger.Debug($"Add new item with mode {EditorMode}");
         switch (EditorMode) {
             case EditorMode.Question:
                 SelectedItem = new Question { Text = "Новый вопрос", Answer = "Ответ" };
@@ -103,11 +131,12 @@ public class EditorVM : ViewModelBase {
 
         DataCollection.Add(SelectedItem);
     }
-    
+
     /// <summary>
     /// Удаляет сущность из коллекции
     /// </summary>
     private void RemoveItem() {
+        logger.Debug($"Remove item with mode {EditorMode}");
         switch (EditorMode) {
             case EditorMode.Question:
                 WeakestLinkLogic.RegularQuestions.Remove((Question)SelectedItem);
@@ -123,13 +152,15 @@ public class EditorVM : ViewModelBase {
         DataCollection.Remove(SelectedItem);
         SelectedItem = DataCollection.Any() ? DataCollection.Last() : null;
     }
-    
+
     /// <summary>
     /// Сохраняет вопросы и подколки в файлы
     /// </summary>
     private void SaveAll() {
         try {
+            logger.Info("Saving all edited data");
             if (!WeakestLinkLogic.ValidateEditableData()) {
+                logger.Warn("Validation failed");
                 mainWindowViewModel.ShowMessageBox("Заполните все поля у вопросов (текст вопроса, правильный ответ) и подколок (текст подколки)", "Ошибка");
                 return;
             }
@@ -137,7 +168,8 @@ public class EditorVM : ViewModelBase {
             WeakestLinkLogic.SaveEditableData();
             mainWindowViewModel.ShowMessageBox("Данные успешно сохранены!", "Успешно");
         }
-        catch {
+        catch (Exception e) {
+            logger.Error(e, "Save data failed");
             mainWindowViewModel.ShowMessageBox($"Данные не сохранились. Подробности в логе по пути logs/{DateTime.Now:yyyy-MM-dd}.txt", "Ошибка");
         }
     }

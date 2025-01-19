@@ -13,7 +13,7 @@ public partial class FinalRoundPage : UserControl {
             else HideFinalRoundPanel();
         };
     }
-    
+
     private void ShowFinalRoundPanel() {
         if (FinalRoundPanel.Opacity < 10e-9) {
             var anim = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(500));

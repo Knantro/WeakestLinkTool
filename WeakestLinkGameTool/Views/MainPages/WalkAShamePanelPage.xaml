@@ -42,27 +42,30 @@
                                     FontSize="50"
                                     Text="Слабое звено"
                                     VerticalAlignment="Top"/>
-        
-            <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center"
-                                        Style="{StaticResource DefaultText}"
-                                        FontSize="50"
-                                        Text="{Binding KickedPlayer.Name, StringFormat={}{0}\, вы - самое слабое звено\, прощайте!}"/>
 
-            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Background="{StaticResource GrayButtonBrush}"
-                    Height="170"
-                    Width="450"
-                    Margin="0 220 0 -220"
-                    Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource InvertVisibilityConverter}}"
-                    Style="{StaticResource DefaultButton}"
-                    Content="Объявить слабое звено"
-                    FontSize="40"
-                    Command="{Binding DeclareWeakestLinkCommand}"/>
+        <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center"
+                                    Style="{StaticResource DefaultText}"
+                                    FontSize="50"
+                                    Text="{Binding KickedPlayer.Name, StringFormat={}{0}\, вы - самое слабое звено\, прощайте!}"/>
+
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center"
+                Background="{StaticResource GrayButtonBrush}"
+                Height="170"
+                Width="450"
+                Margin="0 220 0 -220"
+                Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource InvertVisibilityConverter}}"
+                Style="{StaticResource DefaultButton}"
+                IsDefault="True"
+                Content="Объявить слабое звено"
+                FontSize="40"
+                Command="{Binding DeclareWeakestLinkCommand}"/>
 
         <Button Grid.Row="2" Grid.Column="2"
                 Height="140"
                 Width="280"
                 FontSize="40"
                 Style="{StaticResource DefaultButton}"
+                IsDefault="True"
                 Background="{StaticResource GrayButtonBrush}"
                 Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource VisibilityConverter}}"
                 Content="Новый раунд"

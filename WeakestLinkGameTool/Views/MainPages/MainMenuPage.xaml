@@ -3,12 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModels="clr-namespace:WeakestLinkGameTool.ViewModels"
              xmlns:mainVMs="clr-namespace:WeakestLinkGameTool.ViewModels.MainVMs"
              mc:Ignorable="d"
              Focusable="True"
-             d:DesignHeight="1080" 
+             d:DesignHeight="1080"
              d:DesignWidth="1920">
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="N" Command="{Binding NewGameCommand}"/>
+        <KeyBinding Key="C" Command="{Binding ConnectToGameCommand}"/>
+        <KeyBinding Key="S" Command="{Binding SettingsCommand}"/>
+        <KeyBinding Key="E" Command="{Binding EditorModeCommand}"/>
+        <KeyBinding Key="Q" Command="{Binding ExitCommand}"/>
+    </UserControl.InputBindings>
 
     <UserControl.DataContext>
         <mainVMs:MainMenuVM/>
@@ -31,23 +38,23 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <StackPanel HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-            <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}" 
+            <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
                     Content="Новая игра" FontSize="45"
                     Command="{Binding NewGameCommand}"/>
-            <Button Margin="0 20" Height="160" Width="500"  Style="{StaticResource DefaultButton}" 
+            <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
                     Content="Подключиться к игре" FontSize="45"
                     Command="{Binding ConnectToGameCommand}"
                     IsEnabled="False"/>
-            <Button Margin="0 20" Height="160" Width="500"  Style="{StaticResource DefaultButton}" 
+            <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
                     Content="Настройки" FontSize="45"
                     Command="{Binding SettingsCommand}"/>
-            <Button Margin="0 20" Height="160" Width="500"  Style="{StaticResource DefaultButton}" 
+            <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
                     Content="Редактор" FontSize="45"
                     Command="{Binding EditorModeCommand}"/>
-            <Button Margin="0 20" Height="160" Width="500"  Style="{StaticResource DefaultButton}" 
+            <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
                     Content="Выход" FontSize="45"
                     Command="{Binding ExitCommand}"/>
         </StackPanel>

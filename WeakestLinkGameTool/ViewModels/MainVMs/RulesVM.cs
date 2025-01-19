@@ -5,7 +5,11 @@ using WeakestLinkGameTool.Views.MainPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
+/// <summary>
+/// Модель-представление экрана с правилами игры
+/// </summary>
 public class RulesVM : ViewModelBase {
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private int currentRuleIndex = 0;
     private bool isRulesStarted;
     private string currentRule;
@@ -29,7 +33,7 @@ public class RulesVM : ViewModelBase {
     /// Является ли текущая страница вступления первой
     /// </summary>
     public bool IsFirstRule => currentRuleIndex == 0;
-    
+
     /// <summary>
     /// Является ли текущая страница вступления последней
     /// </summary>
@@ -42,7 +46,7 @@ public class RulesVM : ViewModelBase {
         get => isRulesStarted;
         set => SetField(ref isRulesStarted, value);
     }
-    
+
     /// <summary>
     /// Текущая страница вступления
     /// </summary>
@@ -55,24 +59,26 @@ public class RulesVM : ViewModelBase {
         }
     }
 
-    public RelayCommand NextRuleCommand => new(_ => ChangeRule(), _ => IsRulesStarted);
-    public RelayCommand BackRuleCommand => new(_ => ChangeRule(false));
-    public RelayCommand StartRulesCommand => new(_ => StartRules());
-    public RelayCommand StartDemoCommand => new(async _ => await GetPlayerPageDataContext<GameRulesVM>().StartDemo(), _ => IsRulesStarted);
-    public RelayCommand StopDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().StopDemo(), _ => IsRulesStarted);
-    public RelayCommand ShowRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().ShowRoundPanel(), _ => IsRulesStarted);
-    public RelayCommand HideRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().HideRoundPanel(), _ => IsRulesStarted);
-    public RelayCommand WrongAnswerDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().WrongAnswerDemo(), _ => IsRulesStarted);
-    public RelayCommand BankDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().BankDemo(), _ => IsRulesStarted);
-    
+    public RelayCommand NextRuleCommand => new(_ => ChangeRule(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand BackRuleCommand => new(_ => ChangeRule(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand StartRulesCommand => new(_ => StartRules(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand StartDemoCommand => new(async _ => await GetPlayerPageDataContext<GameRulesVM>().StartDemo(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand StopDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().StopDemo(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand ShowRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().ShowRoundPanel(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand HideRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().HideRoundPanel(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand WrongAnswerDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().WrongAnswerDemo(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand BankDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().BankDemo(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
+
     /// <summary>
     /// Переходит к правилам игры
     /// </summary>
-    public RelayCommand StartGameCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>());
-    
+    public RelayCommand StartGameCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+
     public RulesVM() {
-        CurrentRule = Rules[currentRuleIndex]; 
-        SoundManager.PlayWithVolumeFade(SoundName.GENERAL_STING, SoundName.GENERAL_BED, 0.1f, 300, 500); // TODO: Magic const
+        logger.SignedDebug();
+        CurrentRule = Rules[currentRuleIndex];
+        SoundManager.PlayWithVolumeFade(SoundName.GENERAL_STING, SoundName.GENERAL_BED, SoundConst.GENERAL_BED_FADE_VOLUME,
+            SoundConst.GENERAL_BED_GENERAL_STING_FADE_VOLUME_DURATION, SoundConst.GENERAL_BED_GENERAL_STING_FADE_VOLUME_AWAIT_TIME);
     }
 
     /// <summary>
@@ -80,6 +86,7 @@ public class RulesVM : ViewModelBase {
     /// </summary>
     /// <param name="forward">Направление изменения страницы. По умолчанию - True, то есть следующая</param>
     private void ChangeRule(bool forward = true) {
+        logger.Debug($"Changing rule {(forward ? "forward" : "backward")}");
         CurrentRule = Rules[forward ? ++currentRuleIndex : --currentRuleIndex];
     }
 
@@ -87,8 +94,10 @@ public class RulesVM : ViewModelBase {
     /// Начать объяснение правил игры
     /// </summary>
     private void StartRules() {
-        SoundManager.PlayWithVolumeFade(SoundName.GENERAL_STING, SoundName.GENERAL_BED, 0.1f, 300, 500); // TODO: Magic const
-        
+        logger.Debug("Start rules");
+        SoundManager.PlayWithVolumeFade(SoundName.GENERAL_STING, SoundName.GENERAL_BED, SoundConst.GENERAL_BED_FADE_VOLUME,
+            SoundConst.GENERAL_BED_GENERAL_STING_FADE_VOLUME_DURATION, SoundConst.GENERAL_BED_GENERAL_STING_FADE_VOLUME_AWAIT_TIME);
+
         IsRulesStarted = true;
     }
 }

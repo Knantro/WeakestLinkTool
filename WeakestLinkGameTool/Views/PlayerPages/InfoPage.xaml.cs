@@ -7,7 +7,7 @@ namespace WeakestLinkGameTool.Views.PlayerPages;
 public partial class InfoPage : UserControl {
     public InfoPage() {
         InitializeComponent();
-        
+
         (DataContext as InfoVM).TotalBankVisibilityChanged += (_, show) => {
             if (show) ShowTotalBank();
             else HideTotalBank();

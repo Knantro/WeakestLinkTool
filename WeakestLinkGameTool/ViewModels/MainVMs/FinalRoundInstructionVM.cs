@@ -6,8 +6,11 @@ using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
 
+/// <summary>
+/// Модель-представление экрана с инструкцией перед финальным раундом
+/// </summary>
 public class FinalRoundInstructionVM : ViewModelBase {
-        
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private int currentInstructionIndex = 0;
     private string currentInstruction;
 
@@ -30,12 +33,12 @@ public class FinalRoundInstructionVM : ViewModelBase {
     /// Является ли текущая страница вступления первой
     /// </summary>
     public bool IsFirstInstruction => currentInstructionIndex == 0;
-    
+
     /// <summary>
     /// Является ли текущая страница вступления последней
     /// </summary>
     public bool IsLastInstruction => currentInstructionIndex == Instructions.Count - 1;
-    
+
     /// <summary>
     /// Текущая страница вступления
     /// </summary>
@@ -48,17 +51,18 @@ public class FinalRoundInstructionVM : ViewModelBase {
         }
     }
 
-    public RelayCommand NextInstructionCommand => new(_ => ChangeInstruction());
-    public RelayCommand BackInstructionCommand => new(_ => ChangeInstruction(false));
-    public RelayCommand ShowFullBankCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(true));
-    public RelayCommand HideFullBankVisibleCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(false));
-    
+    public RelayCommand NextInstructionCommand => new(_ => ChangeInstruction(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand BackInstructionCommand => new(_ => ChangeInstruction(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand ShowFullBankCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(true), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand HideFullBankVisibleCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
+
     /// <summary>
     /// Переходит к правилам игры
     /// </summary>
-    public RelayCommand StartFinalCommand => new(_ => ChangeMWPage<FinalRoundPanelPage>());
-    
+    public RelayCommand StartFinalCommand => new(_ => ChangeMWPage<FinalRoundPanelPage>(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+
     public FinalRoundInstructionVM() {
+        logger.SignedDebug();
         Instructions = Instructions.Where(x => !string.IsNullOrEmpty(x)).ToList();
         CurrentInstruction = Instructions[currentInstructionIndex];
         ChangePWPage<InfoPage>();
@@ -69,6 +73,7 @@ public class FinalRoundInstructionVM : ViewModelBase {
     /// </summary>
     /// <param name="forward">Направление изменения страницы. По умолчанию - True, то есть следующая</param>
     private void ChangeInstruction(bool forward = true) {
+        logger.Debug($"Changing instruction {(forward ? "forward" : "backward")}");
         CurrentInstruction = Instructions[forward ? ++currentInstructionIndex : --currentInstructionIndex];
     }
 }

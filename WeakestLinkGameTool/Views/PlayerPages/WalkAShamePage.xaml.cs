@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
+﻿using System.Windows.Controls;
 
 namespace WeakestLinkGameTool.Views.PlayerPages;
 

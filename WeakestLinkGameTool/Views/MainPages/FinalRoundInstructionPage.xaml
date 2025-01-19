@@ -9,14 +9,21 @@
              Focusable="True"
              d:DesignHeight="1080" d:DesignWidth="1920">
 
+    <UserControl.InputBindings>
+        <KeyBinding Key="Left" Command="{Binding BackInstructionCommand}"/>
+        <KeyBinding Key="Right" Command="{Binding NextInstructionCommand}"/>
+        <KeyBinding Key="D1" Command="{Binding HideFullBankVisibleCommand}"/>
+        <KeyBinding Key="D2" Command="{Binding ShowFullBankCommand}"/>
+    </UserControl.InputBindings>
+
     <UserControl.DataContext>
-        <mainVMs:FinalRoundInstructionVM />
+        <mainVMs:FinalRoundInstructionVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -26,22 +33,22 @@
           Background="{StaticResource CommonBackgroundBrush}"
           ShowGridLines="False">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="4*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="1"
                                     Style="{StaticResource DefaultText}"
                                     Text="{Binding CurrentInstruction}"
-                                    TextAlignment="Center" 
+                                    TextAlignment="Center"
                                     FontSize="50"/>
-        
+
         <Button Grid.Row="2" Grid.Column="0"
                 Height="140"
                 Width="280"
@@ -49,10 +56,10 @@
                 IsEnabled="{Binding IsFirstInstruction, Converter={StaticResource InvertBooleanConverter}}"
                 Content="Назад"
                 FontSize="40"
-                Command="{Binding BackInstructionCommand}" />
-        
-        <StackPanel Grid.Row="2" Grid.Column="1" 
-                    VerticalAlignment="Center" 
+                Command="{Binding BackInstructionCommand}"/>
+
+        <StackPanel Grid.Row="2" Grid.Column="1"
+                    VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <Button Height="140"
@@ -61,17 +68,17 @@
                     Content="Скрыть банк"
                     FontSize="40"
                     Margin="20 0"
-                    Command="{Binding HideFullBankVisibleCommand}" />
-            
+                    Command="{Binding HideFullBankVisibleCommand}"/>
+
             <Button Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
                     Content="Показать банк"
                     FontSize="40"
                     Margin="20 0"
-                    Command="{Binding ShowFullBankCommand}" />
+                    Command="{Binding ShowFullBankCommand}"/>
         </StackPanel>
-        
+
         <Button Grid.Row="2" Grid.Column="2"
                 Height="140"
                 Width="280"
@@ -81,14 +88,15 @@
                 Visibility="{Binding IsLastInstruction, Converter={StaticResource InvertVisibilityConverter}}"
                 FontSize="40"
                 Command="{Binding NextInstructionCommand}"/>
-        
+
         <Button Grid.Row="2" Grid.Column="2"
                 Height="140"
                 Width="280"
                 Visibility="{Binding IsLastInstruction, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
                 Content="Финальный раунд"
+                IsDefault="True"
                 FontSize="40"
-                Command="{Binding StartFinalCommand}" />
+                Command="{Binding StartFinalCommand}"/>
     </Grid>
 </UserControl>

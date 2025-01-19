@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace WeakestLinkGameTool.Helpers;
 
+/// <summary>
+/// Общий тип для всех типов, реализующих интерфейс <see cref="INotifyPropertyChanged"/>
+/// </summary>
 public class INPCBase : INotifyPropertyChanged {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 

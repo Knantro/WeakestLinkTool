@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using WeakestLinkGameTool.Models;
 
 namespace WeakestLinkGameTool.Extensions;
 

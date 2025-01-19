@@ -5,19 +5,18 @@ using WeakestLinkGameTool.ViewModels.Base;
 
 namespace WeakestLinkGameTool;
 
-public partial class MessageBox : UserControl
-{
+/// <summary>
+/// Диалоговое окно
+/// </summary>
+public partial class MessageBox : UserControl {
     private MainWindowViewModel mainWindowViewModel = App.ServiceProvider.GetService<MainWindowViewModel>();
-    
-    public MessageBox()
-    {
+
+    public MessageBox() {
         InitializeComponent();
     }
 
-    public void AddButtons(MessageBoxButton buttons)
-    {
-        switch (buttons)
-        {
+    public void AddButtons(MessageBoxButton buttons) {
+        switch (buttons) {
             case MessageBoxButton.OK:
                 AddButton("OK", MessageBoxResult.OK, isDefault: true);
                 break;
@@ -27,7 +26,7 @@ public partial class MessageBox : UserControl
                 break;
             case MessageBoxButton.YesNo:
                 AddButton("Да", MessageBoxResult.Yes, isDefault: true);
-                AddButton("Нет", MessageBoxResult.No);
+                AddButton("Нет", MessageBoxResult.No, isCancel: true);
                 break;
             // case MessageBoxButton.YesNoCancel:
             //     AddButton("Yes", MessageBoxResult.Yes, isDefault: true);
@@ -39,8 +38,7 @@ public partial class MessageBox : UserControl
         }
     }
 
-    private void AddButton(string text, MessageBoxResult result, bool isDefault = false, bool isCancel = false)
-    {
+    private void AddButton(string text, MessageBoxResult result, bool isDefault = false, bool isCancel = false) {
         var button = new Button() { Content = text, IsDefault = isDefault, IsCancel = isCancel };
         button.Click += (o, args) => {
             Result = result;
@@ -58,7 +56,7 @@ public partial class MessageBox : UserControl
             MessageBoxResult.Yes => HorizontalAlignment.Right,
             MessageBoxResult.No => HorizontalAlignment.Left,
         };
-        
+
         ButtonContainer.Children.Add(button);
     }
 

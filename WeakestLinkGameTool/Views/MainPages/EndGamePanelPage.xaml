@@ -9,14 +9,19 @@
              Focusable="True"
              d:DesignHeight="1080" d:DesignWidth="1920">
 
+    <UserControl.InputBindings>
+        <KeyBinding Key="N" Command="{Binding StartNewGameCommand}"/>
+        <KeyBinding Key="S" Command="{Binding FullStatisticsCommand}"/>
+    </UserControl.InputBindings>
+
     <UserControl.DataContext>
-        <mainVMs:EndGamePanelVM />
+        <mainVMs:EndGamePanelVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Assets/BaseStyle.xaml" />
+                <ResourceDictionary Source="/Assets/BaseStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -26,16 +31,16 @@
           ShowGridLines="False"
           Background="{StaticResource CommonBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0"
@@ -65,7 +70,7 @@
                                          CommandParameter="{Binding}">
                                 <RadioButton.Resources>
                                     <Style TargetType="{x:Type RadioButton}">
-                                        <Setter Property="Background" Value="DarkBlue" />
+                                        <Setter Property="Background" Value="DarkBlue"/>
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate>
@@ -80,8 +85,8 @@
                                                             TextAlignment="Left">
                                                             <controls:OutlinedTextBlock.Text>
                                                                 <MultiBinding StringFormat="{}{0}. {1}">
-                                                                    <Binding Path="Number" />
-                                                                    <Binding Path="Name" />
+                                                                    <Binding Path="Number"/>
+                                                                    <Binding Path="Name"/>
                                                                 </MultiBinding>
                                                             </controls:OutlinedTextBlock.Text>
                                                         </controls:OutlinedTextBlock>
@@ -89,7 +94,7 @@
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="CheckBox.IsChecked" Value="True">
                                                             <Setter Property="Border.Background"
-                                                                    Value="{StaticResource GreenButtonBrush}" />
+                                                                    Value="{StaticResource GreenButtonBrush}"/>
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
@@ -110,7 +115,7 @@
             <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
                                         FontSize="35"
                                         TextAlignment="Center"
-                                        Text="Статистика игры" />
+                                        Text="Статистика игры"/>
             <DataGrid Margin="10"
                       FontSize="25"
                       Style="{StaticResource DefaultDataGrid}"
@@ -119,7 +124,8 @@
                     <DataGridTemplateColumn Header="Имя" IsReadOnly="True" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}" Text="{Binding Player.Name}" />
+                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                                            Text="{Binding Player.Name}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -127,7 +133,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <controls:OutlinedTextBlock Style="{StaticResource DefaultText}" Text="{Binding CorrectAnswers}" />
+                                    <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                                                Text="{Binding CorrectAnswers}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -136,7 +143,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <controls:OutlinedTextBlock Style="{StaticResource DefaultText}" Text="{Binding WrongAnswers}" />
+                                    <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                                                Text="{Binding WrongAnswers}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -144,28 +152,32 @@
                     <DataGridTemplateColumn Header="Банк" IsReadOnly="True" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}" Text="{Binding BankedMoney, StringFormat={}{0} ₽}" />
+                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                                            Text="{Binding BankedMoney, StringFormat={}{0} ₽}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Ср. ск. ответа" IsReadOnly="True" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}" Text="{Binding AverageSpeed, StringFormat={}{0:#,0.00} c}" />
+                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                                            Text="{Binding AverageSpeed, StringFormat={}{0:#,0.00} c}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Сильное звено" IsReadOnly="True" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}" Text="{Binding StrongestLinkCount}" />
+                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                                            Text="{Binding StrongestLinkCount}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Слабое&#x0d;звено" IsReadOnly="True" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}" Text="{Binding WeakestLinkCount}" />
+                                <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
+                                                            Text="{Binding WeakestLinkCount}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -180,7 +192,7 @@
             <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
                                         FontSize="35"
                                         TextAlignment="Center"
-                                        Text="{Binding SelectedPlayer.Name, StringFormat={}Статистика игрока - {0}}" />
+                                        Text="{Binding SelectedPlayer.Name, StringFormat={}Статистика игрока - {0}}"/>
             <DataGrid Margin="10"
                       FontSize="25"
                       Style="{StaticResource DefaultDataGrid}"
@@ -195,10 +207,10 @@
                                                TargetType="{x:Type controls:OutlinedTextBlock}">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsStrongestLink}" Value="True">
-                                                    <Setter Property="Fill" Value="LimeGreen" />
+                                                    <Setter Property="Fill" Value="LimeGreen"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsWeakestLink}" Value="True">
-                                                    <Setter Property="Fill" Value="Red" />
+                                                    <Setter Property="Fill" Value="Red"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -217,10 +229,10 @@
                                                    TargetType="{x:Type controls:OutlinedTextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsStrongestLink}" Value="True">
-                                                        <Setter Property="Fill" Value="LimeGreen" />
+                                                        <Setter Property="Fill" Value="LimeGreen"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsWeakestLink}" Value="True">
-                                                        <Setter Property="Fill" Value="Red" />
+                                                        <Setter Property="Fill" Value="Red"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -240,10 +252,10 @@
                                                    TargetType="{x:Type controls:OutlinedTextBlock}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsStrongestLink}" Value="True">
-                                                        <Setter Property="Fill" Value="LimeGreen" />
+                                                        <Setter Property="Fill" Value="LimeGreen"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsWeakestLink}" Value="True">
-                                                        <Setter Property="Fill" Value="Red" />
+                                                        <Setter Property="Fill" Value="Red"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -262,10 +274,10 @@
                                                TargetType="{x:Type controls:OutlinedTextBlock}">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsStrongestLink}" Value="True">
-                                                    <Setter Property="Fill" Value="LimeGreen" />
+                                                    <Setter Property="Fill" Value="LimeGreen"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsWeakestLink}" Value="True">
-                                                    <Setter Property="Fill" Value="Red" />
+                                                    <Setter Property="Fill" Value="Red"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -283,10 +295,10 @@
                                                TargetType="{x:Type controls:OutlinedTextBlock}">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsStrongestLink}" Value="True">
-                                                    <Setter Property="Fill" Value="LimeGreen" />
+                                                    <Setter Property="Fill" Value="LimeGreen"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsWeakestLink}" Value="True">
-                                                    <Setter Property="Fill" Value="Red" />
+                                                    <Setter Property="Fill" Value="Red"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -301,30 +313,32 @@
 
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <controls:OutlinedTextBlock Grid.Row="0" HorizontalAlignment="Left" Style="{StaticResource DefaultText}" FontSize="35" Text="{Binding Winner.Name, StringFormat={}Победитель: {0}}" />
-            <controls:OutlinedTextBlock Grid.Row="1" HorizontalAlignment="Left" Style="{StaticResource DefaultText}" FontSize="35" Text="{Binding TotalBank, StringFormat={}Выигрыш: {0} ₽}" />
+            <controls:OutlinedTextBlock Grid.Row="0" HorizontalAlignment="Left" Style="{StaticResource DefaultText}"
+                                        FontSize="35" Text="{Binding Winner.Name, StringFormat={}Победитель: {0}}"/>
+            <controls:OutlinedTextBlock Grid.Row="1" HorizontalAlignment="Left" Style="{StaticResource DefaultText}"
+                                        FontSize="35" Text="{Binding TotalBank, StringFormat={}Выигрыш: {0} ₽}"/>
         </Grid>
 
 
         <Grid Margin="20 0" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
+
             <controls:OutlinedTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                         TextAlignment="Center"
                                         Style="{StaticResource DefaultText}"
                                         Text="Статистика финала"
-                                        FontSize="35" />
+                                        FontSize="35"/>
 
             <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="0"
                                         HorizontalAlignment="Right"
@@ -332,12 +346,13 @@
                                         Margin="5 0"
                                         Style="{StaticResource DefaultText}"
                                         Text="{Binding FirstFinalist.Name, StringFormat={}{0}:}"
-                                        FontSize="35" />
+                                        FontSize="35"/>
 
-            <ItemsControl Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" ItemsSource="{Binding FirstFinalistAnswers}">
+            <ItemsControl Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
+                          ItemsSource="{Binding FirstFinalistAnswers}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" />
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -348,16 +363,16 @@
                                        TargetType="{x:Type controls:OutlinedTextBlock}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding}" Value="True">
-                                            <Setter Property="Fill" Value="LimeGreen" />
-                                            <Setter Property="Text" Value="✔" />
-                                            <Setter Property="FontSize" Value="35" />
-                                            <Setter Property="Margin" Value="5 -5 5 5" />
+                                            <Setter Property="Fill" Value="LimeGreen"/>
+                                            <Setter Property="Text" Value="✔"/>
+                                            <Setter Property="FontSize" Value="35"/>
+                                            <Setter Property="Margin" Value="5 -5 5 5"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding}" Value="False">
-                                            <Setter Property="Fill" Value="Red" />
-                                            <Setter Property="Text" Value="❌" />
-                                            <Setter Property="FontSize" Value="35" />
-                                            <Setter Property="Margin" Value="5 0 5 0" />
+                                            <Setter Property="Fill" Value="Red"/>
+                                            <Setter Property="Text" Value="❌"/>
+                                            <Setter Property="FontSize" Value="35"/>
+                                            <Setter Property="Margin" Value="5 0 5 0"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -373,12 +388,13 @@
                                         Margin="5 0"
                                         Style="{StaticResource DefaultText}"
                                         Text="{Binding SecondFinalist.Name, StringFormat={}{0}:}"
-                                        FontSize="35" />
+                                        FontSize="35"/>
 
-            <ItemsControl Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" ItemsSource="{Binding SecondFinalistAnswers}">
+            <ItemsControl Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"
+                          ItemsSource="{Binding SecondFinalistAnswers}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" />
+                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -389,16 +405,16 @@
                                        TargetType="{x:Type controls:OutlinedTextBlock}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding}" Value="True">
-                                            <Setter Property="Fill" Value="LimeGreen" />
-                                            <Setter Property="Text" Value="✔" />
-                                            <Setter Property="FontSize" Value="35" />
-                                            <Setter Property="Margin" Value="5 -5 5 5" />
+                                            <Setter Property="Fill" Value="LimeGreen"/>
+                                            <Setter Property="Text" Value="✔"/>
+                                            <Setter Property="FontSize" Value="35"/>
+                                            <Setter Property="Margin" Value="5 -5 5 5"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding}" Value="False">
-                                            <Setter Property="Fill" Value="Red" />
-                                            <Setter Property="Text" Value="❌" />
-                                            <Setter Property="FontSize" Value="35" />
-                                            <Setter Property="Margin" Value="5 0 5 0" />
+                                            <Setter Property="Fill" Value="Red"/>
+                                            <Setter Property="Text" Value="❌"/>
+                                            <Setter Property="FontSize" Value="35"/>
+                                            <Setter Property="Margin" Value="5 0 5 0"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -415,7 +431,7 @@
                 Padding="0"
                 Command="{Binding StartNewGameCommand}"
                 Style="{StaticResource DefaultButton}"
-                Content="Начать новую игру" FontSize="40" />
+                Content="Начать новую игру" FontSize="40"/>
 
         <Button Grid.Row="3" Grid.Column="2"
                 Height="160"
@@ -423,7 +439,7 @@
                 Padding="0"
                 Command="{Binding FullStatisticsCommand}"
                 Style="{StaticResource DefaultButton}"
-                Content="Итоговая статистика" FontSize="40" />
+                Content="Итоговая статистика" FontSize="40"/>
 
         <Button Grid.Row="3" Grid.Column="3"
                 Height="160"
@@ -431,6 +447,7 @@
                 Padding="0"
                 Command="{Binding ToMenuCommand}"
                 Style="{StaticResource DefaultButton}"
-                Content="В меню" FontSize="40" />
+                IsDefault="True"
+                Content="В меню" FontSize="40"/>
     </Grid>
 </UserControl>

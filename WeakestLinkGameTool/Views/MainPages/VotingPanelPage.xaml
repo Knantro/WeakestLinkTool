@@ -9,6 +9,10 @@
              Focusable="True"
              d:DesignHeight="1080" d:DesignWidth="1920">
 
+    <UserControl.InputBindings>
+        <KeyBinding Key="S" Command="{Binding RoundStatistics}"/>
+    </UserControl.InputBindings>
+    
     <UserControl.DataContext>
         <mainVMs:VotingPanelVM />
     </UserControl.DataContext>
@@ -96,7 +100,6 @@
                                             Width="40"
                                             Style="{StaticResource DefaultButton}"
                                             Content="⛭"
-                                            Visibility="{Binding DataContext.IsVotingDone, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource InvertVisibilityConverter}}"
                                             Padding="0 1 0 -1"
                                             FontSize="35"
                                             Command="{Binding DataContext.SelectStatisticsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
@@ -446,6 +449,7 @@
                     Background="{StaticResource RedButtonBrush}"
                     Visibility="{Binding IsVotingDone, Converter={StaticResource InvertVisibilityConverter}}"
                     IsEnabled="{Binding IsAllVotesGiven}"
+                    IsDefault="True"
                     Content="Завершить голосование"
                     Command="{Binding DoneVotingCommand}" />
         </Border>
@@ -457,6 +461,7 @@
                 Style="{StaticResource DefaultButton}"
                 Background="{StaticResource RedButtonBrush}"
                 Visibility="{Binding IsVotingInProgress, Converter={StaticResource VisibilityConverter}}"
+                IsDefault="True"
                 Content="Остановить голосование"
                 Command="{Binding StopVotingCommand}" />
     </Grid>

@@ -7,14 +7,12 @@ namespace WeakestLinkGameTool;
 /// <summary>
 /// Окно игрока (для демонстрации экрана)
 /// </summary>
-public partial class PlayerWindow : Window
-{
+public partial class PlayerWindow : Window {
     public MainWindowViewModel MainDataContext => App.ServiceProvider.GetService<MainWindowViewModel>();
-    
-    public PlayerWindow()
-    {
+
+    public PlayerWindow() {
         InitializeComponent();
-        
+
         ((MainWindowViewModel)DataContext).CurrentPWPage = Activator.CreateInstance<EmptyPage>();
     }
 }

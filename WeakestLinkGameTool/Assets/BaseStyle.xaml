@@ -5,12 +5,10 @@
                     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic">
 
     <converters:TextAlignmentConverter x:Key="TextAlignmentConverter"/>
-    <converters:DoubleDivisionConverter x:Key="DoubleDivisionConverter"/>
     <converters:VisibilityConverter x:Key="VisibilityConverter"/>
     <converters:VisibilityConverter x:Key="InvertVisibilityConverter" Invert="True"/>
     <converters:VisibilityConverter x:Key="CollapseVisibilityConverter" Collapse="True"/>
     <converters:VisibilityConverter x:Key="InvertCollapseVisibilityConverter" Collapse="True" Invert="True"/>
-    <converters:FontSizeScaleConverter x:Key="FontSizeScaleConverter"/>
     <converters:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
 
     <Brush x:Key="TextBoxBackgroundBrush">#776495ED</Brush>
@@ -504,4 +502,94 @@
     <Style TargetType="{x:Type ScrollBar}">
         <Setter Property="Template" Value="{StaticResource VerticalScrollBar}"/>
     </Style>
+    
+                <Style x:Key="SliderButtonStyle"
+                   TargetType="{x:Type RepeatButton}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true"/>
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true"/>
+                <Setter Property="IsTabStop"
+                        Value="false"/>
+                <Setter Property="Focusable"
+                        Value="false"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border Background="Transparent"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SliderThumbStyle"
+                   TargetType="{x:Type Thumb}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true"/>
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true"/>
+                <Setter Property="Height"
+                        Value="40"/>
+                <Setter Property="Width"
+                        Value="40"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Ellipse x:Name="Ellipse"
+                                     StrokeThickness="1"
+                                     Fill="#00BBBB"
+                                     Stroke="{StaticResource MessageBoxBackgroundBrush}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--Template when the orientation of the Slider is Vertical.-->
+            <ControlTemplate x:Key="VerticalSlider"
+                             TargetType="{x:Type Slider}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"
+                                          MinWidth="{TemplateBinding MinWidth}"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border x:Name="TrackBackground"
+                            Margin="0"
+                            CornerRadius="10"
+                            Width="20"
+                            Grid.Column="1"
+                            BorderThickness="1"
+                            Background="AntiqueWhite">
+                    </Border>
+                    <Track Grid.Column="1"
+                           x:Name="PART_Track">
+                        <Track.DecreaseRepeatButton>
+                            <RepeatButton Style="{StaticResource SliderButtonStyle}"
+                                          Command="Slider.DecreaseLarge"/>
+                        </Track.DecreaseRepeatButton>
+                        <Track.Thumb>
+                            <Thumb Style="{StaticResource SliderThumbStyle}"/>
+                        </Track.Thumb>
+                        <Track.IncreaseRepeatButton>
+                            <RepeatButton Style="{StaticResource SliderButtonStyle}"
+                                          Command="Slider.IncreaseLarge"/>
+                        </Track.IncreaseRepeatButton>
+                    </Track>
+                </Grid>
+            </ControlTemplate>
+
+            <Style TargetType="{x:Type Slider}">
+                <Setter Property="SnapsToDevicePixels"
+                        Value="true"/>
+                <Setter Property="OverridesDefaultStyle"
+                        Value="true"/>
+                <Style.Triggers>
+                    <Trigger Property="Orientation"
+                             Value="Vertical">
+                        <Setter Property="Template"
+                                Value="{StaticResource VerticalSlider}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
 </ResourceDictionary>

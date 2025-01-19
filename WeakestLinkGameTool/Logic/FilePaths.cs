@@ -13,6 +13,7 @@ public static class FilePaths {
     public const string SETTINGS = "settings.json";
     public const string APPSETTINGS = "appsettings.json";
     public const string SESSIONS_FOLDER = "Sessions";
+    public const string SOUNDS = "Sounds";
 
     /// <summary>
     /// Возвращает полный путь до файла статистики игровой сессии с определённым номером
@@ -20,13 +21,13 @@ public static class FilePaths {
     /// <param name="sessionNumber">Номер игровой сессии</param>
     /// <returns>Абсолютный путь до файла статистики игровой сессии с определённым номером</returns>
     public static string GetSessionStatisticsFilePath(int sessionNumber) => 
-        GetFullDataPath(Path.Combine(SESSIONS_FOLDER, $"[{sessionNumber}] {GAME_STATISTICS_TABLE}"));
+        Path.Combine(Directory.CreateDirectory(GetFullDataPath(SESSIONS_FOLDER)).FullName, $"[{sessionNumber}] {GAME_STATISTICS_TABLE}");
 
     /// <summary>
     /// Возвращает массив из путей до файлов музыки игры
     /// </summary>
     /// <returns>Абсолютные пути до файлов музыки</returns>
-    public static string[] GetSoundPaths() => Directory.GetFiles(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Sounds"));
+    public static string[] GetSoundPaths() => Directory.GetFiles(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), SOUNDS));
 
     /// <summary>
     /// Получить полный путь до файла с хранилищем информации определённого типа

@@ -8,7 +8,7 @@ namespace WeakestLinkGameTool.Extensions;
 public static class CollectionExtensions {
     
     /// <summary>
-    /// Расширенный метод IEnumerable{T}.Any() с проверкой на null/>
+    /// Расширенный метод <see cref="Enumerable.Any{T}(IEnumerable{T})"/> с проверкой на null
     /// </summary>
     /// <param name="collection">Исходная коллекция</param>
     /// <param name="predicate">Предикат</param>
@@ -26,7 +26,7 @@ public static class CollectionExtensions {
     public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> collection) => new(collection);
     
     /// <summary>
-    /// Расширенный ForEach для IEnumerable
+    /// Расширенный <see cref="List{T}.ForEach(Action{T})"/> для <see cref="IEnumerable{T}"/>
     /// </summary>
     /// <param name="collection">Исходная коллекция</param>
     /// <param name="action">Действие над элементами коллекции</param>

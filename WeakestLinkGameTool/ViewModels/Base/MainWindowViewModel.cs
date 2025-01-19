@@ -8,7 +8,7 @@ using WeakestLinkGameTool.Models.Visual;
 using Application = System.Windows.Application;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace WeakestLinkGameTool.ViewModels.Base; 
+namespace WeakestLinkGameTool.ViewModels.Base;
 
 /// <summary>
 /// Главная модель-представления для всех страниц
@@ -32,7 +32,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     /// Событие закрытия диалогового окна
     /// </summary>
     public event DialogResultEventHandler OnDialogResult;
-    
+
     /// <summary>
     /// Диалоговое окно
     /// </summary>
@@ -40,7 +40,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => messageBox;
         set => SetField(ref messageBox, value);
     }
-    
+
     /// <summary>
     /// Видимость диалогового окна
     /// </summary>
@@ -48,7 +48,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => isMessageBoxVisible;
         set => SetField(ref isMessageBoxVisible, value);
     }
-    
+
     /// <summary>
     /// Текущая страница главного окна
     /// </summary>
@@ -56,7 +56,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => currentMWPage;
         set => SetField(ref currentMWPage, value);
     }
-    
+
     /// <summary>
     /// Текущая страница окна игрока
     /// </summary>
@@ -64,7 +64,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => currentPWPage;
         set => SetField(ref currentPWPage, value);
     }
-    
+
     /// <summary>
     /// Ширина экрана
     /// </summary>
@@ -72,7 +72,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => width;
         set => SetField(ref width, value);
     }
-    
+
     /// <summary>
     /// Высота экрана
     /// </summary>
@@ -80,7 +80,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => height;
         set => SetField(ref height, value);
     }
-    
+
     /// <summary>
     /// Громкость музыки
     /// </summary>
@@ -88,7 +88,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => volume;
         set => SetField(ref volume, value);
     }
-    
+
     /// <summary>
     /// Состояние окна
     /// </summary>
@@ -96,7 +96,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => windowState;
         set => SetField(ref windowState, value);
     }
-    
+
     /// <summary>
     /// Стиль окна
     /// </summary>
@@ -104,7 +104,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
         get => windowStyle;
         set => SetField(ref windowStyle, value);
     }
-    
+
     public RelayCommand<CancelEventArgs> ClosingCommand { get; }
 
     public MainWindowViewModel() {
@@ -113,17 +113,19 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     }
 
     public void OnClosingWindow(CancelEventArgs e) {
+        logger.Info("Closing app called");
         e.Cancel = true;
         ShowMessageBox("Вы уверены, что хотите выйти из игры?", "Предупреждение", MessageBoxButton.YesNo);
         OnDialogResult += ClosingDialogResult;
     }
 
     private void ClosingDialogResult(MessageBoxResult result) {
+        logger.Debug($"Shutdown dialog result is: {result}");
+        OnDialogResult -= ClosingDialogResult;
         if (result == MessageBoxResult.Yes) {
+            logger.Info("Shutdown the app");
             Application.Current.Shutdown();
         }
-
-        OnDialogResult -= ClosingDialogResult;
     }
 
     /// <summary>
@@ -132,13 +134,14 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     /// <param name="message">Сообщение</param>
     /// <param name="caption">Заголовок</param>
     /// <param name="buttons">Кнопки</param>
-    public void ShowMessageBox(string message, string caption = null, MessageBoxButton buttons = MessageBoxButton.OK)
-    {
+    public void ShowMessageBox(string message, string caption = null, MessageBoxButton buttons = MessageBoxButton.OK) {
+        logger.Info($"ShowMessageBox: {message}");
+
         MessageBox = new MessageBox {
             Caption = { Text = caption },
             MessageContainer = { Text = message }
         };
-        
+
         MessageBox.AddButtons(buttons);
 
         IsMessageBoxVisible = true;
@@ -149,8 +152,10 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     /// </summary>
     /// <param name="result">Результат диалогового окна</param>
     public void RaiseDialogResult(MessageBoxResult result) {
+        logger.Info($"Dialog result is: {result}");
+
         IsMessageBoxVisible = false;
-        
+
         OnDialogResult?.Invoke(result);
     }
 
@@ -159,9 +164,10 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     /// </summary>
     /// <param name="newVolume">Новая громкость музыки</param>
     public void ChangeVolume(float newVolume) {
+        logger.Info($"Change volume to: {newVolume:F2}");
         Volume = newVolume;
         SoundManager.SetVolumeAll(newVolume);
-        
+
         SaveSettings();
     }
 
@@ -170,11 +176,12 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     /// </summary>
     /// <param name="resolution">Разрешение экрана</param>
     public void ChangeResolution(Resolution resolution) {
+        logger.Info($"Change resolution to: {resolution.Width}x{resolution.Height}");
         Height = resolution.Height;
         Width = resolution.Width - 2 * SystemParameters.MinimizedWindowHeight + 2;
         WindowStyle = WindowStyle.SingleBorderWindow;
         WindowState = WindowState.Normal;
-        
+
         SaveSettings();
     }
 
@@ -182,18 +189,20 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     /// Переводит приложение в полноэкранный режим
     /// </summary>
     public void TakeScreenToFull() {
+        logger.Info("Take screen to full");
         Height = Screen.PrimaryScreen.Bounds.Height;
         Width = Screen.PrimaryScreen.Bounds.Width;
         WindowStyle = WindowStyle.None;
         WindowState = WindowState.Maximized;
-        
+
         SaveSettings();
     }
-    
+
     /// <summary>
     /// Восстанавливает сохранённые настройки приложения, если это возможно
     /// </summary>
     private void RestoreSettings() {
+        logger.Info("Restore settings");
         var restoredSettings = FileStorage.Load<Settings>(FilePaths.GetFullDataPath(FilePaths.SETTINGS));
 
         if (restoredSettings is not null) {
@@ -203,7 +212,7 @@ public class MainWindowViewModel : INotifyPropertyChanged {
             Height = settings.ScreenResolution.Height;
             Volume = settings.Volume;
             SoundManager.SetVolumeAll(Volume);
-            
+
             if (settings.ScreenResolution.IsFullScreenResolution()) {
                 WindowState = WindowState.Maximized;
                 WindowStyle = WindowStyle.None;
@@ -219,10 +228,11 @@ public class MainWindowViewModel : INotifyPropertyChanged {
     /// Сохраняет текущие настройки приложения
     /// </summary>
     private void SaveSettings() {
+        logger.Info("Save settings");
         settings ??= new Settings();
         settings.ScreenResolution = new Resolution(Width, Height);
         settings.Volume = Volume;
-        
+
         FileStorage.Save(settings, FilePaths.GetFullDataPath(FilePaths.SETTINGS));
     }
 
