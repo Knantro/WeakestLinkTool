@@ -36,12 +36,13 @@ public class WalkAShamePanelVM : ViewModelBase {
         set => SetField(ref preRoundInstructionAvailable, value);
     }
 
-    public RelayCommand DeclareWeakestLinkCommand => new(async _ => await DeclareWeakestLink(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand DeclareWeakestLinkCommand => new(async _ => await DeclareWeakestLink(), _ => !IsWeakestLinkDeclared &&!mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand PreRoundInstructionCommand => new(async _ => await PreRoundInstruction(), _ => PreRoundInstructionAvailable && !mainWindowViewModel.IsMessageBoxVisible);
 
     public WalkAShamePanelVM() {
         logger.SignedDebug();
         KickedPlayer = WeakestLinkLogic.GetCurrentKickedPlayer();
+        EnterCommand = DeclareWeakestLinkCommand;
     }
 
     /// <summary>
@@ -56,6 +57,7 @@ public class WalkAShamePanelVM : ViewModelBase {
         await Task.Delay(SoundConst.GENERAL_BED_WALK_OF_SHAME_DELAY);
         ChangePWPage<WalkAShamePage>();
         PreRoundInstructionAvailable = true;
+        EnterCommand = PreRoundInstructionCommand;
         CommandManager.InvalidateRequerySuggested();
     }
 

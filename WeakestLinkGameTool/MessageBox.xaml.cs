@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.ViewModels.Base;
 
 namespace WeakestLinkGameTool;
@@ -12,8 +13,13 @@ public partial class MessageBox : UserControl {
     private MainWindowViewModel mainWindowViewModel = App.ServiceProvider.GetService<MainWindowViewModel>();
 
     public MessageBox() {
+        Loaded += ForceFocus;
+        Unloaded += (_, _) => { Loaded -= ForceFocus; };
+        
         InitializeComponent();
     }
+    
+    private void ForceFocus(object sender, EventArgs args) => Focus();
 
     public void AddButtons(MessageBoxButton buttons) {
         switch (buttons) {
@@ -39,11 +45,11 @@ public partial class MessageBox : UserControl {
     }
 
     private void AddButton(string text, MessageBoxResult result, bool isDefault = false, bool isCancel = false) {
-        var button = new Button() { Content = text, IsDefault = isDefault, IsCancel = isCancel };
-        button.Click += (o, args) => {
-            Result = result;
-            mainWindowViewModel.RaiseDialogResult(result);
-        };
+        var button = new Button { Content = text };
+        if (isDefault) (DataContext as MessageBoxVM)!.EnterCommand = new RelayCommand(_ => RaiseDialogResult(result));
+        if (isCancel) (DataContext as MessageBoxVM)!.CancelCommand = new RelayCommand(_ => RaiseDialogResult(result));
+        
+        button.Click += (_, _) => { RaiseDialogResult(result); };
         button.Background = Brushes.MidnightBlue;
         button.Margin = new Thickness(10, 0, 10, 0);
         button.FontSize = 35;
@@ -58,6 +64,11 @@ public partial class MessageBox : UserControl {
         };
 
         ButtonContainer.Children.Add(button);
+    }
+
+    private void RaiseDialogResult(MessageBoxResult result) {
+        Result = result;
+        mainWindowViewModel.RaiseDialogResult(result);
     }
 
     public MessageBoxResult Result { get; set; } = MessageBoxResult.None;

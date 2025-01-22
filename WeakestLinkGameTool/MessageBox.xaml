@@ -4,10 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
+        xmlns:base="clr-namespace:WeakestLinkGameTool.ViewModels.Base"
         mc:Ignorable="d"
         Background="Transparent"
         Height="1080" 
-        Width="1920">
+        Width="1920"
+        Focusable="True">
+    
+    <UserControl.DataContext>
+        <base:MessageBoxVM/>
+    </UserControl.DataContext>
+    
+    <UserControl.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
+    </UserControl.InputBindings>
     
     <UserControl.Resources>
         <ResourceDictionary>

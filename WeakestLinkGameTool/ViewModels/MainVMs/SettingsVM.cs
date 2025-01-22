@@ -1,4 +1,5 @@
-﻿using WeakestLinkGameTool.Commands;
+﻿using System.Windows;
+using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.Models.Visual;
 using WeakestLinkGameTool.ViewModels.Base;
 
@@ -58,6 +59,7 @@ public class SettingsVM : ViewModelBase {
 
     public SettingsVM() {
         volume = mainWindowViewModel.Volume * VOLUME_MODIFIER;
+        CancelCommand = BackCommand;
     }
 
     /// <summary>
@@ -70,13 +72,26 @@ public class SettingsVM : ViewModelBase {
             case "Resolution":
                 ResolutionSettingSelected = true;
                 SettingSelected = true;
+                CancelCommand = ReturnCommand;
                 break;
             case "Volume":
                 SoundManager.Play(SoundName.GENERAL_BED);
                 VolumeSettingSelected = true;
                 SettingSelected = true;
+                CancelCommand = ReturnCommand;
+                break;
+            case "ResetUsed":
+                mainWindowViewModel.ShowMessageBox("Вы действительно хотите сбросить вопросы и подколки, сделав их все неиспользованными?", "Предупреждение", MessageBoxButton.YesNo);
                 break;
         }
+    }
+
+    /// <summary>
+    /// Обрабатывает событие результата диалогового окна
+    /// </summary>
+    /// <param name="result">Результат диалоговго окна</param>
+    protected override void OnDialogResult(MessageBoxResult result) {
+        if (result == MessageBoxResult.Yes) WeakestLinkLogic.ResetAll();
     }
 
     /// <summary>
@@ -91,6 +106,7 @@ public class SettingsVM : ViewModelBase {
         }
 
         SettingSelected = false;
+        CancelCommand = BackCommand;
         ResolutionSettingSelected = false;
         VolumeSettingSelected = false;
     }

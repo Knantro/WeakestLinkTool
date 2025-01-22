@@ -10,8 +10,12 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
 
     <UserControl.InputBindings>
+        <KeyBinding Key="OemPlus" Command="{Binding AddPlayerCommand}"/>
+        <KeyBinding Key="OemMinus" Command="{Binding RemovePlayerCommand}"/>
         <KeyBinding Key="Add" Command="{Binding AddPlayerCommand}"/>
         <KeyBinding Key="Subtract" Command="{Binding RemovePlayerCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding BackCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding StartGameCommand}"/>
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -74,7 +78,7 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                                     <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
-                                                                FontSize="40"
+                                                                FontSize="32"
                                                                 Text="{Binding Number, Mode=TwoWay, StringFormat={}{0}.}"/>
                                     <Separator Width="10" Visibility="Hidden"/>
                                 </StackPanel>
@@ -88,7 +92,7 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Hidden"
                                                   HorizontalScrollBarVisibility="Hidden"
                                                   CanContentScroll="True">
-                                        <controls:OutlinedTextBox FontSize="40"
+                                        <controls:OutlinedTextBox FontSize="32"
                                                                   MaxLength="20"
                                                                   Background="#00FFFFFF"
                                                                   TabIndex="{Binding Number}"
@@ -123,10 +127,9 @@
         <Button Grid.Row="4" Grid.Column="0"
                 Height="130"
                 Width="260"
-                FontSize="40"
+                FontSize="32"
                 Style="{StaticResource DefaultButton}"
-                Content="Назад"
-                IsCancel="True"
+                Content="(ESC) Назад"
                 Command="{Binding BackCommand}"/>
 
         <Button Grid.Row="4" Grid.Column="1"
@@ -149,10 +152,9 @@
         <Button Grid.Row="4" Grid.Column="3"
                 Height="130"
                 Width="260"
-                FontSize="40"
+                FontSize="32"
                 Style="{StaticResource DefaultButton}"
-                Content="Запустить"
-                IsDefault="True"
+                Content="(↵) Запустить"
                 Command="{Binding StartGameCommand}"/>
     </Grid>
 </UserControl>

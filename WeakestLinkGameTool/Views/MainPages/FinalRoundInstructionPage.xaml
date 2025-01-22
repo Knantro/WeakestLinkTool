@@ -14,6 +14,7 @@
         <KeyBinding Key="Right" Command="{Binding NextInstructionCommand}"/>
         <KeyBinding Key="D1" Command="{Binding HideFullBankVisibleCommand}"/>
         <KeyBinding Key="D2" Command="{Binding ShowFullBankCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding StartFinalCommand}"/>
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -53,9 +54,8 @@
                 Height="140"
                 Width="280"
                 Style="{StaticResource DefaultButton}"
-                IsEnabled="{Binding IsFirstInstruction, Converter={StaticResource InvertBooleanConverter}}"
-                Content="Назад"
-                FontSize="40"
+                Content="(←) Назад"
+                FontSize="32"
                 Command="{Binding BackInstructionCommand}"/>
 
         <StackPanel Grid.Row="2" Grid.Column="1"
@@ -65,16 +65,16 @@
             <Button Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="Скрыть банк"
-                    FontSize="40"
+                    Content="(1) Скрыть банк"
+                    FontSize="32"
                     Margin="20 0"
                     Command="{Binding HideFullBankVisibleCommand}"/>
 
             <Button Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="Показать банк"
-                    FontSize="40"
+                    Content="(2) Показать банк"
+                    FontSize="32"
                     Margin="20 0"
                     Command="{Binding ShowFullBankCommand}"/>
         </StackPanel>
@@ -83,10 +83,9 @@
                 Height="140"
                 Width="280"
                 Style="{StaticResource DefaultButton}"
-                IsEnabled="{Binding IsLastInstruction, Converter={StaticResource InvertBooleanConverter}}"
-                Content="Далее"
+                Content="(→) Далее"
                 Visibility="{Binding IsLastInstruction, Converter={StaticResource InvertVisibilityConverter}}"
-                FontSize="40"
+                FontSize="32"
                 Command="{Binding NextInstructionCommand}"/>
 
         <Button Grid.Row="2" Grid.Column="2"
@@ -94,9 +93,8 @@
                 Width="280"
                 Visibility="{Binding IsLastInstruction, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                Content="Финальный раунд"
-                IsDefault="True"
-                FontSize="40"
+                Content="(↵) Финальный раунд"
+                FontSize="32"
                 Command="{Binding StartFinalCommand}"/>
     </Grid>
 </UserControl>

@@ -11,7 +11,8 @@
 
     <UserControl.InputBindings>
         <KeyBinding Key="N" Command="{Binding StartNewGameCommand}"/>
-        <KeyBinding Key="S" Command="{Binding FullStatisticsCommand}"/>
+        <KeyBinding Key="T" Command="{Binding FullStatisticsCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding ToMenuCommand}"/>
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -431,7 +432,7 @@
                 Padding="0"
                 Command="{Binding StartNewGameCommand}"
                 Style="{StaticResource DefaultButton}"
-                Content="Начать новую игру" FontSize="40"/>
+                Content="(N) Начать новую игру" FontSize="40"/>
 
         <Button Grid.Row="3" Grid.Column="2"
                 Height="160"
@@ -439,7 +440,7 @@
                 Padding="0"
                 Command="{Binding FullStatisticsCommand}"
                 Style="{StaticResource DefaultButton}"
-                Content="Итоговая статистика" FontSize="40"/>
+                Content="(T) Итоговая статистика" FontSize="40"/>
 
         <Button Grid.Row="3" Grid.Column="3"
                 Height="160"
@@ -447,7 +448,6 @@
                 Padding="0"
                 Command="{Binding ToMenuCommand}"
                 Style="{StaticResource DefaultButton}"
-                IsDefault="True"
-                Content="В меню" FontSize="40"/>
+                Content="(↵) В меню" FontSize="40"/>
     </Grid>
 </UserControl>

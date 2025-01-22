@@ -18,6 +18,7 @@
         <KeyBinding Key="D6" Command="{Binding WrongAnswerDemoCommand}"/>
         <KeyBinding Key="Left" Command="{Binding BackRuleCommand}"/>
         <KeyBinding Key="Right" Command="{Binding NextRuleCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -59,9 +60,8 @@
                 Width="280"
                 Visibility="{Binding IsRulesStarted, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                IsEnabled="{Binding IsFirstRule, Converter={StaticResource InvertBooleanConverter}}"
-                Content="Назад"
-                FontSize="40"
+                Content="(←) Назад"
+                FontSize="32"
                 Command="{Binding BackRuleCommand}"/>
 
         <StackPanel Grid.Row="0" Grid.Column="1"
@@ -72,15 +72,15 @@
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="1. Показать демо"
-                    FontSize="40"
+                    Content="(1) Показать демо"
+                    FontSize="32"
                     Command="{Binding ShowRoundPanelCommand}"/>
             <Button Margin="10 0"
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="2. Скрыть демо"
-                    FontSize="40"
+                    Content="(2) Скрыть демо"
+                    FontSize="32"
                     Command="{Binding HideRoundPanelCommand}"/>
         </StackPanel>
 
@@ -90,9 +90,7 @@
             <Button Height="250"
                     Width="500"
                     Style="{StaticResource DefaultButton}"
-                    IsEnabled="{Binding IsRulesStarted, Converter={StaticResource InvertBooleanConverter}}"
-                    Content="Начать правила"
-                    IsDefault="True"
+                    Content="(↵) Начать правила"
                     FontSize="60"
                     VerticalAlignment="Center"
                     Command="{Binding StartRulesCommand}"/>
@@ -106,29 +104,29 @@
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="3. Старт демо"
-                    FontSize="40"
+                    Content="(3) Старт демо"
+                    FontSize="32"
                     Command="{Binding StartDemoCommand}"/>
             <Button Margin="10 0"
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="4. Стоп демо"
-                    FontSize="40"
+                    Content="(4) Стоп демо"
+                    FontSize="32"
                     Command="{Binding StopDemoCommand}"/>
             <Button Margin="10 0"
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="5. Банк демо"
-                    FontSize="40"
+                    Content="(5) Банк демо"
+                    FontSize="32"
                     Command="{Binding BankDemoCommand}"/>
             <Button Margin="10 0"
                     Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    Content="6. Неверно демо"
-                    FontSize="40"
+                    Content="(6) Неверно демо"
+                    FontSize="32"
                     Command="{Binding WrongAnswerDemoCommand}"/>
         </StackPanel>
 
@@ -137,10 +135,9 @@
             <Button Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    IsEnabled="{Binding IsLastRule, Converter={StaticResource InvertBooleanConverter}}"
-                    Content="Далее"
+                    Content="(→) Далее"
                     Visibility="{Binding IsLastRule, Converter={StaticResource InvertVisibilityConverter}}"
-                    FontSize="40"
+                    FontSize="32"
                     Command="{Binding NextRuleCommand}"/>
         </Border>
 
@@ -149,9 +146,8 @@
                 Width="280"
                 Visibility="{Binding IsLastRule, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                IsDefault="True"
-                Content="Начать игру"
-                FontSize="40"
+                Content="(↵) Начать игру"
+                FontSize="32"
                 Command="{Binding StartGameCommand}"/>
     </Grid>
 </UserControl>

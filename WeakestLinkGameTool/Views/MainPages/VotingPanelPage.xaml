@@ -10,7 +10,8 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
 
     <UserControl.InputBindings>
-        <KeyBinding Key="S" Command="{Binding RoundStatistics}"/>
+        <KeyBinding Key="S" Command="{Binding RoundStatisticsCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
     </UserControl.InputBindings>
     
     <UserControl.DataContext>
@@ -113,7 +114,6 @@
                                             Width="40"
                                             Style="{StaticResource DefaultButton}"
                                             Content="-"
-                                            IsEnabled="{Binding VotesCountIsZero, Converter={StaticResource InvertBooleanConverter}}"
                                             Visibility="{Binding DataContext.IsVotingDone, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource InvertVisibilityConverter}}"
                                             Padding="0 -2.5 0 2.5"
                                             FontSize="35"
@@ -434,35 +434,32 @@
         <Button Grid.Row="4" Grid.Column="1"
                 Height="140"
                 Width="300"
-                FontSize="40"
+                FontSize="32"
                 Style="{StaticResource DefaultButton}"
                 Background="{StaticResource RedButtonBrush}"
-                Content="Статистика раунда"
+                Content="(S) Статистика раунда"
                 Command="{Binding RoundStatisticsCommand}" />
         
         <Border Grid.Row="4" Grid.Column="2"
                 Visibility="{Binding IsVotingInProgress, Converter={StaticResource InvertVisibilityConverter}}">
             <Button Height="140"
                     Width="300"
-                    FontSize="40"
+                    FontSize="32"
                     Style="{StaticResource DefaultButton}"
                     Background="{StaticResource RedButtonBrush}"
                     Visibility="{Binding IsVotingDone, Converter={StaticResource InvertVisibilityConverter}}"
-                    IsEnabled="{Binding IsAllVotesGiven}"
-                    IsDefault="True"
-                    Content="Завершить голосование"
+                    Content="(↵) Завершить голосование"
                     Command="{Binding DoneVotingCommand}" />
         </Border>
 
         <Button Grid.Row="4" Grid.Column="2"
                 Height="140"
                 Width="300"
-                FontSize="40"
+                FontSize="32"
                 Style="{StaticResource DefaultButton}"
                 Background="{StaticResource RedButtonBrush}"
                 Visibility="{Binding IsVotingInProgress, Converter={StaticResource VisibilityConverter}}"
-                IsDefault="True"
-                Content="Остановить голосование"
+                Content="(↵) Остановить голосование"
                 Command="{Binding StopVotingCommand}" />
     </Grid>
 </UserControl>

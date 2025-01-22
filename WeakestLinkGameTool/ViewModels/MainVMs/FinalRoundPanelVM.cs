@@ -425,6 +425,7 @@ public class FinalRoundPanelVM : ViewModelBase {
 
         if (IsTie && !IsSuddenDeath) {
             logger.Info("Is tie. Sudden death is coming");
+            EnterCommand = StartSuddenDeathCommand;
             InfoText = $"После пяти пар вопросов счёт равный. Мы продолжаем игру до первого проигрыша. Вопросы по-прежнему будут задаваться парами.{Environment.NewLine}" +
                 $"{FirstPlayer.Name} если вы правильно отвечаете на вопрос, {SecondPlayer.Name} тоже должен ответить правильно, иначе он проиграет.{Environment.NewLine}" +
                 $"{FirstPlayer.Name} если вы неверно отвечаете на вопрос, а {SecondPlayer.Name} даёт правильный ответ, он выигрывает.{Environment.NewLine}" +
@@ -443,10 +444,10 @@ public class FinalRoundPanelVM : ViewModelBase {
             WinSound();
             FirstPlayer.IsWinner = true;
             IsGameEnd = true;
+            EnterCommand = EndGameCommand;
             IsSuddenDeath = false;
             IsFinalRoundPlaying = false;
-            EndGameText =
-                $"{FirstPlayer.Name}, сегодня вы - самое сильное звено, и уходите домой с суммой {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}. {SecondPlayer.Name}, вы уходите ни с чем.{Environment.NewLine}Вы смотрели \"Слабое звено\", это была всего лишь игра! До встречи!";
+            EndGameText = $"{FirstPlayer.Name}, сегодня вы - самое сильное звено, и уходите домой с суммой {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}. {SecondPlayer.Name}, вы уходите ни с чем.{Environment.NewLine}Вы смотрели \"Слабое звено\", это была всего лишь игра! До встречи!";
             HidePlayerFinalRoundPanel();
             WeakestLinkLogic.SetupWinner(FirstPlayer);
             return true;
@@ -458,10 +459,10 @@ public class FinalRoundPanelVM : ViewModelBase {
             WinSound();
             SecondPlayer.IsWinner = true;
             IsGameEnd = true;
+            EnterCommand = EndGameCommand;
             IsSuddenDeath = false;
             IsFinalRoundPlaying = false;
-            EndGameText =
-                $"{SecondPlayer.Name}, сегодня вы - самое сильное звено, и уходите домой с суммой {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}. {FirstPlayer.Name}, вы уходите ни с чем.{Environment.NewLine}Вы смотрели \"Слабое звено\", это была всего лишь игра! До встречи!";
+            EndGameText = $"{SecondPlayer.Name}, сегодня вы - самое сильное звено, и уходите домой с суммой {WeakestLinkLogic.CurrentSession.FullBank.Decline("рубль", "рубля", "рублей")}. {FirstPlayer.Name}, вы уходите ни с чем.{Environment.NewLine}Вы смотрели \"Слабое звено\", это была всего лишь игра! До встречи!";
             HidePlayerFinalRoundPanel();
             WeakestLinkLogic.SetupWinner(SecondPlayer);
             return true;

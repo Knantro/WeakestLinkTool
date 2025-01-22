@@ -87,8 +87,8 @@ public class IntroPanelVM : ViewModelBase {
         }
     }
 
-    public RelayCommand NextTitleCommand => new(_ => ChangeTitle(), _ => !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand BackTitleCommand => new(_ => ChangeTitle(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand NextTitleCommand => new(_ => ChangeTitle(), _ => !IsLastTitle && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand BackTitleCommand => new(_ => ChangeTitle(false), _ => !IsFirstTitle && !mainWindowViewModel.IsMessageBoxVisible);
 
     /// <summary>
     /// Переходит к правилам игры
@@ -97,7 +97,7 @@ public class IntroPanelVM : ViewModelBase {
         logger.Info("Go to the rules");
         ChangeMWPage<RulesPage>();
         ChangePWPage<GameRulesPage>();
-    }, _ => !mainWindowViewModel.IsMessageBoxVisible);
+    }, _ => IsLastTitle && !mainWindowViewModel.IsMessageBoxVisible);
 
     /// <summary>
     /// Начинает вступление
@@ -109,11 +109,13 @@ public class IntroPanelVM : ViewModelBase {
         await SoundManager.FadeWith(SoundName.INTRO, SoundName.OPENING_TITLES, SoundConst.OPENING_TITLES_FADE, TimeSpan.FromMilliseconds(SoundConst.OPENING_TITLES_POSITION_MS));
         CurrentTitle = Titles[currentTitleIndex];
         await Task.Delay(SoundConst.OPENING_TITLES_AWAIT_TO_START_GAME);
+        EnterCommand = RulesCommand;
         IsIntroFinished = true;
     }, _ => IsStartEnabled && !IsIntroStarted && !mainWindowViewModel.IsMessageBoxVisible);
 
     public IntroPanelVM() {
         logger.SignedDebug();
+        EnterCommand = StartIntroCommand;
         SoundManager.LoopPlay(SoundName.INTRO, SoundConst.INTRO_LOOP_POSITION_A, SoundConst.INTRO_LOOP_POSITION_B);
         WaitStartEnable();
     }

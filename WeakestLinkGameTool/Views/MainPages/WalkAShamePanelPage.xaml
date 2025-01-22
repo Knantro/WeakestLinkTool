@@ -8,7 +8,11 @@
              mc:Ignorable="d"
              Focusable="True"
              d:DesignHeight="1080" d:DesignWidth="1920">
-
+    
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
+    </UserControl.InputBindings>
+    
     <UserControl.DataContext>
         <mainVMs:WalkAShamePanelVM/>
     </UserControl.DataContext>
@@ -55,8 +59,7 @@
                 Margin="0 220 0 -220"
                 Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource InvertVisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                IsDefault="True"
-                Content="Объявить слабое звено"
+                Content="(↵) Объявить слабое звено"
                 FontSize="40"
                 Command="{Binding DeclareWeakestLinkCommand}"/>
 
@@ -65,10 +68,9 @@
                 Width="280"
                 FontSize="40"
                 Style="{StaticResource DefaultButton}"
-                IsDefault="True"
                 Background="{StaticResource GrayButtonBrush}"
                 Visibility="{Binding IsWeakestLinkDeclared, Converter={StaticResource VisibilityConverter}}"
-                Content="Новый раунд"
+                Content="(↵) Новый раунд"
                 Command="{Binding PreRoundInstructionCommand}"/>
     </Grid>
 </UserControl>

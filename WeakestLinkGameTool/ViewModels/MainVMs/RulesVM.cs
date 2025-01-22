@@ -59,9 +59,9 @@ public class RulesVM : ViewModelBase {
         }
     }
 
-    public RelayCommand NextRuleCommand => new(_ => ChangeRule(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand BackRuleCommand => new(_ => ChangeRule(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand StartRulesCommand => new(_ => StartRules(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand NextRuleCommand => new(_ => ChangeRule(), _ => !IsLastRule && IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand BackRuleCommand => new(_ => ChangeRule(false), _ => !IsFirstRule && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand StartRulesCommand => new(_ => StartRules(), _ => !IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand StartDemoCommand => new(async _ => await GetPlayerPageDataContext<GameRulesVM>().StartDemo(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand StopDemoCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().StopDemo(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand ShowRoundPanelCommand => new(_ => GetPlayerPageDataContext<GameRulesVM>().ShowRoundPanel(), _ => IsRulesStarted && !mainWindowViewModel.IsMessageBoxVisible);
@@ -72,10 +72,11 @@ public class RulesVM : ViewModelBase {
     /// <summary>
     /// Переходит к правилам игры
     /// </summary>
-    public RelayCommand StartGameCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand StartGameCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>(), _ => IsLastRule && !mainWindowViewModel.IsMessageBoxVisible);
 
     public RulesVM() {
         logger.SignedDebug();
+        EnterCommand = StartRulesCommand;
         CurrentRule = Rules[currentRuleIndex];
         SoundManager.PlayWithVolumeFade(SoundName.GENERAL_STING, SoundName.GENERAL_BED, SoundConst.GENERAL_BED_FADE_VOLUME,
             SoundConst.GENERAL_BED_GENERAL_STING_FADE_VOLUME_DURATION, SoundConst.GENERAL_BED_GENERAL_STING_FADE_VOLUME_AWAIT_TIME);
@@ -99,5 +100,6 @@ public class RulesVM : ViewModelBase {
             SoundConst.GENERAL_BED_GENERAL_STING_FADE_VOLUME_DURATION, SoundConst.GENERAL_BED_GENERAL_STING_FADE_VOLUME_AWAIT_TIME);
 
         IsRulesStarted = true;
+        EnterCommand = StartGameCommand;
     }
 }

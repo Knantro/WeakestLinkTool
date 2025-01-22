@@ -16,6 +16,7 @@
         <KeyBinding Key="D3" Command="{Binding ChangeEditorModeCommand}" CommandParameter="Joke"/>
         <KeyBinding Key="Delete" Command="{Binding RemoveItemCommand}"/>
         <KeyBinding Key="Insert" Command="{Binding AddItemCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding SaveCommand}"/>
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -54,37 +55,37 @@
                      Grid.Column="1"
                      Height="150"
                      Width="330"
-                     FontSize="45"
+                     FontSize="42"
                      Style="{StaticResource DefaultRadioButton}"
                      GroupName="EditorMenu"
                      Command="{Binding ChangeEditorModeCommand}"
                      CommandParameter="Question"
                      IsChecked="{Binding IsQuestionsSelected}"
-                     Content="1. Вопросы"/>
+                     Content="(1) Вопросы"/>
 
         <RadioButton Grid.Row="0"
                      Grid.Column="2"
                      Height="150"
                      Width="330"
-                     FontSize="45"
+                     FontSize="42"
                      Style="{StaticResource DefaultRadioButton}"
                      GroupName="EditorMenu"
                      Command="{Binding ChangeEditorModeCommand}"
                      CommandParameter="FinalQuestion"
                      IsChecked="{Binding IsFinalQuestionsSelected}"
-                     Content="2. Вопросы финала"/>
+                     Content="(2) Вопросы финала"/>
 
         <RadioButton Grid.Row="0"
                      Grid.Column="3"
                      Height="150"
                      Width="330"
-                     FontSize="45"
+                     FontSize="42"
                      Style="{StaticResource DefaultRadioButton}"
                      GroupName="EditorMenu"
                      Command="{Binding ChangeEditorModeCommand}"
                      CommandParameter="Joke"
                      IsChecked="{Binding IsJokesSelected}"
-                     Content="3. Подколки"/>
+                     Content="(3) Подколки"/>
 
         <ListBox Grid.Row="0" Grid.Column="0"
                  Grid.RowSpan="8"
@@ -106,7 +107,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
-                                                FontSize="45"
+                                                FontSize="42"
                                                 Text="{Binding Text, Mode=TwoWay}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -115,7 +116,7 @@
 
         <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
                                     Style="{StaticResource DefaultText}"
-                                    FontSize="45"
+                                    FontSize="42"
                                     Text="{Binding MainInputText}"/>
 
         <Border Grid.Row="2" Grid.Column="1"
@@ -132,7 +133,7 @@
                           HorizontalScrollBarVisibility="Hidden"
                           CanContentScroll="True"
                           SnapsToDevicePixels="True">
-                <controls:OutlinedTextBox FontSize="45"
+                <controls:OutlinedTextBox FontSize="42"
                                           Background="#00FFFFFF"
                                           CaretBrush="White"
                                           BorderThickness="0"
@@ -146,7 +147,7 @@
 
         <controls:OutlinedTextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
                                     Style="{StaticResource DefaultText}"
-                                    FontSize="45"
+                                    FontSize="42"
                                     Visibility="{Binding IsQuestionEditMode, Converter={StaticResource VisibilityConverter}}"
                                     Text="Правильный ответ"/>
 
@@ -165,7 +166,7 @@
                           HorizontalScrollBarVisibility="Hidden"
                           CanContentScroll="True"
                           SnapsToDevicePixels="True">
-                <controls:OutlinedTextBox FontSize="45"
+                <controls:OutlinedTextBox FontSize="42"
                                           Background="#00FFFFFF"
                                           CaretBrush="White"
                                           BorderThickness="0"
@@ -179,35 +180,33 @@
         <Button Grid.Row="6" Grid.Column="1"
                 Height="150"
                 Width="330"
-                FontSize="45"
+                FontSize="42"
                 Style="{StaticResource DefaultButton}"
-                Content="Удалить"
+                Content="(DEL) Удалить"
                 Command="{Binding RemoveItemCommand}"/>
 
         <Button Grid.Row="6" Grid.Column="3"
                 Height="150"
                 Width="330"
-                FontSize="45"
+                FontSize="42"
                 Style="{StaticResource DefaultButton}"
-                Content="Добавить"
+                Content="(INS) Добавить"
                 Command="{Binding AddItemCommand}"/>
 
         <Button Grid.Row="7" Grid.Column="1"
                 Height="150"
                 Width="330"
-                FontSize="45"
+                FontSize="42"
                 Style="{StaticResource DefaultButton}"
-                Content="Назад"
-                IsCancel="True"
+                Content="(ESC) Назад"
                 Command="{Binding BackCommand}"/>
 
         <Button Grid.Row="7" Grid.Column="3"
                 Height="150"
                 Width="330"
-                FontSize="45"
+                FontSize="42"
                 Style="{StaticResource DefaultButton}"
-                Content="Сохранить"
-                IsDefault="True"
+                Content="(↵) Сохранить"
                 Command="{Binding SaveCommand}"/>
     </Grid>
 </UserControl>

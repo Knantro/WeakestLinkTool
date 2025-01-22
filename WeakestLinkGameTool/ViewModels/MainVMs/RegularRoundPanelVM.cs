@@ -174,7 +174,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     public RelayCommand ResumeRoundCommand { get; set; }
     public RelayCommand PreviousQuestionCommand { get; set; }
     public RelayCommand NextQuestionCommand { get; set; }
-    public RelayCommand StartRoundCommand => new(_ => StartRound(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand StartRoundCommand => new(_ => StartRound(), _ => !IsRoundStarted && CanStartRound && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand RoundEndCommand { get; set; }
 
     public RegularRoundPanelVM() {
@@ -199,7 +199,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         PreviousQuestionCommand = new RelayCommand(_ => PreviousQuestion(), _ => IsRoundPlayingNow && QuestionIndex > 0 && !mainWindowViewModel.IsMessageBoxVisible);
         NextQuestionCommand = new RelayCommand(_ => NextQuestion(), _ => IsRoundPlayingNow && !mainWindowViewModel.IsMessageBoxVisible);
 
-        RoundEndCommand = new RelayCommand(_ => NextJoke(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+        RoundEndCommand = new RelayCommand(_ => NextJoke(), _ => IsRoundEnded && !mainWindowViewModel.IsMessageBoxVisible);
         CurrentRound = WeakestLinkLogic.NextRound();
         TimeLeft = CurrentRound.Timer!.Value;
         timer.Tick += async (_, _) => await TimerTick();
@@ -216,6 +216,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         logger.SignedDebug();
         await Task.Delay(PLAYER_SHOW_PANEL_DELAY);
         playerDataContext.ShowRoundPanel();
+        EnterCommand = StartRoundCommand;
         CanStartRound = true;
         CommandManager.InvalidateRequerySuggested();
     }
@@ -250,6 +251,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         IsRoundStarted = true;
         IsRoundPlayingNow = true;
         timer.Start();
+        EnterCommand = RoundEndCommand;
     }
 
     /// <summary>
@@ -265,7 +267,7 @@ public class RegularRoundPanelVM : ViewModelBase {
             logger.Info("Pre final round ended");
             RoundEndNextButtonText = "К финалу";
             RoundEndCommand = new RelayCommand(_ => EndRound(), _ => !mainWindowViewModel.IsMessageBoxVisible);
-
+            EnterCommand = RoundEndCommand;
             OnPropertyChanged(nameof(RoundEndNextButtonText));
             OnPropertyChanged(nameof(RoundEndCommand));
         }
@@ -448,7 +450,8 @@ public class RegularRoundPanelVM : ViewModelBase {
         if (jokesUsedCount == 3) {
             RoundEndNextButtonText = "Запустить голосование";
             RoundEndCommand = new RelayCommand(_ => EndRound(), _ => !mainWindowViewModel.IsMessageBoxVisible);
-
+            EnterCommand = RoundEndCommand;
+            
             OnPropertyChanged(nameof(RoundEndNextButtonText));
             OnPropertyChanged(nameof(RoundEndCommand));
 

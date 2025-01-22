@@ -10,6 +10,7 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
 
     <UserControl.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
         <KeyBinding Key="D1" Command="{Binding CorrectAnswerCommand}"/>
         <KeyBinding Key="D2" Command="{Binding WrongAnswerCommand}"/>
         <KeyBinding Key="D3" Command="{Binding PreviousQuestionCommand}"/>
@@ -53,7 +54,7 @@
                     Width="260"
                     Padding="0"
                     Style="{StaticResource DefaultButton}"
-                    Content="1. Верно" FontSize="40"
+                    Content="(1) Верно" FontSize="32"
                     Command="{Binding CorrectAnswerCommand}"/>
 
             <Button Margin="10 0"
@@ -61,7 +62,7 @@
                     Width="260"
                     Padding="0"
                     Style="{StaticResource DefaultButton}"
-                    Content="2. Неверно" FontSize="40"
+                    Content="(2) Неверно" FontSize="32"
                     Command="{Binding WrongAnswerCommand}"/>
 
             <Button Margin="10 0"
@@ -69,7 +70,7 @@
                     Width="260"
                     Padding="0"
                     Style="{StaticResource DefaultButton}"
-                    Content="3. Пред. вопрос" FontSize="40"
+                    Content="(3) Пред. вопрос" FontSize="32"
                     Command="{Binding PreviousQuestionCommand}"/>
 
             <Button Margin="10 0"
@@ -77,7 +78,7 @@
                     Width="260"
                     Padding="0"
                     Style="{StaticResource DefaultButton}"
-                    Content="4. След. вопрос" FontSize="40"
+                    Content="(4) След. вопрос" FontSize="32"
                     Command="{Binding NextQuestionCommand}"/>
         </StackPanel>
 
@@ -105,14 +106,14 @@
             <controls:OutlinedTextBlock Grid.Row="0"
                                         TextAlignment="Center"
                                         Style="{StaticResource DefaultText}"
-                                        FontSize="40"
+                                        FontSize="32"
                                         Visibility="{Binding IsFinalRoundPlaying, Converter={StaticResource VisibilityConverter}}"
                                         Text="{Binding CurrentQuestion.Text}"/>
 
             <controls:OutlinedTextBlock Grid.Row="0"
                                         TextAlignment="Center"
                                         Style="{StaticResource DefaultText}"
-                                        FontSize="40"
+                                        FontSize="32"
                                         Visibility="{Binding IsGameEnd, Converter={StaticResource VisibilityConverter}}"
                                         Text="{Binding EndGameText}"/>
 
@@ -145,7 +146,7 @@
                     Height="300" Width="500"
                     Padding="0"
                     Style="{StaticResource DefaultButton}"
-                    Content="{Binding FirstPlayer.Name}"
+                    Content="{Binding FirstPlayer.Name, StringFormat={}(←) {0}}"
                     FontSize="60"
                     Command="{Binding StartFinalRoundCommand}"
                     CommandParameter="{Binding FirstPlayer}"/>
@@ -156,7 +157,7 @@
                     Height="300" Width="500"
                     Padding="0"
                     Style="{StaticResource DefaultButton}"
-                    Content="{Binding SecondPlayer.Name}"
+                    Content="{Binding SecondPlayer.Name, StringFormat={}(→) {0}}"
                     FontSize="60"
                     Command="{Binding StartFinalRoundCommand}"
                     CommandParameter="{Binding SecondPlayer}"/>
@@ -249,10 +250,9 @@
                     Height="150"
                     Width="260"
                     Padding="0"
-                    IsDefault="True"
                     Visibility="{Binding IsTie, Converter={StaticResource VisibilityConverter}}"
                     Style="{StaticResource DefaultButton}"
-                    Content="До первого проигрыша" FontSize="40"
+                    Content="(↵) До первого проигрыша" FontSize="32"
                     Command="{Binding StartSuddenDeathCommand}"/>
         </Border>
 
@@ -262,10 +262,9 @@
                 Height="150"
                 Width="260"
                 Padding="0"
-                IsDefault="True"
                 Visibility="{Binding IsGameEnd, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                Content="Завершить игру" FontSize="40"
+                Content="(↵) Завершить игру" FontSize="32"
                 Command="{Binding EndGameCommand}"/>
 
     </Grid>

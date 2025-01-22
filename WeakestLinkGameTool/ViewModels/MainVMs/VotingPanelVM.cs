@@ -107,12 +107,12 @@ public class VotingPanelVM : ViewModelBase {
     public ObservableCollection<PlayerStatistics> RoundStatistics { get; set; }
 
     public RelayCommand<Player> SelectStatisticsCommand => new(FormPersonalStatistics, _ => !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand<Player> DecreaseVoteCommand => new(DecreasePlayerVotes, _ => !IsVotingInProgress && !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand<Player> IncreaseVoteCommand => new(IncreasePlayerVotes, _ => !IsVotingInProgress && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand<Player> DecreaseVoteCommand => new(DecreasePlayerVotes, player => player.VotesCount > 0 && !IsVotingInProgress && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand<Player> IncreaseVoteCommand => new(IncreasePlayerVotes, player => player.VotesCount < Players.Count - 1 && !IsVotingInProgress && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand<Player> KickPlayerCommand => new(KickPlayer, _ => !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand RoundStatisticsCommand => new(_ => ShowRoundStatistics(), _ => !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand StopVotingCommand => new(_ => StopVoting(), _ => VotingCanStop && !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand DoneVotingCommand => new(_ => DoneVoting(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand StopVotingCommand => new(_ => StopVoting(), _ => IsVotingInProgress && VotingCanStop && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand DoneVotingCommand => new(_ => DoneVoting(), _ => !IsVotingDone && IsAllVotesGiven && !mainWindowViewModel.IsMessageBoxVisible);
 
     public VotingPanelVM() {
         logger.SignedDebug();
@@ -123,6 +123,7 @@ public class VotingPanelVM : ViewModelBase {
         Players = WeakestLinkLogic.CurrentSession.ActivePlayers.ToObservableCollection();
         IsVotingInProgress = true;
         IsRoundStatisticsSelected = true;
+        EnterCommand = StopVotingCommand;
         StartVoting();
     }
 
@@ -207,6 +208,7 @@ public class VotingPanelVM : ViewModelBase {
         SoundManager.FadeWith(SoundName.VOTING_BED, SoundName.GENERAL_STING, SoundConst.VOTING_BED_GENERAL_STING_FADE_OUT, fadeInMilliseconds: null);
         SoundManager.Resume(SoundName.GENERAL_BED);
         IsVotingInProgress = false;
+        EnterCommand = DoneVotingCommand;
     }
 
     /// <summary>

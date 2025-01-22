@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.Helpers;
 using WeakestLinkGameTool.Views.MainPages;
 
@@ -14,6 +15,25 @@ public class ViewModelBase : INPCBase, IDisposable {
     protected static readonly WeakestLinkLogic WeakestLinkLogic = App.ServiceProvider.GetService<WeakestLinkLogic>();
     protected MainWindowViewModel mainWindowViewModel = App.ServiceProvider.GetService<MainWindowViewModel>();
     protected static Random rand = new();
+
+    private RelayCommand enterCommand;
+    private RelayCommand cancelCommand;
+
+    /// <summary>
+    /// Команда при нажатии клавиши Enter
+    /// </summary>
+    public RelayCommand EnterCommand {
+        get => enterCommand;
+        set => SetField(ref enterCommand, value);
+    }
+
+    /// <summary>
+    /// Команда при нажатии клавиши Escape
+    /// </summary>
+    public RelayCommand CancelCommand {
+        get => cancelCommand;
+        set => SetField(ref cancelCommand, value);
+    }
 
     public ViewModelBase() {
         mainWindowViewModel.OnDialogResult += OnDialogResult;

@@ -18,6 +18,7 @@
         <KeyBinding Key="D6" Command="{Binding ResumeRoundCommand}"/>
         <KeyBinding Key="D7" Command="{Binding PreviousQuestionCommand}"/>
         <KeyBinding Key="D8" Command="{Binding NextQuestionCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -98,10 +99,8 @@
                 Height="350"
                 Width="700"
                 Visibility="{Binding IsRoundStarted, Converter={StaticResource InvertVisibilityConverter}}"
-                IsEnabled="{Binding CanStartRound}"
                 Style="{StaticResource DefaultButton}"
-                Content="Начать раунд"
-                IsDefault="True"
+                Content="(↵) Начать раунд"
                 FontSize="80"
                 Command="{Binding StartRoundCommand}"/>
 
@@ -185,11 +184,10 @@
                 Height="120"
                 Width="260"
                 Padding="0"
-                IsDefault="True"
                 Command="{Binding RoundEndCommand}"
                 Visibility="{Binding IsRoundEnded, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                Content="{Binding RoundEndNextButtonText}" FontSize="30"/>
+                Content="{Binding RoundEndNextButtonText, StringFormat={}(↵) {0}}" FontSize="30"/>
 
         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal"
                     HorizontalAlignment="Center">
@@ -201,7 +199,7 @@
                     Padding="0"
                     Command="{Binding CorrectAnswerCommand}"
                     Style="{StaticResource DefaultButton}"
-                    Content="1. Верно" FontSize="30"/>
+                    Content="(1) Верно" FontSize="30"/>
             <Button VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Margin="10 0"
@@ -210,7 +208,7 @@
                     Padding="0"
                     Command="{Binding WrongAnswerCommand}"
                     Style="{StaticResource DefaultButton}"
-                    Content="2. Неверно" FontSize="30"/>
+                    Content="(2) Неверно" FontSize="30"/>
             <Button VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Margin="10 0"
@@ -219,7 +217,7 @@
                     Padding="0"
                     Command="{Binding BankCommand}"
                     Style="{StaticResource DefaultButton}"
-                    Content="3. Банк" FontSize="30"/>
+                    Content="(3) Банк" FontSize="30"/>
             <Button VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Margin="10 0"
@@ -228,7 +226,7 @@
                     Padding="0"
                     Command="{Binding MeasureAnswerTimeCommand}"
                     Style="{StaticResource DefaultButton}"
-                    Content="4. Замерить время" FontSize="30"/>
+                    Content="(4) Замерить время" FontSize="30"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal"
@@ -240,7 +238,7 @@
                     Padding="0"
                     Command="{Binding PauseRoundCommand}"
                     Style="{StaticResource DefaultButton}"
-                    Content="5. Остановить раунд" FontSize="30"/>
+                    Content="(5) Остановить раунд" FontSize="30"/>
             <Button VerticalAlignment="Center"
                     Margin="10 0"
                     Height="120"
@@ -248,7 +246,7 @@
                     Padding="0"
                     Command="{Binding ResumeRoundCommand}"
                     Style="{StaticResource DefaultButton}"
-                    Content="6. Продолжить раунд" FontSize="30"/>
+                    Content="(6) Продолжить раунд" FontSize="30"/>
             <Button VerticalAlignment="Center"
                     Margin="10 0"
                     Height="120"
@@ -256,7 +254,7 @@
                     Padding="0"
                     Command="{Binding PreviousQuestionCommand}"
                     Style="{StaticResource DefaultButton}"
-                    Content="7. Предыдущий вопрос" FontSize="30"/>
+                    Content="(7) Предыдущий вопрос" FontSize="30"/>
             <Button VerticalAlignment="Center"
                     Margin="10 0"
                     Height="120"
@@ -264,7 +262,7 @@
                     Padding="0"
                     Command="{Binding NextQuestionCommand}"
                     Style="{StaticResource DefaultButton}"
-                    Content="8. Следующий вопрос" FontSize="30"/>
+                    Content="(8) Следующий вопрос" FontSize="30"/>
         </StackPanel>
     </Grid>
 </UserControl>

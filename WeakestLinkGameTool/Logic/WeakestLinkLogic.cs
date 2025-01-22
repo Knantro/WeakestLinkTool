@@ -171,6 +171,19 @@ public class WeakestLinkLogic {
     public bool ValidateEditableData() => RegularQuestions.All(x => !string.IsNullOrEmpty(x.Text) && !string.IsNullOrEmpty(x.Answer)) &&
         FinalQuestions.All(x => !string.IsNullOrEmpty(x.Text) && !string.IsNullOrEmpty(x.Answer)) &&
         Jokes.All(x => !string.IsNullOrEmpty(x.Text));
+    
+    /// <summary>
+    /// Делает вопросы и подколки неиспользованными
+    /// </summary>
+    public void ResetAll() {
+        logger.Info("Reset questions and jokes as unused");
+        
+        RegularQuestions.ForEach(x => x.IsUsed = false);
+        FinalQuestions.ForEach(x => x.IsUsed = false);
+        Jokes.ForEach(x => x.IsUsed = false);
+        
+        SaveEditableData();
+    }
 
     /// <summary>
     /// Сохраняет редактируемые игровые данные
@@ -332,7 +345,6 @@ public class WeakestLinkLogic {
     public Question NextFinalQuestion(bool isUsed = false) {
         logger.Debug($"Get next final question: isUsed = {isUsed}");
         if (isUsed && currentFinalQuestionIndex >= 0) {
-            gameLogger.GameLog(CurrentSession.SessionID, $"Текущий вопрос финала: {UnusedRegularQuestions[currentQuestionIndex].Text}");
             UnusedFinalQuestions[currentFinalQuestionIndex].IsUsed = true;
             currentFinalQuestionIndex--;
         }
@@ -344,6 +356,9 @@ public class WeakestLinkLogic {
 
         var question = currentFinalQuestionIndex < UnusedFinalQuestions.Count - 1 ? UnusedFinalQuestions[++currentFinalQuestionIndex] : UnusedFinalQuestions[currentFinalQuestionIndex = 0];
         logger.Debug($"Next final question: {question.Text}. Answer: {question.Answer}");
+        gameLogger.GameLog(CurrentSession.SessionID, isUsed
+            ? $"Текущий вопрос финала: {question.Text} (ответ: {question.Answer})"
+            : $"Вопрос финала изменён на следующий: {question.Text} (ответ: {question.Answer})");
         return question;
     }
 
@@ -455,9 +470,11 @@ public class WeakestLinkLogic {
         logger.Info($"Game is finished. '{CurrentSession.Winner.Name}' won the game");
         gameLogger.GameLog(CurrentSession.SessionID, "Игра завершена");
 
+        SaveEditableData();
+
         CurrentSession.ActivePlayers.ForEach(x => { x.Statistics.Add(CurrentSession.CurrentRound.Statistics.PlayersStatistics[x]); });
 
-        ExcelStatistics.Generate(CurrentSession);
+        Task.Run(() => ExcelStatistics.Generate(CurrentSession));
     }
 
     /// <summary>

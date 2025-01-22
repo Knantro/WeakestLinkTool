@@ -10,11 +10,11 @@
              d:DesignWidth="1920">
 
     <UserControl.InputBindings>
-        <KeyBinding Key="N" Command="{Binding NewGameCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding NewGameCommand}"/>
         <KeyBinding Key="C" Command="{Binding ConnectToGameCommand}"/>
         <KeyBinding Key="S" Command="{Binding SettingsCommand}"/>
         <KeyBinding Key="E" Command="{Binding EditorModeCommand}"/>
-        <KeyBinding Key="Q" Command="{Binding ExitCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding ExitCommand}"/>
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -42,20 +42,20 @@
         <StackPanel HorizontalAlignment="Center"
                     VerticalAlignment="Center">
             <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
-                    Content="Новая игра" FontSize="45"
+                    Content="(↵) Новая игра" FontSize="45"
                     Command="{Binding NewGameCommand}"/>
             <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
-                    Content="Подключиться к игре" FontSize="45"
+                    Content="(C) Подключиться к игре" FontSize="45"
                     Command="{Binding ConnectToGameCommand}"
                     IsEnabled="False"/>
             <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
-                    Content="Настройки" FontSize="45"
+                    Content="(S) Настройки" FontSize="45"
                     Command="{Binding SettingsCommand}"/>
             <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
-                    Content="Редактор" FontSize="45"
+                    Content="(E) Редактор" FontSize="45"
                     Command="{Binding EditorModeCommand}"/>
             <Button Margin="0 20" Height="160" Width="500" Style="{StaticResource DefaultButton}"
-                    Content="Выход" FontSize="45"
+                    Content="(ESC) Выход" FontSize="45"
                     Command="{Binding ExitCommand}"/>
         </StackPanel>
     </Grid>

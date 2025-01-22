@@ -51,16 +51,8 @@ public class Player : INPCBase {
     /// </summary>
     public int VotesCount {
         get => votesCount;
-        set {
-            SetField(ref votesCount, value);
-            OnPropertyChanged(nameof(VotesCountIsZero));
-        }
+        set => SetField(ref votesCount, value);
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public bool VotesCountIsZero => VotesCount == 0;
     
     /// <summary>
     /// 

@@ -5,6 +5,7 @@
                     xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic">
 
     <converters:TextAlignmentConverter x:Key="TextAlignmentConverter"/>
+    <converters:DoubleDivisionConverter x:Key="DoubleDivisionConverter"/>
     <converters:VisibilityConverter x:Key="VisibilityConverter"/>
     <converters:VisibilityConverter x:Key="InvertVisibilityConverter" Invert="True"/>
     <converters:VisibilityConverter x:Key="CollapseVisibilityConverter" Collapse="True"/>

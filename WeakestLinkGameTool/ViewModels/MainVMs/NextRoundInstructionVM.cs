@@ -65,15 +65,15 @@ public class NextRoundInstructionVM : ViewModelBase {
         }
     }
     
-    public RelayCommand NextInstructionCommand => new(_ => ChangeInstruction(), _ => !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand BackInstructionCommand => new(_ => ChangeInstruction(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand NextInstructionCommand => new(_ => ChangeInstruction(), _ => !IsLastInstruction && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand BackInstructionCommand => new(_ => ChangeInstruction(false), _ => !IsFirstInstruction && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand ShowFullBankCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(true), _ => !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand HideFullBankVisibleCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
     
     /// <summary>
     /// Переходит к правилам игры
     /// </summary>
-    public RelayCommand StartRoundCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>(), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand StartRoundCommand => new(_ => ChangeMWPage<RegularRoundPanelPage>(), _ => IsLastInstruction && !mainWindowViewModel.IsMessageBoxVisible);
     
     public NextRoundInstructionVM() {
         logger.SignedDebug();

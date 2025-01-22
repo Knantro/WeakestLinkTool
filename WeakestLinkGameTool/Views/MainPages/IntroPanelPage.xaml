@@ -12,6 +12,7 @@
     <UserControl.InputBindings>
         <KeyBinding Key="Left" Command="{Binding BackTitleCommand}"/>
         <KeyBinding Key="Right" Command="{Binding NextTitleCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
     </UserControl.InputBindings>
     
     <UserControl.DataContext>
@@ -59,8 +60,7 @@
             <Button Height="250"
                     Width="500"
                     Style="{StaticResource DefaultButton}"
-                    IsEnabled="{Binding IsIntroStarted, Converter={StaticResource InvertBooleanConverter}}"
-                    Content="Начать вступление"
+                    Content="(↵) Начать вступление"
                     FontSize="60"
                     Margin="0 30"
                     Command="{Binding StartIntroCommand}"/>
@@ -71,9 +71,8 @@
                 Width="280"
                 Visibility="{Binding IsIntroFinished, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                IsEnabled="{Binding IsFirstTitle, Converter={StaticResource InvertBooleanConverter}}"
-                Content="Назад"
-                FontSize="40"
+                Content="(←) Назад"
+                FontSize="32"
                 Command="{Binding BackTitleCommand}"/>
 
         <Border Grid.Row="2" Grid.Column="2"
@@ -81,10 +80,9 @@
             <Button Height="140"
                     Width="280"
                     Style="{StaticResource DefaultButton}"
-                    IsEnabled="{Binding IsLastTitle, Converter={StaticResource InvertBooleanConverter}}"
-                    Content="Далее"
+                    Content="(→) Далее"
                     Visibility="{Binding IsLastTitle, Converter={StaticResource InvertVisibilityConverter}}"
-                    FontSize="40"
+                    FontSize="32"
                     Command="{Binding NextTitleCommand}"/>
         </Border>
 
@@ -93,9 +91,8 @@
                 Width="280"
                 Visibility="{Binding IsLastTitle, Converter={StaticResource VisibilityConverter}}"
                 Style="{StaticResource DefaultButton}"
-                IsDefault="True"
-                Content="К правилам"
-                FontSize="40"
+                Content="(↵) К правилам"
+                FontSize="32"
                 Command="{Binding RulesCommand}"/>
     </Grid>
 </UserControl>
