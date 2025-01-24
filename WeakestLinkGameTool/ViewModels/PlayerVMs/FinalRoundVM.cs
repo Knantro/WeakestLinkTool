@@ -8,7 +8,7 @@ namespace WeakestLinkGameTool.ViewModels.PlayerVMs;
 /// <summary>
 /// Модель-представление экрана игрока финального раунда
 /// </summary>
-public class FinalRoundVM : ViewModelBase {
+public class FinalRoundVM : InfoVM {
     private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private Player firstPlayer;
     private Player secondPlayer;

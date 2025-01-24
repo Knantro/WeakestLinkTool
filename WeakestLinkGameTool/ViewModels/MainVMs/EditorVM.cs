@@ -20,6 +20,15 @@ public class EditorVM : ViewModelBase {
     public EditorMode EditorMode { get; set; } = EditorMode.Question;
 
     /// <summary>
+    /// Заголовок коллекции текстовых сущностей
+    /// </summary>
+    public string ListBoxHeader => EditorMode switch {
+        EditorMode.Question => $"Вопросы: {DataCollection.Count}",
+        EditorMode.FinalQuestion => $"Вопросы финала: {DataCollection.Count}",
+        EditorMode.Joke => $"Подколки: {DataCollection.Count}",
+    };
+
+    /// <summary>
     /// Текст первичного ввода вопроса или подколки
     /// </summary>
     public string MainInputText => EditorMode == EditorMode.Joke ? "Текст подколки" : "Текст вопроса";
@@ -107,6 +116,7 @@ public class EditorVM : ViewModelBase {
         OnPropertyChanged(nameof(IsQuestionsSelected));
         OnPropertyChanged(nameof(IsFinalQuestionsSelected));
         OnPropertyChanged(nameof(IsJokesSelected));
+        OnPropertyChanged(nameof(ListBoxHeader));
     }
 
     /// <summary>
@@ -130,6 +140,7 @@ public class EditorVM : ViewModelBase {
         }
 
         DataCollection.Add(SelectedItem);
+        OnPropertyChanged(nameof(ListBoxHeader));
     }
 
     /// <summary>
@@ -151,6 +162,7 @@ public class EditorVM : ViewModelBase {
 
         DataCollection.Remove(SelectedItem);
         SelectedItem = DataCollection.Any() ? DataCollection.Last() : null;
+        OnPropertyChanged(nameof(ListBoxHeader));
     }
 
     /// <summary>

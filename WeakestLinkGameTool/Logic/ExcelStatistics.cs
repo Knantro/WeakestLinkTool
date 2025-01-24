@@ -105,14 +105,20 @@ public static class ExcelStatistics {
             firstFinalistCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             firstFinalistCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             firstFinalistCell.Style.Font.SetFromFont(fontName, commonFontSize);
-            if (session.FirstFinalist.IsWinner) firstFinalistCell.Style.Font.Color.SetColor(greenColor);
+            if (session.FirstFinalist.IsWinner) {
+                firstFinalistCell.Style.Font.Color.SetColor(greenColor);
+                firstFinalistCell.Style.Font.Bold = true;
+            }
 
             var secondFinalistCell = sheet.Cells["H3"];
             secondFinalistCell.Value = session.SecondFinalist.Name;
             secondFinalistCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             secondFinalistCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             secondFinalistCell.Style.Font.SetFromFont(fontName, commonFontSize);
-            if (session.SecondFinalist.IsWinner) secondFinalistCell.Style.Font.Color.SetColor(greenColor);
+            if (session.SecondFinalist.IsWinner) {
+                secondFinalistCell.Style.Font.Color.SetColor(greenColor);
+                secondFinalistCell.Style.Font.Bold = true;
+            }
 
             var finalAnswersCells = sheet.Cells[2, 9, 3, 9 + max - 1];
             finalAnswersCells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

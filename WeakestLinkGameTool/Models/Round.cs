@@ -45,7 +45,7 @@ public class Round {
     public bool IsFinal { get; set; }
     
     /// <summary>
-    /// 
+    /// Исключённый игрок
     /// </summary>
     public Player KickedPlayer { get; set; }
 

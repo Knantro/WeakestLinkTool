@@ -333,7 +333,7 @@ public class WeakestLinkLogic {
         var joke = currentQuestionIndex < UnusedJokes.Count - 1 ? UnusedJokes[++currentQuestionIndex] : UnusedJokes[currentQuestionIndex = 0];
         joke.IsUsed = true;
         logger.Debug($"Next joke: {joke.Text}");
-        gameLogger.GameLog(CurrentSession.SessionID, $"{joke}");
+        gameLogger.GameLog(CurrentSession.SessionID, $"{joke.Text}");
         return joke;
     }
 
@@ -502,7 +502,7 @@ public class WeakestLinkLogic {
     /// <param name="player">Победитель игры</param>
     public void SetupWinner(Player player) {
         logger.Info($"Winner is '{player.Name}'");
-        gameLogger.GameLog(CurrentSession.SessionID, $"Финальный раунд завершён{Environment.NewLine}Победу одержал финалист игры - {player.Name}");
+        gameLogger.GameLog(CurrentSession.SessionID, $"Финальный раунд завершён. Победу одержал финалист игры - {player.Name}");
 
         CurrentSession.Winner = player;
     }

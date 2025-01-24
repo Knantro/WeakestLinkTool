@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:playerVMs="clr-namespace:WeakestLinkGameTool.ViewModels.PlayerVMs"
+             xmlns:controls="clr-namespace:WeakestLinkGameTool.Assets.Controls"
              mc:Ignorable="d"
              Focusable="True"
              d:DesignHeight="1080" d:DesignWidth="1920"
@@ -21,11 +22,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Name="FinalRoundPanel"
-          HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch"
-          ShowGridLines="False"
-          Opacity="0">
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="3*"/>
@@ -37,7 +35,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">
+        <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
+                    Name="FinalRoundPanel"
+                    Opacity="0">
             <Grid Margin="0 0 0 20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -115,5 +115,61 @@
                 </ItemsControl>
             </Grid>
         </StackPanel>
+
+        <Grid Grid.Column="1" Grid.Row="2" x:Name="TotalBankGrid"
+              Margin="0 13 0 -13"
+              Opacity="0"
+              VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="240"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Polygon Grid.Row="1" Grid.Column="0"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Center"
+                     Margin="10 0 -10 0"
+                     Width="500"
+                     Height="30"
+                     Fill="{StaticResource GrayButtonBrush}"
+                     Stretch="Fill" Stroke="Black" StrokeThickness="1">
+                <Polygon.Points>
+                    <Point X="0" Y="1"/>
+                    <Point X="2" Y="0"/>
+                    <Point X="2" Y="2"/>
+                </Polygon.Points>
+            </Polygon>
+
+            <Polygon Grid.Row="1" Grid.Column="2"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Center"
+                     Margin="-10 0 10 0"
+                     Width="500"
+                     Height="30"
+                     Fill="{StaticResource GrayButtonBrush}"
+                     Stretch="Fill" Stroke="Black" StrokeThickness="1">
+                <Polygon.Points>
+                    <Point X="0" Y="0"/>
+                    <Point X="2" Y="1"/>
+                    <Point X="0" Y="2"/>
+                </Polygon.Points>
+            </Polygon>
+
+            <Border Grid.Row="1" Grid.Column="1"
+                    Background="{StaticResource GrayButtonBrush}"
+                    CornerRadius="1000000000"
+                    Height="100"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    Width="240">
+                <controls:OutlinedTextBlock Text="{Binding CurrentTotalBank}"
+                                            FontSize="45"
+                                            Style="{StaticResource DefaultText}"/>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

@@ -15,8 +15,10 @@
         <KeyBinding Key="D2" Command="{Binding ChangeEditorModeCommand}" CommandParameter="FinalQuestion"/>
         <KeyBinding Key="D3" Command="{Binding ChangeEditorModeCommand}" CommandParameter="Joke"/>
         <KeyBinding Key="Delete" Command="{Binding RemoveItemCommand}"/>
-        <KeyBinding Key="Insert" Command="{Binding AddItemCommand}"/>
+        <KeyBinding Key="Add" Command="{Binding AddItemCommand}"/>
+        <KeyBinding Key="OemPlus" Command="{Binding AddItemCommand}"/>
         <KeyBinding Key="Enter" Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding BackCommand}"/>
     </UserControl.InputBindings>
 
     <UserControl.DataContext>
@@ -34,7 +36,8 @@
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
           Background="{StaticResource CommonBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.5*"/>
             <RowDefinition Height="0.3*"/>
             <RowDefinition Height="80"/>
             <RowDefinition Height="0.5*"/>
@@ -52,6 +55,7 @@
 
 
         <RadioButton Grid.Row="0"
+                     Grid.RowSpan="2"
                      Grid.Column="1"
                      Height="150"
                      Width="330"
@@ -64,6 +68,7 @@
                      Content="(1) Вопросы"/>
 
         <RadioButton Grid.Row="0"
+                     Grid.RowSpan="2"
                      Grid.Column="2"
                      Height="150"
                      Width="330"
@@ -76,6 +81,7 @@
                      Content="(2) Вопросы финала"/>
 
         <RadioButton Grid.Row="0"
+                     Grid.RowSpan="2"
                      Grid.Column="3"
                      Height="150"
                      Width="330"
@@ -87,7 +93,12 @@
                      IsChecked="{Binding IsJokesSelected}"
                      Content="(3) Подколки"/>
 
-        <ListBox Grid.Row="0" Grid.Column="0"
+        <controls:OutlinedTextBlock Grid.Row="0" Grid.Column="0"
+                                    Style="{StaticResource DefaultText}"
+                                    FontSize="42"
+                                    Text="{Binding ListBoxHeader}"/>
+        
+        <ListBox Grid.Row="1" Grid.Column="0"
                  Grid.RowSpan="8"
                  Background="{StaticResource TextBoxBackgroundBrush}"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -97,8 +108,9 @@
                  BorderBrush="{StaticResource TextBoxBorderBrush}"
                  Margin="10 20"
                  ItemsSource="{Binding DataCollection}"
+                 SelectionChanged="ListBox_SelectionChanged"
                  SelectionMode="Single"
-                 SelectedItem="{Binding SelectedItem}">
+                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
             <ListBox.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="15"/>
@@ -107,19 +119,19 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
-                                                FontSize="42"
+                                                FontSize="32"
                                                 Text="{Binding Text, Mode=TwoWay}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
 
-        <controls:OutlinedTextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+        <controls:OutlinedTextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
                                     Style="{StaticResource DefaultText}"
                                     FontSize="42"
                                     Text="{Binding MainInputText}"/>
 
-        <Border Grid.Row="2" Grid.Column="1"
+        <Border Grid.Row="3" Grid.Column="1"
                 Grid.ColumnSpan="3"
                 Background="{StaticResource TextBoxBackgroundBrush}"
                 BorderBrush="{StaticResource TextBoxBorderBrush}"
@@ -145,13 +157,13 @@
         </Border>
 
 
-        <controls:OutlinedTextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
+        <controls:OutlinedTextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"
                                     Style="{StaticResource DefaultText}"
                                     FontSize="42"
                                     Visibility="{Binding IsQuestionEditMode, Converter={StaticResource VisibilityConverter}}"
                                     Text="Правильный ответ"/>
 
-        <Border Grid.Row="5" Grid.Column="1"
+        <Border Grid.Row="6" Grid.Column="1"
                 Grid.ColumnSpan="3"
                 Background="{StaticResource TextBoxBackgroundBrush}"
                 BorderBrush="{StaticResource TextBoxBorderBrush}"
@@ -177,7 +189,7 @@
             </ScrollViewer>
         </Border>
 
-        <Button Grid.Row="6" Grid.Column="1"
+        <Button Grid.Row="7" Grid.Column="1"
                 Height="150"
                 Width="330"
                 FontSize="42"
@@ -185,15 +197,15 @@
                 Content="(DEL) Удалить"
                 Command="{Binding RemoveItemCommand}"/>
 
-        <Button Grid.Row="6" Grid.Column="3"
+        <Button Grid.Row="7" Grid.Column="3"
                 Height="150"
                 Width="330"
                 FontSize="42"
                 Style="{StaticResource DefaultButton}"
-                Content="(INS) Добавить"
+                Content="(+) Добавить"
                 Command="{Binding AddItemCommand}"/>
 
-        <Button Grid.Row="7" Grid.Column="1"
+        <Button Grid.Row="8" Grid.Column="1"
                 Height="150"
                 Width="330"
                 FontSize="42"
@@ -201,7 +213,7 @@
                 Content="(ESC) Назад"
                 Command="{Binding BackCommand}"/>
 
-        <Button Grid.Row="7" Grid.Column="3"
+        <Button Grid.Row="8" Grid.Column="3"
                 Height="150"
                 Width="330"
                 FontSize="42"

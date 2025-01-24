@@ -15,6 +15,8 @@
         <KeyBinding Key="D2" Command="{Binding WrongAnswerCommand}"/>
         <KeyBinding Key="D3" Command="{Binding PreviousQuestionCommand}"/>
         <KeyBinding Key="D4" Command="{Binding NextQuestionCommand}"/>
+        <KeyBinding Key="D5" Command="{Binding ShowFullBankCommand}"/>
+        <KeyBinding Key="D6" Command="{Binding HideFullBankCommand}"/>
         <KeyBinding Key="Left" Command="{Binding StartFinalRoundCommand}" CommandParameter="{Binding FirstPlayer}"/>
         <KeyBinding Key="Right" Command="{Binding StartFinalRoundCommand}" CommandParameter="{Binding SecondPlayer}"/>
     </UserControl.InputBindings>
@@ -46,7 +48,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal"
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
             <Button Margin="10 0"
@@ -80,6 +82,22 @@
                     Style="{StaticResource DefaultButton}"
                     Content="(4) След. вопрос" FontSize="32"
                     Command="{Binding NextQuestionCommand}"/>
+
+            <Button Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Style="{StaticResource DefaultButton}"
+                    Content="(5) Показать банк" FontSize="32"
+                    Command="{Binding ShowFullBankCommand}"/>
+
+            <Button Margin="10 0"
+                    Height="120"
+                    Width="260"
+                    Padding="0"
+                    Style="{StaticResource DefaultButton}"
+                    Content="(6) Скрыть банк" FontSize="32"
+                    Command="{Binding HideFullBankCommand}"/>
         </StackPanel>
 
         <Grid Grid.Column="1" Grid.Row="1" ShowGridLines="False">
@@ -146,7 +164,7 @@
                     Height="300" Width="500"
                     Padding="0"
                     Style="{StaticResource DefaultButton}"
-                    Content="{Binding FirstPlayer.Name, StringFormat={}(←) {0}}"
+                    Content="{Binding FirstPlayerText}"
                     FontSize="60"
                     Command="{Binding StartFinalRoundCommand}"
                     CommandParameter="{Binding FirstPlayer}"/>
@@ -157,7 +175,7 @@
                     Height="300" Width="500"
                     Padding="0"
                     Style="{StaticResource DefaultButton}"
-                    Content="{Binding SecondPlayer.Name, StringFormat={}(→) {0}}"
+                    Content="{Binding SecondPlayerText}"
                     FontSize="60"
                     Command="{Binding StartFinalRoundCommand}"
                     CommandParameter="{Binding SecondPlayer}"/>

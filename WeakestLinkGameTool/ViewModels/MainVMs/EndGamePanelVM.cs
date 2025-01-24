@@ -4,6 +4,7 @@ using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.Models.Statistics;
 using WeakestLinkGameTool.ViewModels.Base;
 using WeakestLinkGameTool.ViewModels.PlayerVMs;
+using WeakestLinkGameTool.Views.MainPages;
 using WeakestLinkGameTool.Views.PlayerPages;
 
 namespace WeakestLinkGameTool.ViewModels.MainVMs;
@@ -120,7 +121,7 @@ public class EndGamePanelVM : ViewModelBase {
         SoundManager.Stop(SoundName.CLOSING_TITLES);
         SoundManager.LoopPlay(SoundName.GENERAL_BED, SoundConst.GENERAL_BED_LOOP_POSITION_A, SoundConst.GENERAL_BED_LOOP_POSITION_B);
         WeakestLinkLogic.NewSessionSamePlayers();
-        ChangeMWPage<RegularRoundPage>();
+        ChangeMWPage<RegularRoundPanelPage>();
     }
 
     /// <summary>
@@ -138,6 +139,7 @@ public class EndGamePanelVM : ViewModelBase {
     /// </summary>
     private void ShowFullGameStatistics() {
         logger.SignedDebug();
+        if (SelectedPlayer != null) SelectedPlayer.ChosenForPersonalStatistics = false;
         IsFullGameStatisticsSelected = true;
         IsPersonalStatisticsSelected = false;
     }
@@ -148,7 +150,9 @@ public class EndGamePanelVM : ViewModelBase {
     /// <param name="player">Игрок, для которого формируется индивидуальная статистика</param>
     private void FormPersonalStatistics(Player player) {
         logger.Debug($"Forming personal statistics for {player.Name}");
+        if (SelectedPlayer != null) SelectedPlayer.ChosenForPersonalStatistics = false;
         SelectedPlayer = player;
+        SelectedPlayer.ChosenForPersonalStatistics = true;
         IsFullGameStatisticsSelected = false;
         PersonalPlayerStatistics = player.Statistics.Where(x => x.RoundName != "Финал").ToObservableCollection();
         IsPersonalStatisticsSelected = true;

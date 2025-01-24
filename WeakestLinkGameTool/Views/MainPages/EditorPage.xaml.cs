@@ -11,4 +11,8 @@ public partial class EditorPage : UserControl {
     }
 
     private void ForceFocus(object sender, EventArgs args) => Focus();
+
+    private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        (sender as ListBox).ScrollIntoView((sender as ListBox).SelectedItem);
+    }
 }

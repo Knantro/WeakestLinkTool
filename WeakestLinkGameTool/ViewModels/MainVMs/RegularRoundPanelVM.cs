@@ -164,7 +164,7 @@ public class RegularRoundPanelVM : ViewModelBase {
     /// </summary>
     public string TimeText => timeLeft.ToString("m\\:ss");
 
-    public string RoundEndNextButtonText { get; set; } = "Следующая подколка";
+    public string RoundEndNextButtonText { get; set; } = "(\u21b5) Следующая подколка";
 
     public RelayCommand CorrectAnswerCommand { get; set; }
     public RelayCommand WrongAnswerCommand { get; set; }
@@ -265,7 +265,7 @@ public class RegularRoundPanelVM : ViewModelBase {
 
         if (WeakestLinkLogic.CurrentSession.CurrentRound.IsPreFinal) {
             logger.Info("Pre final round ended");
-            RoundEndNextButtonText = "К финалу";
+            RoundEndNextButtonText = "(\u21b5) К финалу";
             RoundEndCommand = new RelayCommand(_ => EndRound(), _ => !mainWindowViewModel.IsMessageBoxVisible);
             EnterCommand = RoundEndCommand;
             OnPropertyChanged(nameof(RoundEndNextButtonText));
@@ -448,7 +448,7 @@ public class RegularRoundPanelVM : ViewModelBase {
         jokesUsedCount++;
 
         if (jokesUsedCount == 3) {
-            RoundEndNextButtonText = "Запустить голосование";
+            RoundEndNextButtonText = "(\u21b5) Запустить голосование";
             RoundEndCommand = new RelayCommand(_ => EndRound(), _ => !mainWindowViewModel.IsMessageBoxVisible);
             EnterCommand = RoundEndCommand;
             

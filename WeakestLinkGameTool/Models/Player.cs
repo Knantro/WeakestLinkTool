@@ -7,11 +7,11 @@ namespace WeakestLinkGameTool.Models;
 /// Модель игрока
 /// </summary>
 public class Player : INPCBase {
-    
     private int number;
     private string name;
     private bool isStrongestLink;
     private bool isWeakestLink;
+    private bool chosenForPersonalStatistics;
     private int votesCount;
     
     /// <summary>
@@ -47,6 +47,14 @@ public class Player : INPCBase {
     }
     
     /// <summary>
+    /// Выбран ли данный игрок для формирования персональной статистики (для экрана конца игры)
+    /// </summary>
+    public bool ChosenForPersonalStatistics {
+        get => chosenForPersonalStatistics;
+        set => SetField(ref chosenForPersonalStatistics, value);
+    }
+    
+    /// <summary>
     /// Количество голосов на голосовании за "Слабое звено"
     /// </summary>
     public int VotesCount {
@@ -55,12 +63,12 @@ public class Player : INPCBase {
     }
     
     /// <summary>
-    /// 
+    /// Исключён ли данный игрок
     /// </summary>
     public bool IsKicked { get; set; }
     
     /// <summary>
-    /// 
+    /// Является ли игрок победителем
     /// </summary>
     public bool IsWinner { get; set; }
 

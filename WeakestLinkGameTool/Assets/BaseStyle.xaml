@@ -92,6 +92,7 @@
 
     <Style x:Key="DefaultButton" TargetType="{x:Type Button}">
         <Setter Property="Content" Value=""/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="Height" Value="50"/>
         <Setter Property="Width" Value="170"/>
         <Setter Property="Foreground" Value="White"/>

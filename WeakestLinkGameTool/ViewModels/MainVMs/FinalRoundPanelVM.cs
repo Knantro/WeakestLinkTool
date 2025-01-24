@@ -45,12 +45,22 @@ public class FinalRoundPanelVM : ViewModelBase {
     }
 
     /// <summary>
+    /// Текст кнопки выбора первого отвечающего игрока слева
+    /// </summary>
+    public string FirstPlayerText => $"(\u2190) {FirstPlayer.Name}";
+
+    /// <summary>
     /// Второй финалист
     /// </summary>
     public Player SecondPlayer {
         get => secondPlayer;
         set => SetField(ref secondPlayer, value);
     }
+    
+    /// <summary>
+    /// Текст кнопки выбора первого отвечающего игрока справа
+    /// </summary>
+    public string SecondPlayerText => $"(\u2192) {SecondPlayer.Name}";
 
     /// <summary>
     /// Текущий игрок
@@ -157,6 +167,8 @@ public class FinalRoundPanelVM : ViewModelBase {
     public RelayCommand PreviousQuestionCommand => new(_ => PreviousQuestion(), _ => QuestionIndex > 0 && IsFinalRoundPlaying && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand StartSuddenDeathCommand => new(_ => StartSuddenDeath(), _ => !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand EndGameCommand => new(_ => EndGame(), _ => CanEndGame && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand ShowFullBankCommand => new(_ => GetPlayerPageDataContext<FinalRoundVM>().ToggleFullBankVisibility(true), _ => CanEndGame && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand HideFullBankCommand => new(_ => GetPlayerPageDataContext<FinalRoundVM>().ToggleFullBankVisibility(false), _ => CanEndGame && !mainWindowViewModel.IsMessageBoxVisible);
 
     public FinalRoundPanelVM() {
         logger.SignedDebug();

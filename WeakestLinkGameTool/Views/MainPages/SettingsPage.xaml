@@ -79,23 +79,23 @@
                                             Style="{StaticResource DefaultText}"
                                             FontSize="50"/>
                 <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
-                        Content="1024x576" FontSize="45"
+                        Content="(CTRL+1) 1024x576" FontSize="45"
                         Command="{Binding ChangeResolutionCommand}"
                         CommandParameter="1024x576"/>
                 <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
-                        Content="1280x720" FontSize="45"
+                        Content="(CTRL+2) 1280x720" FontSize="45"
                         Command="{Binding ChangeResolutionCommand}"
                         CommandParameter="1280x720"/>
                 <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
-                        Content="1366x768" FontSize="45"
+                        Content="(CTRL+3) 1366x768" FontSize="45"
                         Command="{Binding ChangeResolutionCommand}"
                         CommandParameter="1366x768"/>
                 <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
-                        Content="1600x900" FontSize="45"
+                        Content="(CTRL+4)1600x900" FontSize="45"
                         Command="{Binding ChangeResolutionCommand}"
                         CommandParameter="1600x900"/>
                 <Button Margin="0 10" Height="120" Width="500" Style="{StaticResource DefaultButton}"
-                        Content="Полный экран" FontSize="45"
+                        Content="(F) Полный экран" FontSize="45"
                         Command="{Binding ChangeResolutionCommand}"
                         CommandParameter="Full"/>
                 <Button Margin="0 40" Height="120" Width="500" Style="{StaticResource DefaultButton}"

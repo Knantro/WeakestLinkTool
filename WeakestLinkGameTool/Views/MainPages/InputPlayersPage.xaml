@@ -78,7 +78,7 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                                     <controls:OutlinedTextBlock Style="{StaticResource DefaultText}"
-                                                                FontSize="32"
+                                                                FontSize="42"
                                                                 Text="{Binding Number, Mode=TwoWay, StringFormat={}{0}.}"/>
                                     <Separator Width="10" Visibility="Hidden"/>
                                 </StackPanel>
@@ -92,7 +92,7 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Hidden"
                                                   HorizontalScrollBarVisibility="Hidden"
                                                   CanContentScroll="True">
-                                        <controls:OutlinedTextBox FontSize="32"
+                                        <controls:OutlinedTextBox FontSize="42"
                                                                   MaxLength="20"
                                                                   Background="#00FFFFFF"
                                                                   TabIndex="{Binding Number}"

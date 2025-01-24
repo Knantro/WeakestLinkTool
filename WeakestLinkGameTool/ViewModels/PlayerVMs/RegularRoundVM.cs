@@ -78,7 +78,7 @@ public class RegularRoundVM : ViewModelBase {
     /// Обрабатывает прошедшую секунду раунда, отображая это на экраны ведущего и игрока
     /// </summary>
     public void TimerTick() {
-        logger.SignedDebug();
+        logger.SignedTrace();
         TimeLeft -= TimeSpan.FromSeconds(1);
     }
 

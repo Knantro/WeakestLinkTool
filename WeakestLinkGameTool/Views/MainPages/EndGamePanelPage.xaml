@@ -67,6 +67,7 @@
                                          GroupName="A"
                                          HorizontalAlignment="Stretch"
                                          FontSize="40"
+                                         IsChecked="{Binding ChosenForPersonalStatistics}"
                                          Command="{Binding DataContext.SelectStatisticsCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                          CommandParameter="{Binding}">
                                 <RadioButton.Resources>

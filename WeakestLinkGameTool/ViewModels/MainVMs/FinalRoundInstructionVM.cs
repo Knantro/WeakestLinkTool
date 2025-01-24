@@ -54,7 +54,7 @@ public class FinalRoundInstructionVM : ViewModelBase {
     public RelayCommand NextInstructionCommand => new(_ => ChangeInstruction(), _ => !IsLastInstruction && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand BackInstructionCommand => new(_ => ChangeInstruction(false), _ => !IsFirstInstruction && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand ShowFullBankCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(true), _ => !mainWindowViewModel.IsMessageBoxVisible);
-    public RelayCommand HideFullBankVisibleCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand HideFullBankCommand => new(_ => GetPlayerPageDataContext<InfoVM>().ToggleFullBankVisibility(false), _ => !mainWindowViewModel.IsMessageBoxVisible);
 
     /// <summary>
     /// Переходит к правилам игры

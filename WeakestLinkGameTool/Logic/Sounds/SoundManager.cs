@@ -45,7 +45,7 @@ public static class SoundManager {
     /// <param name="soundName">Название звука</param>
     /// <param name="volume">Новая громкость</param>
     public static void SetVolume(string soundName, float volume) {
-        logger.Debug($"Set volume of '{soundName}' to {volume:F2}");
+        logger.Trace($"Set volume of '{soundName}' to {volume:F2}");
         if (audios.TryGetValue(soundName, out var audio)) {
             audio.SetVolume(volume);
         }
@@ -81,7 +81,7 @@ public static class SoundManager {
     /// <param name="destVolume">Конечный уровень громкости</param>
     /// <param name="duration">Период изменения в миллисекундах (мс)</param>
     public static async Task FadeVolume(string soundName, float destVolume, int duration) {
-        logger.Info($"Fade volume of '{soundName}' to '{destVolume:F2}' by {duration}ms");
+        logger.Debug($"Fade volume of '{soundName}' to '{destVolume:F2}' by {duration}ms");
         if (duration < 0) {
             logger.Warn("Duration must by a positive value");
             return;
