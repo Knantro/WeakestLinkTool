@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Forms;
 using WeakestLinkGameTool.Commands;
 using WeakestLinkGameTool.Models;
 using WeakestLinkGameTool.Models.Interfaces;
@@ -81,6 +82,8 @@ public class EditorVM : ViewModelBase {
     public ObservableCollection<ITextUsable> DataCollection { get; set; } = [];
 
     public RelayCommand<string> ChangeEditorModeCommand => new(mode => ChangeEditorMode(Enum.Parse<EditorMode>(mode)), _ => !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand UpCommand => new(_ => UpDown(), _ => HasSelectedItem && DataCollection.IsAny() && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand DownCommand => new(_ => UpDown(false), _ => HasSelectedItem && DataCollection.IsAny() && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand AddItemCommand => new(_ => AddItem(), _ => !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand RemoveItemCommand => new(_ => RemoveItem(), _ => HasSelectedItem && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand SaveCommand => new(_ => SaveAll(), _ => !mainWindowViewModel.IsMessageBoxVisible);
@@ -90,6 +93,24 @@ public class EditorVM : ViewModelBase {
         logger.SignedDebug();
         ChangeEditorMode(EditorMode.Question);
         DataCollection = WeakestLinkLogic.RegularQuestions.Select(ITextUsable (x) => x).ToObservableCollection();
+    }
+
+    /// <summary>
+    /// Перемещает курсор списка вверх или вниз
+    /// </summary>
+    /// <param name="up">Перемещать ли список вверх</param>
+    private void UpDown(bool up = true) {
+        logger.Debug($"UpDown isUp: {up}. SelectedItem: {SelectedItem.Text}");
+        if (SelectedItem != null) {
+            var index = DataCollection.IndexOf(SelectedItem);
+            if (up && index > 0) {
+                SelectedItem = DataCollection[index - 1];
+            }
+    
+            if (!up && index < DataCollection.Count - 1) {
+                SelectedItem = DataCollection[index + 1];
+            }
+        }
     }
 
     /// <summary>
@@ -160,8 +181,9 @@ public class EditorVM : ViewModelBase {
                 break;
         }
 
+        var index = DataCollection.IndexOf(SelectedItem);
         DataCollection.Remove(SelectedItem);
-        SelectedItem = DataCollection.Any() ? DataCollection.Last() : null;
+        SelectedItem = DataCollection.Any() ? DataCollection[index] : null;
         OnPropertyChanged(nameof(ListBoxHeader));
     }
 
