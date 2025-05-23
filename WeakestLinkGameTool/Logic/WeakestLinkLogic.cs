@@ -226,9 +226,10 @@ public class WeakestLinkLogic {
     /// <returns>Игрок, который начинает регулярный раунд</returns>
     public Player GetStartRoundPlayer() {
         logger.Debug("Get start round player");
+        // Либо выбираем первого по алфавиту, либо сильное звено прошлого раунда, либо, если его исключили, игрока, следующего по статистике
         var player = CurrentSession.CurrentRound.Number == 1
             ? CurrentSession.ActivePlayers.OrderBy(x => x.Name).First()
-            : CurrentSession.ActivePlayers.FirstOrDefault(x => x.IsStrongestLink) ?? CurrentSession.CurrentRound.Statistics.PlayersStatistics.Values.First(x => !x.Player.IsKicked).Player;
+            : CurrentSession.ActivePlayers.FirstOrDefault(x => x.IsStrongestLink) ?? CurrentSession.Rounds[^2].Statistics.PlayersStatistics.Values.First(x => !x.Player.IsKicked).Player;
 
         currentPlayerIndex = CurrentSession.ActivePlayers.IndexOf(player);
         logger.Trace($"Current player index: {currentPlayerIndex}");
@@ -349,7 +350,7 @@ public class WeakestLinkLogic {
             currentFinalQuestionIndex--;
         }
 
-        if (UnusedFinalQuestions.Count == 0) {
+        if (UnusedFinalQuestions.Count <= 1) {
             logger.Info("Refill final questions. All now are not used");
             FinalQuestions.ForEach(x => x.IsUsed = false);
         }
@@ -409,7 +410,7 @@ public class WeakestLinkLogic {
             playerStatistics.FinalRoundAnswers.Add(false);
         }
         else {
-            gameLogger.GameLog(CurrentSession.SessionID, $"Игрок {player.Name} отвечает верно");
+            gameLogger.GameLog(CurrentSession.SessionID, $"Игрок {player.Name} отвечает неверно");
             playerStatistics.WrongAnswers++;
             playerStatistics.AnswerSpeeds.Add(answerTime);
         }

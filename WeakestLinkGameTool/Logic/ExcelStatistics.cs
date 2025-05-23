@@ -128,11 +128,13 @@ public static class ExcelStatistics {
             finalAnswersCells.Value = noAnswerSymbol;
 
             for (var i = 1; i <= max; i++) {
-                var firstFinalistAnswer = session.FirstFinalist.Statistics.Last().FinalRoundAnswers[i - 1];
-                sheet.Cells[2, 8 + i].Value = firstFinalistAnswer ? correctAnswerSymbol : wrongAnswerSymbol;
-                sheet.Cells[2, 8 + i].Style.VerticalAlignment = firstFinalistAnswer ? ExcelVerticalAlignment.Top : ExcelVerticalAlignment.Center;
-                sheet.Cells[2, 8 + i].Style.Font.SetFromFont(fontName, firstFinalistAnswer ? commonFontSize : crossSymbolFontSize, !firstFinalistAnswer);
-                sheet.Cells[2, 8 + i].Style.Font.Color.SetColor(firstFinalistAnswer ? greenColor : redColor);
+                if (session.FirstFinalist.Statistics.Last().FinalRoundAnswers.Count > i - 1) {
+                    var firstFinalistAnswer = session.FirstFinalist.Statistics.Last().FinalRoundAnswers[i - 1];
+                    sheet.Cells[2, 8 + i].Value = firstFinalistAnswer ? correctAnswerSymbol : wrongAnswerSymbol;
+                    sheet.Cells[2, 8 + i].Style.VerticalAlignment = firstFinalistAnswer ? ExcelVerticalAlignment.Top : ExcelVerticalAlignment.Center;
+                    sheet.Cells[2, 8 + i].Style.Font.SetFromFont(fontName, firstFinalistAnswer ? commonFontSize : crossSymbolFontSize, !firstFinalistAnswer);
+                    sheet.Cells[2, 8 + i].Style.Font.Color.SetColor(firstFinalistAnswer ? greenColor : redColor);
+                }
 
                 if (session.SecondFinalist.Statistics.Last().FinalRoundAnswers.Count > i - 1) {
                     var secondFinalistAnswer = session.SecondFinalist.Statistics.Last().FinalRoundAnswers[i - 1];

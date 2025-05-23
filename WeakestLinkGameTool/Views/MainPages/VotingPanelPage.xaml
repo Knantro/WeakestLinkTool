@@ -441,15 +441,30 @@
                 Command="{Binding RoundStatisticsCommand}" />
         
         <Border Grid.Row="4" Grid.Column="2"
+                Visibility="{Binding IsReceivingVotingResults, Converter={StaticResource VisibilityConverter}}">
+            <Border 
+                Visibility="{Binding IsVotingInProgress, Converter={StaticResource InvertVisibilityConverter}}">
+                <Button Height="140"
+                        Width="300"
+                        FontSize="32"
+                        Style="{StaticResource DefaultButton}"
+                        Background="{StaticResource RedButtonBrush}"
+                        Visibility="{Binding IsVotingDone, Converter={StaticResource InvertVisibilityConverter}}"
+                        Content="(↵) Завершить голосование"
+                        Command="{Binding DoneVotingCommand}" />
+            </Border>
+        </Border>
+        
+        <Border Grid.Row="4" Grid.Column="2"
                 Visibility="{Binding IsVotingInProgress, Converter={StaticResource InvertVisibilityConverter}}">
             <Button Height="140"
                     Width="300"
                     FontSize="32"
                     Style="{StaticResource DefaultButton}"
                     Background="{StaticResource RedButtonBrush}"
-                    Visibility="{Binding IsVotingDone, Converter={StaticResource InvertVisibilityConverter}}"
-                    Content="(↵) Завершить голосование"
-                    Command="{Binding DoneVotingCommand}" />
+                    Visibility="{Binding IsReceivingVotingResults, Converter={StaticResource InvertVisibilityConverter}}"
+                    Content="(↵) Получить результаты"
+                    Command="{Binding GetVotingResultsCommand}" />
         </Border>
 
         <Button Grid.Row="4" Grid.Column="2"

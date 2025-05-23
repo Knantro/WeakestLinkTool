@@ -65,7 +65,7 @@
                 <Button Margin="0 10" Height="200" Width="500" Style="{StaticResource DefaultButton}"
                         Content="(3) Сброс&#x0d;вопросов/подколок" FontSize="45"
                         Command="{Binding SelectSettingCommand}"
-                        CommandParameter="Volume"/>
+                        CommandParameter="ResetUsed"/>
                 
                 <Button Margin="0 137" Height="120" Width="500" Style="{StaticResource DefaultButton}"
                         Content="(ESC) Назад" FontSize="45"

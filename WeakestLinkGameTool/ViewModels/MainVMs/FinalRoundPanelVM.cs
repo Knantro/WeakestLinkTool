@@ -454,6 +454,7 @@ public class FinalRoundPanelVM : ViewModelBase {
             SecondPlayerAnswersPanel.Count(x => x.IsRight == true) + SecondPlayerAnswersPanel.Count(x => x.IsRight == null)) {
             logger.Info($"{FirstPlayer.Name} win the game");
             WinSound();
+            InfoText = string.Empty;
             FirstPlayer.IsWinner = true;
             IsGameEnd = true;
             EnterCommand = EndGameCommand;
@@ -469,6 +470,7 @@ public class FinalRoundPanelVM : ViewModelBase {
             FirstPlayerAnswersPanel.Count(x => x.IsRight == true) + FirstPlayerAnswersPanel.Count(x => x.IsRight == null)) {
             logger.Info($"{SecondPlayer.Name} win the game");
             WinSound();
+            InfoText = string.Empty;
             SecondPlayer.IsWinner = true;
             IsGameEnd = true;
             EnterCommand = EndGameCommand;

@@ -60,14 +60,14 @@ public class EndGameVM : ViewModelBase {
         AddLine(sb, "Авторы вопросов");
         AddLine(sb, "Knantro");
         AddLine(sb, "Банк вопросов \"Слабого Звена\"");
-        AddLine(sb, "NULL"); // TODO: Указать автора 
+        // AddLine(sb, "NULL"); // TODO: Указать автора 
         AddLine(sb, "NULL", true); // TODO: Указать автора 
 
         AddLine(sb, "Авторы подколок");
         AddLine(sb, "Knantro");
         AddLine(sb, "Банк вопросов \"Слабого Звена\"");
-        AddLine(sb, "NULL"); // TODO: Указать автора 
-        AddLine(sb, "NULL", true); // TODO: Указать автора 
+        // AddLine(sb, "NULL"); // TODO: Указать автора 
+        // AddLine(sb, "NULL", true); // TODO: Указать автора 
 
         AddLine(sb, "Музыка");
         AddLine(sb, "Paul Farrer", true);

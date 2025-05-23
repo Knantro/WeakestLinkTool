@@ -17,6 +17,8 @@ public class VotingPanelVM : ViewModelBase {
     private bool isPersonalStatisticsSelected;
     private bool votingCanStop;
     private bool isVotingInProgress;
+    private bool isReceivingVotingResults;
+    private bool isVotingDoneEnabled;
     private bool isVotingDone;
     private Player selectedPlayer;
 
@@ -71,6 +73,22 @@ public class VotingPanelVM : ViewModelBase {
     }
 
     /// <summary>
+    /// Идёт ли получение результатов голосования
+    /// </summary>
+    public bool IsReceivingVotingResults {
+        get => isReceivingVotingResults;
+        set => SetField(ref isReceivingVotingResults, value);
+    }
+
+    /// <summary>
+    /// Доступна ли кнопка завершения голосования
+    /// </summary>
+    public bool IsVotingDoneEnabled {
+        get => isVotingDoneEnabled;
+        set => SetField(ref isVotingDoneEnabled, value);
+    }
+
+    /// <summary>
     /// Завершено ли голосование
     /// </summary>
     public bool IsVotingDone {
@@ -112,6 +130,7 @@ public class VotingPanelVM : ViewModelBase {
     public RelayCommand<Player> KickPlayerCommand => new(KickPlayer, _ => !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand RoundStatisticsCommand => new(_ => ShowRoundStatistics(), _ => !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand StopVotingCommand => new(_ => StopVoting(), _ => IsVotingInProgress && VotingCanStop && !mainWindowViewModel.IsMessageBoxVisible);
+    public RelayCommand GetVotingResultsCommand => new(_ => GetVotingResults(), _ => !IsReceivingVotingResults && !mainWindowViewModel.IsMessageBoxVisible);
     public RelayCommand DoneVotingCommand => new(_ => DoneVoting(), _ => !IsVotingDone && IsAllVotesGiven && !mainWindowViewModel.IsMessageBoxVisible);
 
     public VotingPanelVM() {
@@ -208,17 +227,31 @@ public class VotingPanelVM : ViewModelBase {
         SoundManager.FadeWith(SoundName.VOTING_BED, SoundName.GENERAL_STING, SoundConst.VOTING_BED_GENERAL_STING_FADE_OUT, fadeInMilliseconds: null);
         SoundManager.Resume(SoundName.GENERAL_BED);
         IsVotingInProgress = false;
+        EnterCommand = GetVotingResultsCommand;
+    }
+
+    /// <summary>
+    /// Получает результаты голосования от игроков
+    /// </summary>
+    private void GetVotingResults() {
+        logger.Debug("Get voting results");
+        
+        SoundManager.PlayWithVolumeFade(SoundName.VOTING_STING, SoundName.GENERAL_BED, SoundConst.GENERAL_BED_FADE_VOLUME,
+            SoundConst.GENERAL_BED_VOTING_STING_FADE_VOLUME_DURATION, SoundConst.GENERAL_BED_VOTING_STING_FADE_VOLUME_AWAIT_TIME);
+        
         EnterCommand = DoneVotingCommand;
+        IsReceivingVotingResults = true;
     }
 
     /// <summary>
     /// Завершает голосование
     /// </summary>
     private void DoneVoting() {
-        logger.Debug("Done voting");
+        logger.Debug($"Done voting");
+        
         SoundManager.PlayWithVolumeFade(SoundName.VOTING_STING, SoundName.GENERAL_BED, SoundConst.GENERAL_BED_FADE_VOLUME,
             SoundConst.GENERAL_BED_VOTING_STING_FADE_VOLUME_DURATION, SoundConst.GENERAL_BED_VOTING_STING_FADE_VOLUME_AWAIT_TIME);
-
+        
         IsVotingDone = true;
     }
 }

@@ -90,6 +90,7 @@ public class FinalRoundVM : InfoVM {
             SecondPlayerAnswersPanel.First(x => x.QuestionNumber == questionNumber).IsActive = false;
             SecondPlayerAnswersPanel.First(x => x.QuestionNumber == questionNumber).IsRight = true;
             SecondPlayerAnswersPanel.First(x => x.QuestionNumber == questionNumber).IsWrong = false;
+            if (questionNumber < FirstPlayerAnswersPanel.Count) FirstPlayerAnswersPanel.First(x => x.QuestionNumber == questionNumber + 1).IsActive = true;
         }
 
         turnSwitch = !turnSwitch;
